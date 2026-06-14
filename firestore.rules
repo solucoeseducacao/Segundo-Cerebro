@@ -9,15 +9,15 @@ service cloud.firestore {
       // Criação: usuário pode criar seu próprio documento
       allow create: if request.auth != null && request.auth.uid == userId;
 
-      // Update: usuário pode atualizar apenas campos seguros
-      // Campos sensíveis de plano pagos (creditos, planoExpira, assinaturaId, pagamentoId)
-      // NÃO podem ser escritos diretamente pelo cliente — só via backend/webhook
-      // promoCode e plano podem ser escritos pelo cliente (fluxo de resgate de cupom)
-      // FUTURO: mover resgate de cupom para Cloud Function e remover 'plano' e 'promoCode' daqui
+      // Update: usuário pode atualizar apenas campos não sensíveis
+      // Campos protegidos: somente o backend (Admin SDK) pode alterar
       allow update: if request.auth != null
         && request.auth.uid == userId
         && !request.resource.data.diff(resource.data).affectedKeys()
-            .hasAny(['creditos', 'planoExpira', 'assinaturaId', 'pagamentoId', 'creditosPromo']);
+            .hasAny([
+              'plano','planoExpira','creditos','adaptacoesDisponiveis','adaptacoesAvulsas',
+              'isencaoAte','isencaoOrigem','assinaturaId','pagamentoId','creditosPromo','promoCode'
+            ]);
     }
 
     // Subcoleções do usuário: citações, coleções, ideias, embeddings
@@ -39,7 +39,17 @@ service cloud.firestore {
     // Escrita: NUNCA pelo cliente (apenas pelo backend via Service Account)
     match /codigos_promo/{code} {
       allow read: if request.auth != null;
-      allow write: if false; // somente backend/admin via Service Account
+      allow write: if false;
+    }
+    // Nova coleção unificada (usada pelo proxy)
+    match /promo_codes/{code} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // ===== WEBHOOK EVENTS (idempotência) =====
+    match /webhook_events/{id} {
+      allow read, write: if false; // somente backend
     }
 
     // ===== CACHE / LOGS DE IA =====

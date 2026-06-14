@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const admin = require('firebase-admin');
 
 const app = express();
 app.use(cors());
@@ -9,8 +10,27 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://segundo-cerebro-bf
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || '';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 const FIREBASE_PROJECT_ID = 'segundo-cerebro-bfb66';
-// FIREBASE_WEB_API_KEY deve ser configurada no Render como variável de ambiente
-// Valor: AIzaSyAfaddZQi_QILdYZZQv5zb3R3nHRvp7z4s (mesma que está no frontend)
+const FIREBASE_WEB_API_KEY = process.env.FIREBASE_WEB_API_KEY; // nunca hardcoded
+
+const RATE_LIMIT_WINDOW = 60_000;
+const RATE_LIMIT_MAX = 10;
+
+let db = null;
+try {
+  if(process.env.FIREBASE_SERVICE_ACCOUNT){
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      projectId: FIREBASE_PROJECT_ID
+    });
+    db = admin.firestore();
+    console.log('[firebase-admin] inicializado com service account');
+  } else {
+    console.warn('[firebase-admin] FIREBASE_SERVICE_ACCOUNT não configurada');
+  }
+} catch(e) {
+  console.error('[firebase-admin] erro:', e.message);
+}
 
 app.use((req,res,next)=>{
   const origin = req.headers.origin;
@@ -20,30 +40,87 @@ app.use((req,res,next)=>{
   next();
 });
 
-// Valida Firebase ID Token via API pública do Google (sem SDK)
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
 async function verificarFirebaseToken(authHeader){
   if(!authHeader||!authHeader.startsWith('Bearer ')) return null;
   const idToken = authHeader.slice(7);
   try{
+    if(db){
+      const decoded = await admin.auth().verifyIdToken(idToken);
+      return {localId: decoded.uid, email: decoded.email};
+    }
+    if(!FIREBASE_WEB_API_KEY){ console.error('FIREBASE_WEB_API_KEY não configurada'); return null; }
     const resp = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.FIREBASE_WEB_API_KEY}`,
+      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_WEB_API_KEY}`,
       {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({idToken})}
     );
     const data = await resp.json();
     if(!resp.ok || !data.users || !data.users[0]) return null;
-    return data.users[0]; // {localId, email, ...}
-  }catch(e){
-    return null;
-  }
+    return data.users[0];
+  }catch(e){ return null; }
 }
 
-// ===== ANTHROPIC / CLAUDE =====
+async function checkRateLimit(uid){
+  if(!db) return;
+  const ref = db.collection('rate_limits').doc(uid);
+  const now = Date.now();
+  const snap = await ref.get();
+  if(snap.exists){
+    const d = snap.data();
+    if((now - d.ultimoReset) < RATE_LIMIT_WINDOW){
+      if(d.count >= RATE_LIMIT_MAX) throw new Error('Muitas requisições. Aguarde um minuto.');
+      await ref.update({ count: admin.firestore.FieldValue.increment(1) });
+      return;
+    }
+  }
+  await ref.set({ count: 1, ultimoReset: now });
+}
+
+async function checkAndUpdateBudget(custo){
+  if(!db) return;
+  const hoje = new Date().toISOString().slice(0,10);
+  const ref = db.collection('admin_config').doc('budget_daily');
+  await db.runTransaction(async(t)=>{
+    const snap = await t.get(ref);
+    let d = snap.exists ? snap.data() : { custoAcumulado:0, bloqueado:false, data:hoje };
+    if(d.data !== hoje) d = { custoAcumulado:0, bloqueado:false, data:hoje };
+    if(d.bloqueado) throw new Error('Sistema temporariamente em manutenção.');
+    const novo = (d.custoAcumulado||0) + custo;
+    if(novo > 10){
+      t.set(ref, { custoAcumulado:novo, bloqueado:true, data:hoje, bloqueadoEm:admin.firestore.FieldValue.serverTimestamp() }, {merge:true});
+      console.error(`ALERTA ORÇAMENTO: R$${novo.toFixed(2)} em ${hoje}`);
+    } else {
+      t.set(ref, { custoAcumulado:novo, bloqueado:false, data:hoje }, {merge:true});
+    }
+  });
+}
+
+// ── Middleware auth+budget+rate para /claude ──────────────────────────────────
+
+app.use('/claude', async(req,res,next)=>{
+  const user = await verificarFirebaseToken(req.headers.authorization);
+  if(!user) return res.status(401).json({error:'Nao autenticado. Faca login novamente.'});
+  try{
+    if(db){
+      const budSnap = await db.collection('admin_config').doc('budget_daily').get();
+      if(budSnap.exists && budSnap.data().bloqueado)
+        return res.status(503).json({error:'Sistema em manutenção. Tente mais tarde.'});
+    }
+    await checkRateLimit(user.localId);
+    req.user = user;
+    next();
+  }catch(e){
+    if(e.message.includes('Muitas')) return res.status(429).json({error:e.message});
+    if(e.message.includes('manutenção')) return res.status(503).json({error:e.message});
+    return res.status(500).json({error:'Erro interno.'});
+  }
+});
+
+// ── Rota Claude ───────────────────────────────────────────────────────────────
+
 app.post('/claude', async(req,res)=>{
   try{
-    // Valida autenticação Firebase
-    const user = await verificarFirebaseToken(req.headers.authorization);
-    if(!user) return res.status(401).json({error:'Nao autenticado. Faca login novamente.'});
-
     const {messages, system, max_tokens=1024} = req.body;
     if(!messages) return res.status(400).json({error:'messages obrigatorio'});
 
@@ -64,14 +141,20 @@ app.post('/claude', async(req,res)=>{
 
     const data = await response.json();
     if(!response.ok) return res.status(response.status).json(data);
-    res.json({text: data.content[0].text});
 
+    const inputTokens = data.usage?.input_tokens || 0;
+    const outputTokens = data.usage?.output_tokens || 0;
+    const custoEstimado = (inputTokens * 0.00000025) + (outputTokens * 0.00000125);
+    await checkAndUpdateBudget(custoEstimado).catch(()=>{});
+
+    res.json({text: data.content[0].text});
   }catch(e){
     res.status(500).json({error: e.message});
   }
 });
 
-// ===== MERCADO PAGO — PIX =====
+// ── Mercado Pago – PIX ────────────────────────────────────────────────────────
+
 app.post('/mp/pix', async(req,res)=>{
   try{
     const {valor, descricao, email_pagador, plano, uid} = req.body;
@@ -90,7 +173,7 @@ app.post('/mp/pix', async(req,res)=>{
       headers:{
         'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'X-Idempotency-Key': `${uid}-${Date.now()}`
+        'X-Idempotency-Key': `${uid}-${plano}-${Date.now()}`
       },
       body: JSON.stringify(body)
     });
@@ -105,13 +188,11 @@ app.post('/mp/pix', async(req,res)=>{
       qr_code_base64: data.point_of_interaction?.transaction_data?.qr_code_base64,
       ticket_url: data.point_of_interaction?.transaction_data?.ticket_url
     });
-
   }catch(e){
     res.status(500).json({error: e.message});
   }
 });
 
-// ===== MERCADO PAGO — VERIFICAR STATUS PAGAMENTO =====
 app.get('/mp/status/:id', async(req,res)=>{
   try{
     const resp = await fetch(`https://api.mercadopago.com/v1/payments/${req.params.id}`,{
@@ -124,33 +205,22 @@ app.get('/mp/status/:id', async(req,res)=>{
   }
 });
 
-// ===== MERCADO PAGO — CARTÃO RECORRENTE (ASSINATURA) =====
 app.post('/mp/assinatura', async(req,res)=>{
   try{
     const {plano, email_pagador, token_cartao, uid} = req.body;
     if(!plano||!email_pagador||!token_cartao||!uid)
       return res.status(400).json({error:'Dados incompletos'});
 
-    // Tabela de preços (recorrente mensal)
     const precos = {mestre:19.90, doutor:39.90, pesquisador_pro:79.90};
     const valor = precos[plano];
     if(!valor) return res.status(400).json({error:'Plano invalido'});
 
-    // Cria plano de assinatura no MP
     const planResp = await fetch('https://api.mercadopago.com/preapproval_plan',{
       method:'POST',
-      headers:{
-        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
+      headers:{'Authorization': `Bearer ${MP_ACCESS_TOKEN}`, 'Content-Type': 'application/json'},
       body: JSON.stringify({
         reason: `Segundo Cerebro - ${plano}`,
-        auto_recurring:{
-          frequency: 1,
-          frequency_type: 'months',
-          transaction_amount: valor,
-          currency_id: 'BRL'
-        },
+        auto_recurring:{ frequency:1, frequency_type:'months', transaction_amount:valor, currency_id:'BRL' },
         payment_methods_allowed:{payment_types:[{id:'credit_card'}]},
         back_url: ALLOWED_ORIGIN
       })
@@ -158,13 +228,9 @@ app.post('/mp/assinatura', async(req,res)=>{
     const planData = await planResp.json();
     if(!planResp.ok) return res.status(planResp.status).json(planData);
 
-    // Assina o plano com o token do cartão
     const subResp = await fetch('https://api.mercadopago.com/preapproval',{
       method:'POST',
-      headers:{
-        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
+      headers:{'Authorization': `Bearer ${MP_ACCESS_TOKEN}`, 'Content-Type': 'application/json'},
       body: JSON.stringify({
         preapproval_plan_id: planData.id,
         payer_email: email_pagador,
@@ -177,97 +243,150 @@ app.post('/mp/assinatura', async(req,res)=>{
     if(!subResp.ok) return res.status(subResp.status).json(subData);
 
     res.json({id: subData.id, status: subData.status, plano});
-
   }catch(e){
     res.status(500).json({error: e.message});
   }
 });
 
-// ===== MERCADO PAGO — WEBHOOK (confirmação automática) =====
-// Trata planos (mestre/doutor/pesquisador_pro) e avulsos (creditos_100/adaptacao_artigo)
+// ── Webhook MP com idempotência ───────────────────────────────────────────────
+
 app.post('/mp/webhook', async(req,res)=>{
   try{
     const {type, data} = req.body;
     if(type==='payment' && data?.id){
-      const resp = await fetch(`https://api.mercadopago.com/v1/payments/${data.id}`,{
+      const paymentId = String(data.id);
+      if(!db){
+        console.error('[webhook] Firestore não disponível');
+        return res.sendStatus(200);
+      }
+      // Idempotência: ignora pagamentos já processados
+      const eventRef = db.collection('webhook_events').doc(paymentId);
+      const eventSnap = await eventRef.get();
+      if(eventSnap.exists){
+        console.log(`[webhook] ${paymentId} já processado — ignorando`);
+        return res.sendStatus(200);
+      }
+
+      const resp = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`,{
         headers:{'Authorization': `Bearer ${MP_ACCESS_TOKEN}`}
       });
       const payment = await resp.json();
+
       if(payment.status==='approved'){
         const {plano, uid} = payment.metadata||{};
         if(uid){
-          const fsBase=`https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/usuarios/${uid}`;
-
-          // Produtos avulsos: creditos_100 e adaptacao_artigo
+          const userRef = db.collection('usuarios').doc(uid);
           if(plano==='creditos_100'){
-            // Incremento de créditos via Firestore REST (fieldTransform)
-            await fetch(fsBase+':commit',{
-              method:'POST',
-              headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({writes:[{transform:{document:fsBase,fieldTransforms:[{fieldPath:'creditos',increment:{integerValue:100}}]}}]})
-            });
+            await userRef.update({ creditos: admin.firestore.FieldValue.increment(100) });
           } else if(plano==='adaptacao_artigo'){
-            await fetch(fsBase+':commit',{
-              method:'POST',
-              headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({writes:[{transform:{document:fsBase,fieldTransforms:[{fieldPath:'adaptacoesAvulsas',increment:{integerValue:1}}]}}]})
-            });
+            await userRef.update({ adaptacoesDisponiveis: admin.firestore.FieldValue.increment(1) });
           } else if(plano){
-            // Plano de acesso (mestre, doutor, pesquisador_pro)
-            const expira=new Date();expira.setDate(expira.getDate()+365);
-            const fsUrl=fsBase+'?updateMask.fieldPaths=plano&updateMask.fieldPaths=pagamentoId&updateMask.fieldPaths=planoExpira';
-            await fetch(fsUrl,{
-              method:'PATCH',
-              headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({fields:{
-                plano:{stringValue:plano},
-                pagamentoId:{stringValue:String(data.id)},
-                planoExpira:{stringValue:expira.toISOString()}
-              }})
-            });
+            const expira = new Date();
+            expira.setDate(expira.getDate()+365);
+            await userRef.set({ plano, pagamentoId:paymentId, planoExpira:expira.toISOString() }, {merge:true});
           }
+          console.log(`[webhook] ${paymentId} aprovado → uid=${uid} plano=${plano}`);
         }
       }
+      // Marca como processado (mesmo se não aprovado, para não reprocessar)
+      await eventRef.set({ processedAt: admin.firestore.FieldValue.serverTimestamp(), status: payment.status });
     }
     res.sendStatus(200);
   }catch(e){
-    console.error('Webhook erro:',e.message);
-    res.sendStatus(200); // sempre 200 para o MP não reenviar
+    console.error('[webhook] erro:', e.message);
+    res.sendStatus(200);
   }
 });
 
-// Expõe Public Key de forma segura (sem expor Access Token)
-app.get('/mp/pubkey', async(_,res)=>{
+// ── Código promocional (unificado: promo_codes) ───────────────────────────────
+
+app.post('/promo/resgatar', async(req,res)=>{
   try{
-    // Busca a public key via API do MP
-    const resp=await fetch('https://api.mercadopago.com/users/me',{
-      headers:{'Authorization':`Bearer ${MP_ACCESS_TOKEN}`}
+    const user = await verificarFirebaseToken(req.headers.authorization);
+    if(!user) return res.status(401).json({error:'Não autenticado.'});
+
+    const {codigo} = req.body;
+    if(!codigo) return res.status(400).json({error:'Código obrigatório.'});
+    const codigoNorm = String(codigo).toUpperCase().trim();
+
+    if(!db) return res.status(503).json({error:'Serviço indisponível. Tente mais tarde.'});
+
+    const promoRef = db.collection('promo_codes').doc(codigoNorm);
+    const snap = await promoRef.get();
+    if(!snap.exists || snap.data().cancelled)
+      return res.status(404).json({error:'Código inválido ou cancelado.'});
+
+    const p = snap.data();
+    if(p.expiresAt && p.expiresAt.toMillis() < Date.now())
+      return res.status(410).json({error:'Código expirado.'});
+    if(p.usesLeft !== null && p.usesLeft !== undefined && p.usesLeft <= 0)
+      return res.status(409).json({error:'Código esgotado.'});
+
+    const uid = user.localId;
+    if((p.redeemedBy||[]).includes(uid))
+      return res.status(409).json({error:'Você já usou este código.'});
+
+    const userRef = db.collection('usuarios').doc(uid);
+    const F = admin.firestore.FieldValue;
+
+    await db.runTransaction(async(t)=>{
+      const pr = await t.get(promoRef);
+      const d = pr.data();
+      if(d.usesLeft !== null && d.usesLeft !== undefined && d.usesLeft <= 0)
+        throw new Error('Esgotado');
+
+      switch(d.type){
+        case 'creditos':
+          t.update(userRef, { creditos: F.increment(d.value||0) });
+          break;
+        case 'adaptacao':
+          t.update(userRef, { adaptacoesDisponiveis: F.increment(d.value||0) });
+          break;
+        case 'plano':
+          t.update(userRef, { plano: d.value });
+          break;
+        case 'isencao': {
+          const ate = new Date();
+          ate.setDate(ate.getDate() + (d.durationDays||7));
+          t.update(userRef, {
+            isencaoAte: admin.firestore.Timestamp.fromDate(ate),
+            isencaoOrigem: codigoNorm
+          });
+          break;
+        }
+        default:
+          // Compatibilidade com formato antigo (campo plano direto)
+          if(d.plano) t.update(userRef, { plano: d.plano });
+      }
+
+      const updateData = { redeemedBy: F.arrayUnion(uid) };
+      if(d.usesLeft !== null && d.usesLeft !== undefined)
+        updateData.usesLeft = F.increment(-1);
+      t.update(promoRef, updateData);
     });
-    const data=await resp.json();
-    // A public key fica nas credenciais da aplicação — retornamos como variável de ambiente separada
-    res.json({public_key: process.env.MP_PUBLIC_KEY||''});
+
+    res.json({ok:true, tipo:p.type||'plano', valor:p.value||p.plano});
   }catch(e){
-    res.json({public_key: process.env.MP_PUBLIC_KEY||''});
+    console.error('[promo] erro:', e.message);
+    if(e.message==='Esgotado') return res.status(409).json({error:'Código esgotado.'});
+    res.status(500).json({error:'Erro interno.'});
   }
 });
 
-app.get('/health', (_,res)=>res.json({ok:true, mp: !!MP_ACCESS_TOKEN, ai: !!ANTHROPIC_API_KEY, v:'2.1'}));
+app.get('/mp/pubkey', async(_,res)=>{
+  res.json({public_key: process.env.MP_PUBLIC_KEY||''});
+});
 
-// ── KEEP-ALIVE: pinga a si mesmo a cada 9 min para não dormir no Render Free ──
+app.get('/health', (_,res)=>res.json({ok:true, mp:!!MP_ACCESS_TOKEN, ai:!!ANTHROPIC_API_KEY, firestore:!!db, v:'4.0'}));
+
+// ── Keep-alive ────────────────────────────────────────────────────────────────
 const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT||3000}`;
 setInterval(async()=>{
-  try{
-    await fetch(`${SELF_URL}/health`);
-    console.log('[keep-alive] ping ok',new Date().toISOString());
-  }catch(e){
-    console.warn('[keep-alive] erro:',e.message);
-  }
-}, 9 * 60 * 1000); // 9 minutos
+  try{ await fetch(`${SELF_URL}/health`); console.log('[keep-alive] ok', new Date().toISOString()); }
+  catch(e){ console.warn('[keep-alive] erro:', e.message); }
+}, 9 * 60 * 1000);
 
 app.listen(process.env.PORT||3000, ()=>{
-  console.log('Proxy Segundo Cerebro rodando');
-  // Pinga imediatamente ao iniciar para "acordar" dependências
-  setTimeout(async()=>{
-    try{ await fetch(`${SELF_URL}/health`); }catch(e){}
-  }, 5000);
+  console.log('Proxy Segundo Cerebro v4.0 rodando');
+  setTimeout(async()=>{ try{ await fetch(`${SELF_URL}/health`); }catch(e){} }, 5000);
 });

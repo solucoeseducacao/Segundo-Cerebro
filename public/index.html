@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3 -->
+<!-- v4 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -17,7 +17,7 @@
 
 <!-- Open Graph -->
 <meta property="og:title" content="Segundo Cérebro — Citações Acadêmicas com IA">
-<meta property="og:description" content="Organize, cite e exporte referências em ABNT com IA. Usado por +1.200 pesquisadores brasileiros.">
+<meta property="og:description" content="Organize, cite e exporte referências em ABNT com IA. Mais publicações, mais organização. A saúde mental agradece.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://segundo-cerebro-bfb66.web.app">
 <!-- docx carregado dinamicamente só na exportação — não bloqueia o carregamento inicial -->
@@ -206,7 +206,7 @@ main{flex:none;overflow-y:visible;padding:10px;width:100%}
 
 /* ── SIDEBAR → BARRA HORIZONTAL ── */
 aside{width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;overflow-y:hidden;padding:8px 12px;display:flex;gap:8px;align-items:center;flex-shrink:0}
-.sidebar-section,.sidebar-sort,.btn-new-col{display:none}
+.sidebar-section,.sidebar-sort{display:none}.btn-new-col{display:flex;margin:0;width:auto;white-space:nowrap;padding:5px 10px;flex-shrink:0}
 .collection-item{white-space:nowrap;padding:5px 10px;flex-shrink:0}
 
 /* ── GRIDS ── */
@@ -374,10 +374,10 @@ main{padding:8px}
       <h2 class="pw-title" id="paywallName">Olá, pesquisador! Escolha seu plano</h2>
       <p class="pw-sub">O assistente acadêmico que pesquisadores sérios usam para organizar referências, citar com precisão e exportar em ABNT — tudo com IA.</p>
       <div class="pw-social">
-        <span>📚 +1.200 pesquisadores</span>
-        <span>⭐ 4,9/5 de avaliação</span>
+        <span>📚 Diversos usuários satisfeitos</span>
         <span>🔒 100% seguro</span>
-        <span>🇧🇱 Empresa brasileira</span>
+        <span>🇧🇷 Empresa brasileira</span>
+        <span>💚 Mais publicações, mais organização</span>
       </div>
       <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:.82rem;color:#7c5c00;text-align:center;line-height:1.5">
         ⏳ <strong>Oferta de lançamento:</strong> garanta o preço atual antes do próximo reajuste.<br>
@@ -387,72 +387,84 @@ main{padding:8px}
 
     <div class="pw-plans">
 
-      <!-- PESQUISADOR PRO — destaque máximo -->
+      <!-- PRO — destaque máximo -->
       <div class="pw-plan popular">
-        <span class="pw-badge gold">⭐ MAIS ESCOLHIDO — MELHOR CUSTO-BENEFÍCIO</span>
+        <span class="pw-badge gold">⭐ MELHOR CUSTO-BENEFÍCIO PARA GRUPOS</span>
         <div class="pw-plan-header" style="margin-top:8px">
-          <div class="pw-plan-name">Pesquisador Pro</div>
+          <div class="pw-plan-name">Pro — Publicar</div>
           <div class="pw-plan-price">
-            <div class="main gold">R$ 89,90<span style="font-size:.7rem;font-weight:400"> / compra anual</span> <span class="pw-saving">ECONOMIZE R$10</span></div>
-            <div class="sub">ou R$ 99,90 / compra mensal</div>
+            <div class="main gold">R$ 79,90<span style="font-size:.7rem;font-weight:400">/mês no anual</span> <span class="pw-saving">≈ R$958/ano</span></div>
+            <div class="sub">ou R$ 89,90/mês no plano mensal</div>
           </div>
         </div>
         <div class="pw-plan-features">
-          <span>Citações e exportações <strong>ilimitadas</strong></span>
-          <span>IA sem restrições — resumir, expandir, adaptar</span>
-          <span>Busca semântica por conceito</span>
-          <span>OCR — extraia texto de fotos de livros</span>
-          <span>Adaptar artigo às normas ABNT (IA Pro)</span>
-          <span>Suporte prioritário por e-mail</span>
+          <span>Tudo do Orientador, mais:</span>
+          <span>Transcrição Whisper — 300 min/mês (alta precisão)</span>
+          <span>IA para links semânticos entre notas</span>
+          <span>Busca por similaridade no arquivo</span>
+          <span>Alunos ilimitados incluídos</span>
+          <span>Múltiplos projetos independentes (ilimitados)</span>
+          <span>Exportação Word com links automáticos</span>
+          <span>Resumo semanal por e-mail</span>
+          <span>Suporte prioritário (até 24h)</span>
         </div>
         <div class="pw-plan-btns">
-          <button class="pw-btn-pix gold" onclick="iniciarPagamentoPix('pesquisador_pro',89.90)">💳 Compra Anual<br>R$ 89,90 / ano</button>
-          <button class="pw-btn-rec gold" onclick="iniciarAssinatura('pesquisador_pro')">🔄 Compra Mensal<br>R$ 99,90/mês</button>
+          <button class="pw-btn-pix gold" onclick="iniciarPagamentoPix('pro',958.80)">💳 Anual — 12x de R$79,90<br><small>somente cartão, sem juros</small></button>
+          <button class="pw-btn-rec gold" onclick="iniciarPagamentoPix('pro_mensal',89.90)">🔄 Mensal — R$89,90<br><small>PIX ou cartão</small></button>
         </div>
       </div>
 
-      <!-- DOUTOR -->
+      <!-- ORIENTADOR -->
       <div class="pw-plan">
-        <div class="pw-plan-header">
-          <div class="pw-plan-name">Plano Doutor</div>
+        <span class="pw-badge blue">🧑‍🏫 PARA PROFESSORES-ORIENTADORES</span>
+        <div class="pw-plan-header" style="margin-top:8px">
+          <div class="pw-plan-name">Orientador — Avaliar e Orientar</div>
           <div class="pw-plan-price">
-            <div class="main">R$ 49,90<span style="font-size:.7rem;font-weight:400"> / compra anual</span></div>
-            <div class="sub">ou R$ 59,90 / compra mensal</div>
+            <div class="main">R$ 39,90<span style="font-size:.7rem;font-weight:400">/mês no anual</span> <span class="pw-saving">≈ R$478/ano</span></div>
+            <div class="sub">ou R$ 49,90/mês no plano mensal</div>
           </div>
         </div>
         <div class="pw-plan-features">
-          <span>Citações e exportações <strong>ilimitadas</strong></span>
-          <span>IA completa — resumir e expandir ideias</span>
-          <span>Busca semântica por conceito</span>
-          <span>OCR — extraia texto de imagens</span>
-          <span class="no">Adaptar artigo às normas (só Pro)</span>
-          <span class="no">Suporte prioritário (só Pro)</span>
+          <span>Tudo do Pesquisador, mais:</span>
+          <span>Painel do orientador — receba trabalhos de alunos</span>
+          <span>Feedback com perfil de voz configurável</span>
+          <span>E-mail para alunos em um clique</span>
+          <span>Até 10 alunos com acesso gratuito restrito</span>
+          <span>Histórico de versões por aluno</span>
+          <span>Avaliação qualitativa completa (ABNT + metodológica)</span>
+          <span class="no">Transcrição Whisper (só Pro)</span>
+          <span class="no">Links semânticos automáticos (só Pro)</span>
         </div>
         <div class="pw-plan-btns">
-          <button class="pw-btn-pix" onclick="iniciarPagamentoPix('doutor',49.90)">💳 Compra Anual<br>R$ 49,90 / ano</button>
-          <button class="pw-btn-rec" onclick="iniciarAssinatura('doutor')">🔄 Compra Mensal<br>R$ 59,90/mês</button>
+          <button class="pw-btn-pix" onclick="iniciarPagamentoPix('orientador',478.80)">💳 Anual — 12x de R$39,90<br><small>somente cartão, sem juros</small></button>
+          <button class="pw-btn-rec" onclick="iniciarPagamentoPix('orientador_mensal',49.90)">🔄 Mensal — R$49,90<br><small>PIX ou cartão</small></button>
         </div>
       </div>
 
-      <!-- MESTRE -->
+      <!-- PESQUISADOR -->
       <div class="pw-plan">
-        <div class="pw-plan-header">
-          <div class="pw-plan-name">Plano Mestre</div>
+        <span class="pw-badge green">🔥 MAIS POPULAR ENTRE MESTRANDOS</span>
+        <div class="pw-plan-header" style="margin-top:8px">
+          <div class="pw-plan-name">Pesquisador — Produzir</div>
           <div class="pw-plan-price">
-            <div class="main">R$ 29,90<span style="font-size:.7rem;font-weight:400"> / compra anual</span></div>
-            <div class="sub">ou R$ 39,90 / compra mensal</div>
+            <div class="main">R$ 19,90<span style="font-size:.7rem;font-weight:400">/mês no anual</span> <span class="pw-saving">≈ R$238/ano</span></div>
+            <div class="sub">ou R$ 29,90/mês no plano mensal</div>
           </div>
         </div>
         <div class="pw-plan-features">
-          <span>Até 500 citações · 20 exportações/mês</span>
-          <span>IA básica — resumir ideias</span>
-          <span class="no">OCR (só Doutor e Pro)</span>
-          <span class="no">Busca semântica (só Doutor e Pro)</span>
-          <span class="no">Adaptar normas (só Pro)</span>
+          <span>Segundo Cérebro <strong>ilimitado</strong></span>
+          <span>Todos os módulos do Painel de Pesquisa (7 modos)</span>
+          <span>Construtor ABNT com memória de autores</span>
+          <span>Exportação Word básica por tema</span>
+          <span>Transcrição por voz — 120 min/mês (Web Speech)</span>
+          <span>Histórico de prompts de IA</span>
+          <span>Múltiplos projetos (até 3)</span>
+          <span class="no">Transcrição Whisper (só Pro)</span>
+          <span class="no">Painel do orientador (só Orientador+)</span>
         </div>
         <div class="pw-plan-btns">
-          <button class="pw-btn-pix" onclick="iniciarPagamentoPix('mestre',29.90)">💳 Compra Anual<br>R$ 29,90 / ano</button>
-          <button class="pw-btn-rec" onclick="iniciarAssinatura('mestre')">🔄 Compra Mensal<br>R$ 39,90/mês</button>
+          <button class="pw-btn-pix" onclick="iniciarPagamentoPix('pesquisador',238.80)">💳 Anual — 12x de R$19,90<br><small>somente cartão, sem juros</small></button>
+          <button class="pw-btn-rec" onclick="iniciarPagamentoPix('pesquisador_mensal',29.90)">🔄 Mensal — R$29,90<br><small>PIX ou cartão</small></button>
         </div>
       </div>
 
@@ -670,6 +682,10 @@ main{padding:8px}
       <button onclick="fecharCartaoModal()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.85rem;text-decoration:underline">Cancelar</button>
     </div>
   </div>
+</div>
+
+<!-- Banner de upsell automático -->
+<div id="upsellBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9000;background:#3d2b1f;color:#fff;padding:12px 16px;font-size:.85rem;text-align:center;line-height:1.5;cursor:pointer" onclick="showPaywall();this.style.display='none'">
 </div>
 
 <div id="appRoot">
@@ -941,29 +957,31 @@ main{padding:8px}
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,GoogleAuthProvider,signInWithPopup,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,signOut,onAuthStateChanged,getIdToken}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import{getFirestore,doc,getDoc,setDoc,deleteDoc,collection,getDocs,serverTimestamp,increment}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import{getFunctions,httpsCallable}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js';
+// firebase-functions removido: Spark plan não suporta Cloud Functions
 
 const FC={apiKey:"AIzaSyAfaddZQi_QILdYZZQv5zb3R3nHRvp7z4s",authDomain:"segundo-cerebro-bfb66.firebaseapp.com",projectId:"segundo-cerebro-bfb66",storageBucket:"segundo-cerebro-bfb66.firebasestorage.app",messagingSenderId:"850519671097",appId:"1:850519671097:web:d0c2125bd42e5d5a1668e8"};
 const LIMITES={
-  leitor:       {citacoes:30,  exportMes:5,        semantica:false,ocr:false,adaptacao:false,ia:false},
-  mestre:       {citacoes:500, exportMes:20,        semantica:false,ocr:false,adaptacao:false,ia:true},
-  mestre_offline:{citacoes:500,exportMes:20,        semantica:false,ocr:false,adaptacao:false,ia:true},
-  doutor:       {citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:false,ia:true},
-  pesquisador_pro:{citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:true,ia:true},
-  ilimitado:    {citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:true,ia:true}
+  // Plano gratuito — Experimentar
+  leitor:        {citacoes:50,  exportMes:0,         semantica:false,ocr:false,adaptacao:false,ia:false,transcricao:0},
+  // Plano Pesquisador — Produzir
+  pesquisador:   {citacoes:Infinity,exportMes:Infinity,semantica:false,ocr:false,adaptacao:false,ia:true,transcricao:120},
+  // Plano Orientador — Avaliar e Orientar
+  orientador:    {citacoes:Infinity,exportMes:Infinity,semantica:false,ocr:false,adaptacao:false,ia:true,transcricao:120,alunos:10},
+  // Plano Pro — Publicar
+  pro:           {citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:true,ia:true,transcricao:300,alunos:Infinity},
+  // Legado (compatibilidade com planos antigos)
+  mestre:        {citacoes:500, exportMes:20,         semantica:false,ocr:false,adaptacao:false,ia:true,transcricao:0},
+  mestre_offline:{citacoes:500, exportMes:20,         semantica:false,ocr:false,adaptacao:false,ia:true,transcricao:0},
+  doutor:        {citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:false,ia:true,transcricao:0},
+  pesquisador_pro:{citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:true,ia:true,transcricao:300},
+  ilimitado:     {citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:true,ia:true,transcricao:300}
 };
 const CORES=['#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c','#3498db','#9b59b6','#e91e63','#795548','#607d8b'];
 
 const app=initializeApp(FC);
 const auth=getAuth(app);
 const db=getFirestore(app);
-const fns=getFunctions(app);
-const fnInit=httpsCallable(fns,'inicializarUsuario');
-const fnGemini=httpsCallable(fns,'callGemini');
-const fnEmbed=httpsCallable(fns,'gerarEmbedding');
-const fnSemantica=httpsCallable(fns,'buscaSemantica');
-const fnCobranca=httpsCallable(fns,'criarCobranca');
-const fnPromo=httpsCallable(fns,'resgatarCodigo');
+// Cloud Functions removidas (Spark plan): fnInit, fnGemini, fnEmbed, fnSemantica, fnCobranca, fnPromo
 
 let CU=null,UD=null,quotes=[],cols=[],activeCol='all',activeTag=null,sortOrder='recente',searchQ='',semOrder=null,editId=null,curTags=[],selColor=CORES[0],readQ=null;
 
@@ -1011,7 +1029,7 @@ window._instalarApp=async function(){
 
 const OWNER_EMAIL='felipevigneron@gmail.com';
 // Planos pagos que dão acesso ao app (leitor NÃO entra — vai para paywall obrigatório)
-function hasAppAccess(p){return['mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'].includes(p);}
+function hasAppAccess(p){return['pesquisador','orientador','pro','mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'].includes(p);}
 
 function hideLoader(){
   const l=document.getElementById('authLoader');
@@ -1024,6 +1042,26 @@ setTimeout(()=>{
   if(l && l.style.display!=='none'){ hideLoader(); showLogin(); }
 },8000);
 
+// Timeout helper: resolve com fallbackValue se a promise demorar mais que ms
+function withTimeout(promise, ms=7000, fallbackValue=null){
+  let timer;
+  const timeout = new Promise(resolve=>{ timer=setTimeout(()=>resolve(fallbackValue),ms); });
+  return Promise.race([promise,timeout]).finally(()=>clearTimeout(timer));
+}
+
+// Função genérica para chamar a IA via proxy
+async function callAI(prompt, system, maxTokens=500){
+  const token = await getIdToken(CU,true);
+  const resp = await fetch('https://proxy-anthropic.onrender.com/claude',{
+    method:'POST',
+    headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+    body: JSON.stringify({messages:[{role:'user',content:prompt}], system:system||'Você é um assistente acadêmico brasileiro.', max_tokens:maxTokens})
+  });
+  if(!resp.ok){ const err=await resp.json(); throw new Error(err.error||'Erro na IA'); }
+  const data = await resp.json();
+  return data.text;
+}
+
 onAuthStateChanged(auth,async u=>{
   try{
     if(!u){CU=null;UD=null;showLogin();return;}
@@ -1034,38 +1072,37 @@ onAuthStateChanged(auth,async u=>{
     if(u.email===OWNER_EMAIL){
       hideLoader();
       showApp();
-      await Promise.all([loadCols(),loadQuotes(),loadIdeias().catch(()=>{})]);
+      await withTimeout(Promise.all([loadCols(),loadQuotes(),loadIdeias().catch(()=>{})]));
       renderSidebar();renderGrid();
       return;
     }
 
-    // Carregar dados do usuário (Firestore) com timeout de 5s
-    await Promise.race([
-      loadUD().catch(()=>{}),
-      new Promise(r=>setTimeout(r,5000))
-    ]);
+    // Carregar dados do usuário com timeout de 5s
+    await withTimeout(loadUD().catch(()=>{}), 5000);
 
     // REGRA DE SEGURANÇA: planos que dão acesso ao app (leitor não entra)
-    const PLANOS_PAGOS=['mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'];
+    const PLANOS_PAGOS=['pesquisador','orientador','pro','mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'];
     const plano=UD?.plano||null;
 
     if(!PLANOS_PAGOS.includes(plano)){
-      // Sem plano pago → paywall OBRIGATÓRIO
       showPaywall();
       return;
     }
 
-    // Tem plano pago → verificar se não expirou
-    const planoValido=await verificarPlanoValido().catch(()=>true);
+    // Verificar validade do plano com timeout de 6s (fallback: considera válido)
+    const planoValido=await withTimeout(verificarPlanoValido().catch(()=>true), 6000, true);
     if(!planoValido){
       showPaywall();
       return;
     }
 
-    // Acesso liberado
+    // Acesso liberado — mostra app imediatamente, carrega dados em background
     showApp();
-    await Promise.all([loadCols(),loadQuotes(),loadIdeias().catch(()=>{})]);
-    renderSidebar();renderGrid();
+    Promise.all([
+      loadCols().catch(()=>{}),
+      loadQuotes().catch(()=>{}),
+      loadIdeias().catch(()=>{})
+    ]).then(()=>{ renderSidebar(); renderGrid(); }).catch(()=>{});
 
   }catch(err){
     console.error('Erro no onAuthStateChanged:',err);
@@ -1113,6 +1150,35 @@ document.getElementById('btnReset').onclick=async()=>{
 
 document.getElementById('btnLogout').onclick=()=>signOut(auth);
 
+// ── RESGATE DE CÓDIGO PROMOCIONAL (via proxy seguro) ───────────────────────
+async function _resgatarCodigo(inputId, msgId){
+  const codigo = (document.getElementById(inputId)?.value||'').trim().toUpperCase();
+  const msg = document.getElementById(msgId);
+  if(!codigo){ if(msg)msg.textContent='Digite um código.'; return; }
+  if(!CU){ if(msg)msg.textContent='Faça login primeiro.'; return; }
+  try{
+    if(msg){ msg.textContent='Verificando...'; msg.style.color='var(--text3)'; }
+    const token = await getIdToken(CU, true);
+    const resp = await fetch('https://proxy-anthropic.onrender.com/promo/resgatar',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body: JSON.stringify({codigo})
+    });
+    const data = await resp.json();
+    if(!resp.ok){ if(msg){ msg.textContent=data.error||'Código inválido.'; msg.style.color='#c0392b'; } return; }
+    if(msg){ msg.textContent='✅ Código aplicado! Carregando...'; msg.style.color='#27ae60'; }
+    // Recarrega dados e redireciona para o app
+    await loadUD();
+    setTimeout(()=>location.reload(), 1200);
+  }catch(e){
+    if(msg){ msg.textContent='Erro de conexão. Tente novamente.'; msg.style.color='#c0392b'; }
+  }
+}
+// Paywall (pré-login): resgate por código de acesso
+window.resgatarCodigoPaywall=()=>_resgatarCodigo('paywallPromoInput','paywallPromoMsg');
+// Sidebar (pós-login): resgate de código promocional
+document.getElementById('btnPromo').onclick=()=>_resgatarCodigo('promoInput','promoMsg');
+
 function friendlyErr(c){const m={'auth/user-not-found':'Usuario nao encontrado.','auth/wrong-password':'Senha incorreta.','auth/email-already-in-use':'E-mail ja cadastrado.','auth/weak-password':'Senha fraca (min. 6 caracteres).','auth/invalid-email':'E-mail invalido.','auth/too-many-requests':'Muitas tentativas. Tente mais tarde.','auth/popup-closed-by-user':'Login cancelado.','auth/cancelled-popup-request':'Login cancelado.'};return m[c]||'Erro ao autenticar.';}
 function showLErr(m){document.getElementById('loginError').textContent=m;}
 // hideLoader definida acima com clearTimeout
@@ -1131,7 +1197,7 @@ async function verificarPlanoValido(){
     const expira=new Date(UD.planoExpira);
     if(expira < new Date()){
       // Plano expirado — remove e manda para paywall
-      await setDoc(doc(db,'usuarios',CU.uid),{plano:null,planoExpira:null,pagamentoId:null},{merge:true});
+      await setDoc(doc(db,'usuarios',CU.uid),{plano:null},{merge:true});
       UD.plano=null;
       return false;
     }
@@ -1201,7 +1267,7 @@ function renderColorPicker(){const p=document.getElementById('colorPicker');p.in
 document.getElementById('btnNovaColecao').onclick=()=>openM('colModal');
 document.getElementById('btnSaveCol').onclick=async()=>{const n=document.getElementById('colName').value.trim();if(!n)return;const id='col_'+Date.now(),c={name:n,color:selColor};await setDoc(doc(db,'usuarios',CU.uid,'colecoes',id),c);cols.push({id,...c});renderSidebar();renderColSel();document.getElementById('colName').value='';closeM('colModal');toast('Colecao criada!');};
 
-async function loadQuotes(){const s=await getDocs(collection(db,'usuarios',CU.uid,'citacoes'));quotes=s.docs.map(d=>({id:d.id,...d.data()}));renderTagToolbar();renderGrid();renderSidebar();}
+async function loadQuotes(){const s=await getDocs(collection(db,'usuarios',CU.uid,'citacoes'));quotes=s.docs.map(d=>({id:d.id,...d.data()}));renderTagToolbar();renderGrid();renderSidebar();checkUpsell();}
 
 function getFiltered(){let r=[...quotes];if(activeCol!=='all')r=r.filter(q=>q.collectionId===activeCol);if(activeTag)r=r.filter(q=>(q.tags||[]).includes(activeTag));if(searchQ){const s=searchQ.toLowerCase();r=r.filter(q=>(q.text||'').toLowerCase().includes(s)||(q.author||'').toLowerCase().includes(s)||(q.work||'').toLowerCase().includes(s));}if(semOrder){const o=[];semOrder.forEach(id=>{const f=r.find(x=>x.id===id);if(f)o.push(f);});r.forEach(x=>{if(!semOrder.includes(x.id))o.push(x);});return o;}r.sort((a,b)=>{if(sortOrder==='recente')return(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0);if(sortOrder==='autor_az')return(a.author||'').localeCompare(b.author||'');if(sortOrder==='autor_za')return(b.author||'').localeCompare(a.author||'');if(sortOrder==='obra_az')return(a.work||'').localeCompare(b.work||'');return 0;});return r;}
 
@@ -1216,9 +1282,26 @@ window.copyAbnt=function(id){const q=quotes.find(x=>x.id===id);if(!q)return;navi
 window.openRead=function(id){const q=quotes.find(x=>x.id===id);if(!q)return;readQ=q;document.getElementById('readModalTitle').textContent=q.author||'Citacao';document.getElementById('readText').textContent=q.text||'';document.getElementById('readAbnt').textContent=buildAbnt(q)||'-';document.getElementById('readInline').textContent=buildInline(q)||'-';const cs=document.getElementById('readCommentSection');if(q.comment){document.getElementById('readComment').textContent=q.comment;cs.style.display='';}else cs.style.display='none';const ts=document.getElementById('readTagsSection');if((q.tags||[]).length){document.getElementById('readTags').innerHTML=(q.tags||[]).map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('');ts.style.display='';}else ts.style.display='none';openM('readModal');};
 window.openEdit=function(id){closeM('readModal');const q=quotes.find(x=>x.id===id);if(!q)return;editId=id;document.getElementById('quoteModalTitle').textContent='Editar citacao';document.getElementById('qText').value=q.text||'';document.getElementById('qAuthor').value=q.author||'';document.getElementById('qWork').value=q.work||'';document.getElementById('qYear').value=q.year||'';document.getElementById('qPages').value=q.pages||'';document.getElementById('qCollection').value=q.collectionId||'';document.getElementById('qComment').value=q.comment||'';curTags=[...(q.tags||[])];renderTagsForm();openM('quoteModal');};
 window.delQuote=async function(id){if(!confirm('Excluir esta citacao?'))return;await deleteDoc(doc(db,'usuarios',CU.uid,'citacoes',id));quotes=quotes.filter(q=>q.id!==id);renderTagToolbar();renderGrid();renderSidebar();toast('Citacao excluida.');};
+// Upsell automático: quando usuário gratuito atinge 80% das citações
+function checkUpsell(){
+  if(!UD||!CU) return;
+  const pl=UD.plano||'leitor';
+  if(pl!=='leitor') return;
+  const lim=LIMITES[pl]?.citacoes||50;
+  const pct=quotes.length/lim;
+  if(pct>=0.8 && !sessionStorage.getItem('upsellShown')){
+    sessionStorage.setItem('upsellShown','1');
+    const el=document.getElementById('upsellBanner');
+    if(el){
+      el.textContent=`📚 Você está usando ${quotes.length} de ${lim} citações do plano gratuito. Faça upgrade para o Pesquisador e tenha espaço ilimitado!`;
+      el.style.display='';
+      setTimeout(()=>el.style.display='none', 12000);
+    }
+  }
+}
 
 document.getElementById('btnNovaCitacao').onclick=()=>{editId=null;document.getElementById('quoteModalTitle').textContent='Nova citacao';['qText','qAuthor','qWork','qYear','qPages','qComment'].forEach(i=>document.getElementById(i).value='');document.getElementById('qCollection').value='';curTags=[];renderTagsForm();openM('quoteModal');};
-document.getElementById('btnSaveQuote').onclick=async()=>{const text=document.getElementById('qText').value.trim();if(!text){toast('O texto da citacao e obrigatorio.');return;}const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.citacoes??30;if(!editId&&quotes.length>=lim){toast(`Limite de ${lim} citacoes. Faca upgrade!`);return;}const id=editId||'cit_'+Date.now(),data={text,author:document.getElementById('qAuthor').value.trim(),work:document.getElementById('qWork').value.trim(),year:parseInt(document.getElementById('qYear').value)||null,pages:document.getElementById('qPages').value.trim(),collectionId:document.getElementById('qCollection').value||null,tags:[...curTags],comment:document.getElementById('qComment').value.trim(),createdAt:editId?(quotes.find(q=>q.id===id)?.createdAt||serverTimestamp()):serverTimestamp()};await setDoc(doc(db,'usuarios',CU.uid,'citacoes',id),data);if(editId){const i=quotes.findIndex(q=>q.id===id);if(i>=0)quotes[i]={id,...data};}else quotes.unshift({id,...data});closeM('quoteModal');renderTagToolbar();renderGrid();renderSidebar();toast(editId?'Citacao atualizada!':'Citacao salva!');if(LIMITES[pl]?.semantica)fnEmbed({quoteId:id,texto:text,autor:data.author,obra:data.work}).catch(()=>{});};
+document.getElementById('btnSaveQuote').onclick=async()=>{const text=document.getElementById('qText').value.trim();if(!text){toast('O texto da citacao e obrigatorio.');return;}const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.citacoes??30;if(!editId&&quotes.length>=lim){toast(`Limite de ${lim} citacoes. Faca upgrade!`);return;}const id=editId||'cit_'+Date.now(),data={text,author:document.getElementById('qAuthor').value.trim(),work:document.getElementById('qWork').value.trim(),year:parseInt(document.getElementById('qYear').value)||null,pages:document.getElementById('qPages').value.trim(),collectionId:document.getElementById('qCollection').value||null,tags:[...curTags],comment:document.getElementById('qComment').value.trim(),createdAt:editId?(quotes.find(q=>q.id===id)?.createdAt||serverTimestamp()):serverTimestamp()};await setDoc(doc(db,'usuarios',CU.uid,'citacoes',id),data);if(editId){const i=quotes.findIndex(q=>q.id===id);if(i>=0)quotes[i]={id,...data};}else quotes.unshift({id,...data});closeM('quoteModal');renderTagToolbar();renderGrid();renderSidebar();toast(editId?'Citacao atualizada!':'Citacao salva!');// fnEmbed removida (Cloud Function indisponível no Spark plan)};
 
 function renderTagsForm(){const w=document.getElementById('tagsWrap');w.querySelectorAll('.tag-pill').forEach(e=>e.remove());curTags.forEach(t=>{const p=document.createElement('span');p.className='tag-pill';p.style.cursor='pointer';p.innerHTML=`${esc(t)} <span class="tag-remove">x</span>`;p.querySelector('.tag-remove').onclick=()=>{curTags=curTags.filter(x=>x!==t);renderTagsForm();};w.insertBefore(p,document.getElementById('tagInput'));});}
 document.getElementById('tagInput').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==',')return;e.preventDefault();const v=e.target.value.trim().replace(/,/g,'');if(v&&!curTags.includes(v)){curTags.push(v);renderTagsForm();}e.target.value='';});
@@ -1231,10 +1314,57 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){
 
 document.getElementById('btnSemantica').onclick=runSem;
 document.getElementById('semanticInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSem();});
-async function runSem(){const q=document.getElementById('semanticInput').value.trim();if(!q)return;if(!LIMITES[UD?.plano||'leitor']?.semantica){toast('Busca semantica disponivel a partir do plano Mestre.');return;}try{setBtnLoading('btnSemantica',true,'Buscando...');const r=await fnSemantica({query:q});semOrder=r.data.resultados.map(x=>x.id);document.getElementById('btnClearSem').style.display='';toast(`${semOrder.length} resultado(s).`);renderGrid();}catch(e){toast('Erro: '+e.message);}finally{setBtnLoading('btnSemantica',false,'Buscar');}}
+async function runSem(){toast('Busca semântica em manutenção. Em breve disponível!');}
 document.getElementById('btnClearSem').onclick=()=>{semOrder=null;document.getElementById('semanticInput').value='';document.getElementById('btnClearSem').style.display='none';renderGrid();};
 
 document.getElementById('btnCopyFull').onclick=()=>{if(!readQ)return;navigator.clipboard.writeText(`"${readQ.text}"\n\n${buildInline(readQ)}`).then(()=>toast('Copiado!'));};
 document.getElementById('btnEditFromRead').onclick=()=>{if(readQ){closeM('readModal');openEdit(readQ.id);}};
 
-document.getElementById('btnExport').onclick=async()=>{const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.exportMes??5;if((UD?.exportacoesMes||0)>=lim){toast(`Limite de ${lim} exportacoes/mes atingido.`);return;}const f=getFiltered();if(!f.length){toast('Nenhuma citacao para exportar.');return;}try{const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx,g={};f.forEach(q=>{const n=cols.find(c=>c.id===q.collectionId)?.name||'Sem colecao';(g[n]=g[n]||[]).push(q);});const ch=[];Object.entries(g).forEach(([n,qs])=>{ch.push(new Paragraph({text:n,heading:HeadingLevel.HEADING_2}));qs.forEach(q=>{ch.push(new Paragraph({children:[new TextRun({text:`"${q.text}"`,italics:true,font:'Georgia',size:24})]}));if(q.author||q.work)ch.push(new Paragraph({children:[new TextRun({text:buildAbnt(q),bold:true,font:'Arial',size:20})]}));if((q.tags||[]).length)ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+q.tags.join(', '),font:'Arial',size:18,color:'888888'})]}));if(q.comment)ch.push(new Paragraph({children:[new TextRun({text:q.comment,font:'Arial',size:18,italics:true})]}));ch.push(new Paragraph({text:''}));});});const blob=await Packer.toBlob(new Document({sections:[{children:ch}]})),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`citacoes-${new Date().toISOString().slice(0,10)}.docx`;a.click();await setDoc(doc(db,'usuarios',CU.uid),{exportacoesMes:increment(1)},{merge
+document.getElementById('btnExport').onclick=async()=>{
+  const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.exportMes??5;
+  if((UD?.exportacoesMes||0)>=lim){toast(`Limite de ${lim} exportacoes/mes atingido.`);return;}
+  const f=getFiltered();
+  if(!f.length){toast('Nenhuma citacao para exportar.');return;}
+  try{
+    if(!window.docx){
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://unpkg.com/docx@7.8.2/build/index.js';
+        s.onload=res; s.onerror=rej;
+        document.head.appendChild(s);
+      });
+    }
+    const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx;
+    const g={};
+    f.forEach(q=>{
+      const n=cols.find(c=>c.id===q.collectionId)?.name||'Sem colecao';
+      (g[n]=g[n]||[]).push(q);
+    });
+    const ch=[];
+    Object.entries(g).forEach(([n,qs])=>{
+      ch.push(new Paragraph({text:n,heading:HeadingLevel.HEADING_2}));
+      qs.forEach(q=>{
+        ch.push(new Paragraph({children:[new TextRun({text:`"${q.text}"`,italics:true,font:'Georgia',size:24})]}));
+        if(q.author||q.work)
+          ch.push(new Paragraph({children:[new TextRun({text:buildAbnt(q),bold:true,font:'Arial',size:20})]}));
+        if((q.tags||[]).length)
+          ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+q.tags.join(', '),font:'Arial',size:18,color:'888888'})]}));
+        if(q.comment)
+          ch.push(new Paragraph({children:[new TextRun({text:q.comment,font:'Arial',size:18,italics:true})]}));
+        ch.push(new Paragraph({text:''}));
+      });
+    });
+    const docFile=new Document({sections:[{children:ch}]});
+    const blob=await Packer.toBlob(docFile);
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=`citacoes-${new Date().toISOString().slice(0,10)}.docx`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    if(CU) await setDoc(doc(db,'usuarios',CU.uid),{exportacoesMes:increment(1)},{merge:true});
+    toast('Exportacao concluida!');
+  }catch(err){
+    toast('Erro na exportacao. Tente novamente.');
+    console.error(err);
+  }
+};
