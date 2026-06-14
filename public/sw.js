@@ -1,4 +1,4 @@
-const CACHE = 'sc-v4';
+const CACHE = 'sc-v5';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
