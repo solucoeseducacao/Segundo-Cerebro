@@ -952,18 +952,33 @@ const OWNER_EMAIL='felipevigneron@gmail.com';
 // Planos que têm acesso completo ao app (leitor também entra, mas com limites)
 function hasAppAccess(p){return['leitor','mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'].includes(p);}
 
+// Timeout de segurança: se o loader não sumir em 10s, força a tela de login
+const _loaderTimeout=setTimeout(()=>{
+  if(document.getElementById('authLoader')?.style.display!=='none'){
+    hideLoader();showLogin();
+  }
+},10000);
+function hideLoader(){
+  clearTimeout(_loaderTimeout);
+  const l=document.getElementById('authLoader');if(l)l.style.display='none';
+}
+
 onAuthStateChanged(auth,async u=>{
   if(u){
     CU=u;
-    await fnInit().catch(()=>{});
-    await loadUD();
+    // fnInit com timeout de 4s — no Spark plan a Cloud Function não existe e trava
+    await Promise.race([fnInit().catch(()=>{}),new Promise(r=>setTimeout(r,4000))]);
+    await loadUD().catch(()=>{});
     if(u.email===OWNER_EMAIL){
-      await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+      showApp();
+      await Promise.all([loadCols(),loadQuotes(),loadIdeias().catch(()=>{})]);
+      renderSidebar();renderGrid();
     } else if(hasAppAccess(UD?.plano)){
-      // Verifica se o plano veio de código promo expirado
-      const planoValido=await verificarPlanoValido();
+      const planoValido=await verificarPlanoValido().catch(()=>true);
       if(planoValido){
-        await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+        showApp();
+        await Promise.all([loadCols(),loadQuotes(),loadIdeias().catch(()=>{})]);
+        renderSidebar();renderGrid();
       } else {
         showPaywall();
       }
@@ -1014,7 +1029,7 @@ document.getElementById('btnLogout').onclick=()=>signOut(auth);
 
 function friendlyErr(c){const m={'auth/user-not-found':'Usuario nao encontrado.','auth/wrong-password':'Senha incorreta.','auth/email-already-in-use':'E-mail ja cadastrado.','auth/weak-password':'Senha fraca (min. 6 caracteres).','auth/invalid-email':'E-mail invalido.','auth/too-many-requests':'Muitas tentativas. Tente mais tarde.','auth/popup-closed-by-user':'Login cancelado.','auth/cancelled-popup-request':'Login cancelado.'};return m[c]||'Erro ao autenticar.';}
 function showLErr(m){document.getElementById('loginError').textContent=m;}
-function hideLoader(){const l=document.getElementById('authLoader');if(l)l.style.display='none';}
+// hideLoader definida acima com clearTimeout
 function showLogin(){hideLoader();document.getElementById('loginScreen').style.display='flex';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='none';showLoginHome();}
 function showApp(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('paywallScreen').style.display='none';document.getElementById('appRoot').style.display='flex';updateHeader();}
 function showPaywall(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='flex';const nm=CU?.displayName||CU?.email||'';document.getElementById('paywallName').textContent=nm?`Olá, ${nm}! Escolha seu plano`:'Bem-vindo! Escolha seu plano';}
@@ -1136,7 +1151,4 @@ document.getElementById('btnClearSem').onclick=()=>{semOrder=null;document.getEl
 document.getElementById('btnCopyFull').onclick=()=>{if(!readQ)return;navigator.clipboard.writeText(`"${readQ.text}"\n\n${buildInline(readQ)}`).then(()=>toast('Copiado!'));};
 document.getElementById('btnEditFromRead').onclick=()=>{if(readQ){closeM('readModal');openEdit(readQ.id);}};
 
-document.getElementById('btnExport').onclick=async()=>{const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.exportMes??5;if((UD?.exportacoesMes||0)>=lim){toast(`Limite de ${lim} exportacoes/mes atingido.`);return;}const f=getFiltered();if(!f.length){toast('Nenhuma citacao para exportar.');return;}try{const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx,g={};f.forEach(q=>{const n=cols.find(c=>c.id===q.collectionId)?.name||'Sem colecao';(g[n]=g[n]||[]).push(q);});const ch=[];Object.entries(g).forEach(([n,qs])=>{ch.push(new Paragraph({text:n,heading:HeadingLevel.HEADING_2}));qs.forEach(q=>{ch.push(new Paragraph({children:[new TextRun({text:`"${q.text}"`,italics:true,font:'Georgia',size:24})]}));if(q.author||q.work)ch.push(new Paragraph({children:[new TextRun({text:buildAbnt(q),bold:true,font:'Arial',size:20})]}));if((q.tags||[]).length)ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+q.tags.join(', '),font:'Arial',size:18,color:'888888'})]}));if(q.comment)ch.push(new Paragraph({children:[new TextRun({text:q.comment,font:'Arial',size:18,italics:true})]}));ch.push(new Paragraph({text:''}));});});const blob=await Packer.toBlob(new Document({sections:[{children:ch}]})),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`citacoes-${new Date().toISOString().slice(0,10)}.docx`;a.click();await setDoc(doc(db,'usuarios',CU.uid),{exportacoesMes:increment(1)},{merge:true});UD.exportacoesMes=(UD.exportacoesMes||0)+1;toast('DOCX exportado!');}catch(e){toast('Erro ao exportar: '+e.message);}};
-
-document.getElementById('btnOcr').onclick=()=>{const pl=UD?.plano||'leitor';if(!LIMITES[pl]?.ocr){toast('OCR disponivel a partir do plano Doutor.');return;}document.getElementById('ocrFileInput').value='';document.getElementById('ocrPreview').style.display='none';document.getElementById('ocrResult').style.display='none';openM('ocrModal');};
-document.getElementById('ocrFileInput').addEventListener('change',e=>{const f=e.target.files[0];if
+document.getElementById('btnExport').onclick=async()=>{const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.exportMes??5;if((UD?.exportacoesMes||0)>=lim){toast(`Limite de ${lim} exportacoes/mes atingido.`);return;}const f=getFiltered();if(!f.length){toast('Nenhuma citacao para exportar.');return;}try{const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx,g={};f.forEach(q=>{const n=cols.find(c=>c.id===q.collectionId)?.name||'Sem colecao';(g[n]=g[n]||[]).push(q);});const ch=[];Object.entries(g).forEach(([n,qs])=>{ch.push(new Paragraph({text:n,heading:HeadingLevel.HEADING_2}));qs.forEach(q=>{ch.push(new Paragraph({children:[new TextRun({text:`"${q.text}"`,italics:true,font:'Georgia',size:24})]}));if(q.author||q.work)ch.push(new Paragraph({children:[new TextRun({text:buildAbnt(q),bold:true,font:'Arial',size:20})]}));if((q.tags||[]).length)ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+q.tags.join(', '),font:'Arial',size:18,color:'888888'})]}));if(q.comment)ch.push(new Paragraph({children:[new TextRun({text:q.comment,font:'Arial',size:18,italics:true})]}));ch.push(new Paragraph({text:''}));});});const blob=await Packer.toBlob(new Document({sections:[{children:ch}]})),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`citacoes-${new Date().toISOString().slice(0,10)}.docx`;a.click();await setDoc(doc(db,'usuarios',CU.uid),{exportacoesMes:increment(1)},{merge
