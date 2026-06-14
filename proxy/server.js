@@ -32,6 +32,9 @@ try {
   console.error('[firebase-admin] erro:', e.message);
 }
 
+// Health check sem restrição de origem
+app.get('/health',(_,res)=>res.json({ok:true,mp:!!MP_ACCESS_TOKEN,ai:!!ANTHROPIC_API_KEY,firestore:!!db,v:'4.0'}));
+
 app.use((req,res,next)=>{
   const origin = req.headers.origin;
   if(origin && origin !== ALLOWED_ORIGIN){
@@ -376,8 +379,6 @@ app.post('/promo/resgatar', async(req,res)=>{
 app.get('/mp/pubkey', async(_,res)=>{
   res.json({public_key: process.env.MP_PUBLIC_KEY||''});
 });
-
-app.get('/health', (_,res)=>res.json({ok:true, mp:!!MP_ACCESS_TOKEN, ai:!!ANTHROPIC_API_KEY, firestore:!!db, v:'4.0'}));
 
 // ── Keep-alive ────────────────────────────────────────────────────────────────
 const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT||3000}`;
