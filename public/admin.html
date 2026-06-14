@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Segundo Cérebro</title>
+<style>
+:root{--bg:#f5f5f5;--surface:#fff;--accent:#3d2b1f;--text:#1a1814;--text2:#6b6560;--border:#e0dbd0;--green:#27ae60;--red:#e53935}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+button{cursor:pointer;font-family:inherit}
+input,select,textarea{font-family:inherit}
+
+/* ── LOGIN ── */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:48px 40px;max-width:360px;width:100%;text-align:center}
+.login-logo{font-family:Georgia,serif;font-style:italic;font-size:1.5rem;color:var(--accent);margin-bottom:6px}
+.login-sub{font-size:.85rem;color:var(--text2);margin-bottom:28px}
+.btn-google{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;gap:10px;font-size:.95rem;cursor:pointer;color:var(--text);transition:.15s}
+.btn-google:hover{background:#f8f8f8}
+.btn-google svg{width:18px;height:18px}
+.login-error{color:var(--red);font-size:.85rem;margin-top:12px;min-height:20px}
+
+/* ── ADMIN ── */
+#adminRoot{display:none;max-width:960px;margin:0 auto;padding:24px 20px}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.admin-title{font-family:Georgia,serif;font-style:italic;font-size:1.5rem;color:var(--accent)}
+.admin-user{font-size:.85rem;color:var(--text2);display:flex;align-items:center;gap:10px}
+.btn-sm{padding:7px 16px;border-radius:7px;font-size:.85rem;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:.15s}
+.btn-sm:hover{background:#f0ede6}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-accent:hover{opacity:.88}
+.btn-danger{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-danger:hover{opacity:.88}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
+.card-title{font-weight:700;font-size:1rem;margin-bottom:16px;color:var(--accent)}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.metric-box{background:#faf9f6;border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.metric-num{font-size:1.8rem;font-weight:700;color:var(--accent)}
+.metric-label{font-size:.78rem;color:var(--text2);margin-top:4px}
+
+/* ── BUDGET STATUS ── */
+.budget-status{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:8px;font-weight:600;font-size:.95rem}
+.budget-ok{background:#e8f5e9;color:var(--green);border:1px solid #a5d6a7}
+.budget-blocked{background:#fdecea;color:var(--red);border:1px solid #f5c6c6}
+
+/* ── FORM ── */
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.83rem;font-weight:500;color:var(--text2);margin-bottom:5px}
+.form-group input,.form-group select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--text)}
+.form-group input:focus,.form-group select:focus{outline:2px solid var(--accent);border-color:transparent}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:.88rem;cursor:pointer;margin-bottom:14px}
+.checkbox-row input{width:16px;height:16px;cursor:pointer}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:left;padding:10px 12px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text2);border-bottom:2px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:hover td{background:#faf9f6}
+.badge{padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
+.badge-active{background:#e8f5e9;color:var(--green)}
+.badge-cancelled{background:#fdecea;color:var(--red)}
+.badge-loading{background:#f5f5f5;color:var(--text2)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:12px 20px;border-radius:8px;font-size:.88rem;z-index:999;transform:translateY(80px);opacity:0;transition:.25s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Segundo Cérebro</div>
+    <div class="login-sub">Painel Administrativo</div>
+    <button class="btn-google" id="btnAdminGoogle">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Entrar com Google
+    </button>
+    <div class="login-error" id="adminLoginError"></div>
+  </div>
+</div>
+
+<!-- ADMIN ROOT -->
+<div id="adminRoot">
+  <div class="admin-header">
+    <div class="admin-title">Admin — Segundo Cérebro</div>
+    <div class="admin-user">
+      <span id="adminUserName"></span>
+      <button class="btn-sm" id="btnAdminLogout">Sair</button>
+    </div>
+  </div>
+
+  <!-- MÉTRICAS -->
+  <div class="card">
+    <div class="card-title">📊 Métricas</div>
+    <div class="metrics-grid">
+      <div class="metric-box"><div class="metric-num" id="metUsers">—</div><div class="metric-label">Usuários cadastrados</div></div>
+      <div class="metric-box"><div class="metric-num" id="metPaying">—</div><div class="metric-label">Usuários pagantes</div></div>
+      <div class="metric-box"><div class="metric-num" id="metOps">—</div><div class="metric-label">Operações IA (últimas 200)</div></div>
+      <div class="metric-box"><div class="metric-num" id="metCost">—</div><div class="metric-label">Custo estimado (R$)</div></div>
+    </div>
+  </div>
+
+  <!-- ORÇAMENTO -->
+  <div class="card">
+    <div class="card-title">💰 Orçamento Diário</div>
+    <div id="budgetStatus" class="budget-status budget-loading" style="background:#f5f5f5;color:var(--text2);border:1px solid var(--border)">
+      Carregando…
+    </div>
+    <div style="margin-top:12px;display:none" id="liberarWrap">
+      <button class="btn-sm btn-accent" id="btnLiberarSistema">Liberar sistema</button>
+    </div>
+  </div>
+
+  <!-- CRIAR CÓDIGO -->
+  <div class="card">
+    <div class="card-title">🎟 Criar Código Promocional</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Código *</label>
+        <input type="text" id="promoCode" placeholder="EX: BETA2024" style="text-transform:uppercase"
+          oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div class="form-group">
+        <label>Tipo *</label>
+        <select id="promoType">
+          <option value="creditos">Créditos IA</option>
+          <option value="adaptacao">Adaptação de artigo</option>
+          <option value="plano">Upgrade de plano</option>
+          <option value="isencao">Isenção (dias grátis)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label id="promoValueLabel">Valor (quantidade)</label>
+        <input type="text" id="promoValue" placeholder="Ex: 50 ou mestre">
+      </div>
+      <div class="form-group">
+        <label>Usos disponíveis</label>
+        <input type="number" id="promoUses" value="100" min="1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Duração em dias (isenção)</label>
+        <input type="number" id="promoDuration" placeholder="Ex: 30" min="1" max="30">
+      </div>
+      <div class="form-group">
+        <label>Usos por usuário</label>
+        <input type="number" id="promoUsesPerUser" value="1" min="1">
+      </div>
+    </div>
+    <label class="checkbox-row">
+      <input type="checkbox" id="promoIlimitado">
+      Código ilimitado (sem custo de IA para o usuário — máx. 3 ativos)
+    </label>
+    <button class="btn-sm btn-accent" id="btnCriarPromo">Criar código</button>
+    <div id="promoCreateMsg" style="font-size:.83rem;margin-top:8px;min-height:18px"></div>
+  </div>
+
+  <!-- LISTA DE CÓDIGOS -->
+  <div class="card">
+    <div class="card-title">📋 Códigos Promocionais</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th><th>Tipo</th><th>Valor</th>
+            <th>Usos restantes</th><th>Usados</th>
+            <th>Status</th><th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="promoTable"></tbody>
+      </table>
+    </div>
+    <div id="promoTableEmpty" style="font-size:.85rem;color:var(--text2);padding:16px 0;display:none">Nenhum código encontrado.</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="adminToast"></div>
+
+<script type="module">
+import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import {
+  getFirestore, doc, getDoc, updateDoc, setDoc,
+  collection, getDocs, query, orderBy, limit
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFunctions, httpsCallable }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAfaddZQi_QILdYZZQv5zb3R3nHRvp7z4s",
+  authDomain:        "segundo-cerebro-bfb66.firebaseapp.com",
+  projectId:         "segundo-cerebro-bfb66",
+  storageBucket:     "segundo-cerebro-bfb66.firebasestorage.app",
+  messagingSenderId: "850519671097",
+  appId:             "1:850519671097:web:d0c2125bd42e5d5a1668e8"
+};
+
+const ADMIN_EMAIL = 'felipevigneron@gmail.com';
+
+const app       = initializeApp(firebaseConfig);
+const auth      = getAuth(app);
+const db        = getFirestore(app);
+const functions = getFunctions(app);
+
+const fnBudget       = httpsCallable(functions, 'adminControlBudget');
+const fnCreatePromo  = httpsCallable(functions, 'adminCreatePromoCode');
+const fnCancelPromo  = httpsCallable(functions, 'adminCancelPromoCode');
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (!user) { showLogin(); return; }
+  if (user.email !== ADMIN_EMAIL) {
+    document.getElementById('adminLoginError').textContent = 'Acesso negado. Conta não autorizada.';
+    await signOut(auth); showLogin(); return;
+  }
+  document.getElementById('adminUserName').textContent = user.displayName || user.email;
+  showAdmin();
+  await loadAllData();
+});
+
+document.getElementById('btnAdminGoogle').onclick = async () => {
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch(e) { document.getElementById('adminLoginError').textContent = e.message; }
+};
+document.getElementById('btnAdminLogout').onclick = () => signOut(auth);
+
+function showLogin() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminRoot').style.display   = 'none';
+}
+function showAdmin() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminRoot').style.display   = 'block';
+}
+
+// ── LOAD DATA ────────────────────────────────────────────────────────────────
+async function loadAllData() {
+  await Promise.all([loadMetrics(), loadBudget(), loadPromoCodes()]);
+}
+
+async function loadMetrics() {
+  try {
+    const usersSnap = await getDocs(collection(db, 'usuarios'));
+    const users     = usersSnap.docs.map(d => d.data());
+    document.getElementById('metUsers').textContent   = users.length;
+    document.getElementById('metPaying').textContent  = users.filter(u => u.plano && u.plano !== 'leitor').length;
+
+    const logsSnap = await getDocs(query(collection(db, 'ia_logs'), orderBy('timestamp','desc'), limit(200)));
+    const logs     = logsSnap.docs.map(d => d.data());
+    const custo    = logs.reduce((acc, l) => acc + (l.custo || 0), 0);
+    document.getElementById('metOps').textContent  = logs.length;
+    document.getElementById('metCost').textContent = `R$ ${custo.toFixed(2)}`;
+  } catch(e) {
+    console.error('Erro métricas:', e);
+  }
+}
+
+async function loadBudget() {
+  try {
+    const snap = await getDoc(doc(db, 'admin_config', 'budget_daily'));
+    const el   = document.getElementById('budgetStatus');
+    const wrap = document.getElementById('liberarWrap');
+    if (!snap.exists()) {
+      el.className = 'budget-status budget-ok';
+      el.textContent = '✓ Normal (sem dados ainda)';
+      wrap.style.display = 'none';
+      return;
+    }
+    const d = snap.data();
+    if (d.bloqueado) {
+      el.className = 'budget-status budget-blocked';
+      el.textContent = `⚠ BLOQUEADO — R$ ${(d.custoAcumulado||0).toFixed(2)} acumulado hoje`;
+      wrap.style.display = '';
+    } else {
+      el.className = 'budget-status budget-ok';
+      el.textContent = `✓ Normal — R$ ${(d.custoAcumulado||0).toFixed(2)} acumulado hoje`;
+      wrap.style.display = 'none';
+    }
+  } catch(e) { console.error('Erro budget:', e); }
+}
+
+document.getElementById('btnLiberarSistema').onclick = async () => {
+  if (!confirm('Liberar o sistema? As cobranças voltarão a ser processadas.')) return;
+  try {
+    await fnBudget({ action: 'liberar' });
+    toast('Sistema liberado!'); await loadBudget();
+  } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ── PROMO CODES ──────────────────────────────────────────────────────────────
+async function loadPromoCodes() {
+  try {
+    const snap  = await getDocs(collection(db, 'promo_codes'));
+    const codes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const tbody = document.getElementById('promoTable');
+    const empty = document.getElementById('promoTableEmpty');
+    tbody.innerHTML = '';
+    if (!codes.length) { empty.style.display = ''; return; }
+    empty.style.display = 'none';
+    codes.forEach(c => {
+      const tr = document.createElement('tr');
+      const used = (c.redeemedBy || []).length;
+      tr.innerHTML = `
+        <td><strong>${esc(c.code)}</strong></td>
+        <td>${esc(c.type)}</td>
+        <td>${esc(String(c.value ?? '—'))}</td>
+        <td>${c.usesLeft !== null ? c.usesLeft : '∞'}</td>
+        <td>${used}</td>
+        <td><span class="badge ${c.cancelled ? 'badge-cancelled' : 'badge-active'}">${c.cancelled ? 'Cancelado' : 'Ativo'}</span></td>
+        <td>${!c.cancelled ? `<button class="btn-sm btn-danger" data-code="${esc(c.code)}">Cancelar</button>` : '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll('[data-code]').forEach(btn => {
+      btn.onclick = async () => {
+        if (!confirm(`Cancelar o código ${btn.dataset.code}?`)) return;
+        try {
+          await fnCancelPromo({ code: btn.dataset.code });
+          toast('Código cancelado.'); await loadPromoCodes();
+        } catch(e) { toast('Erro: ' + e.message); }
+      };
+    });
+  } catch(e) { console.error('Erro promo codes:', e); }
+}
+
+// Atualiza label do valor conforme tipo
+document.getElementById('promoType').addEventListener('change', e => {
+  const labels = {
+    creditos:   'Valor (quantidade de créditos)',
+    adaptacao:  'Valor (quantidade de adaptações)',
+    plano:      'Valor (nome do plano: mestre, doutor, etc.)',
+    isencao:    'Valor (ignorado — usa duração em dias)',
+  };
+  document.getElementById('promoValueLabel').textContent = labels[e.target.value] || 'Valor';
+});
+
+document.getElementById('btnCriarPromo').onclick = async () => {
+  const msg  = document.getElementById('promoCreateMsg');
+  const code = document.getElementById('promoCode').value.trim().toUpperCase();
+  const type = document.getElementById('promoType').value;
+  const rawVal = document.getElementById('promoValue').value.trim();
+  const value  = type === 'plano' ? rawVal : (parseFloat(rawVal) || 0);
+  const usesLeft     = parseInt(document.getElementById('promoUses').value) || 100;
+  const usesPerUser  = parseInt(document.getElementById('promoUsesPerUser').value) || 1;
+  const durationDays = parseInt(document.getElementById('promoDuration').value) || null;
+  const ilimitado    = document.getElementById('promoIlimitado').checked;
+
+  if (!code || !type) { msg.style.color='var(--red)'; msg.textContent='Código e tipo são obrigatórios.'; return; }
+  try {
+    await fnCreatePromo({
+      code, type, value, usesLeft, usesPerUser, durationDays,
+      privilegeLevel: ilimitado ? 'ilimitado' : 'limitado'
+    });
+    msg.style.color = 'var(--green)';
+    msg.textContent = `✓ Código ${code} criado com sucesso!`;
+    document.getElementById('promoCode').value = '';
+    await loadPromoCodes();
+  } catch(e) {
+    msg.style.color = 'var(--red)';
+    msg.textContent = e.message;
+  }
+};
+
+// ── TOAST ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('adminToast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

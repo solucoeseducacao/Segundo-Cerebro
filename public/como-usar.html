@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Como Usar — Segundo Cérebro</title>
+<style>
+  :root{--bg:#0f1117;--bg2:#1a1d27;--border:#2a2d3e;--text:#e8eaf0;--text2:#8b8fa8;--accent:#7c6aff;--accent2:#a78bfa;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+  .topbar a{color:var(--accent2);text-decoration:none;font-size:.9rem;}
+  .topbar a:hover{text-decoration:underline;}
+  .logo{font-weight:700;font-size:1.1rem;color:var(--text);}
+  .container{max-width:800px;margin:0 auto;padding:48px 24px 80px;}
+  h1{font-size:2rem;font-weight:800;margin-bottom:8px;color:var(--text);}
+  .subtitle{color:var(--text2);margin-bottom:48px;font-size:1.05rem;}
+  h2{font-size:1.25rem;font-weight:700;color:var(--accent2);margin:40px 0 12px;display:flex;align-items:center;gap:10px;}
+  h2 .icon{font-size:1.4rem;}
+  h3{font-size:1rem;font-weight:600;margin:20px 0 6px;color:var(--text);}
+  p{color:var(--text2);margin-bottom:12px;}
+  ul,ol{color:var(--text2);padding-left:20px;margin-bottom:12px;}
+  li{margin-bottom:6px;}
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:16px;}
+  .badge{display:inline-block;background:rgba(124,106,255,.18);color:var(--accent2);border-radius:6px;padding:2px 10px;font-size:.78rem;font-weight:600;margin-bottom:8px;}
+  .step{display:flex;gap:16px;margin-bottom:20px;}
+  .step-num{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+  .step-body{flex:1;}
+  .step-body strong{display:block;color:var(--text);margin-bottom:4px;}
+  .tip{background:rgba(124,106,255,.1);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0;font-size:.9rem;color:var(--text2);}
+  .tip strong{color:var(--accent2);}
+  table{width:100%;border-collapse:collapse;margin:12px 0;}
+  th{text-align:left;color:var(--text2);font-size:.82rem;font-weight:600;padding:8px 12px;border-bottom:1px solid var(--border);}
+  td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2);font-size:.9rem;vertical-align:top;}
+  td:first-child{color:var(--text);font-weight:500;}
+  code{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:.85rem;font-family:monospace;}
+  .toc{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:40px;}
+  .toc h3{color:var(--text);margin-bottom:12px;font-size:1rem;}
+  .toc ol{margin:0;padding-left:18px;}
+  .toc li{margin-bottom:4px;}
+  .toc a{color:var(--accent2);text-decoration:none;font-size:.9rem;}
+  .toc a:hover{text-decoration:underline;}
+  hr{border:none;border-top:1px solid var(--border);margin:40px 0;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">📚 Segundo Cérebro</span>
+  <a href="/">← Voltar ao app</a>
+</div>
+
+<div class="container">
+  <h1>Como usar o Segundo Cérebro</h1>
+  <p class="subtitle">Guia completo de todas as funcionalidades — do login à inteligência artificial.</p>
+
+  <div class="toc">
+    <h3>Índice</h3>
+    <ol>
+      <li><a href="#acesso">Acesso e login</a></li>
+      <li><a href="#citacoes">Gerenciar citações</a></li>
+      <li><a href="#colecoes">Coleções e organização</a></li>
+      <li><a href="#busca">Busca e filtros</a></li>
+      <li><a href="#ia">Funções de inteligência artificial</a></li>
+      <li><a href="#ideias">Módulo de ideias</a></li>
+      <li><a href="#exportar">Exportar referências (ABNT)</a></li>
+      <li><a href="#planos">Planos e assinatura</a></li>
+      <li><a href="#dicas">Dicas e boas práticas</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. ACESSO -->
+  <h2 id="acesso"><span class="icon">🔐</span> 1. Acesso e login</h2>
+  <div class="card">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Clique em "Entrar com Google"</strong>
+        Use sua conta Google. O login é rápido e seguro — nenhuma senha adicional é necessária.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Ou use e-mail e senha</strong>
+        Cadastre-se com e-mail e senha próprios. Clique em "Não tenho conta" na tela de login para criar uma.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Recuperação de senha</strong>
+        Clique em "Esqueci minha senha" e informe seu e-mail. Você receberá um link de redefinição.
+      </div>
+    </div>
+  </div>
+  <div class="tip"><strong>Acesso restrito:</strong> O app é exclusivo para assinantes. Após o login, usuários sem plano ativo são direcionados à tela de assinatura.</div>
+
+  <!-- 2. CITAÇÕES -->
+  <h2 id="citacoes"><span class="icon">📝</span> 2. Gerenciar citações</h2>
+  <p>Citações são o núcleo do Segundo Cérebro. Cada citação armazena o trecho, os dados do autor, obra, ano, páginas e tags.</p>
+
+  <h3>Adicionar uma citação</h3>
+  <div class="card">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Clique no botão "+" ou "Nova Citação"</strong> (canto superior direito ou botão flutuante).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Preencha os campos:</strong>
+        <ul style="margin-top:6px">
+          <li><strong>Texto da citação</strong> — o trecho exato</li>
+          <li><strong>Autor</strong> — sobrenome, Nome (para geração ABNT automática)</li>
+          <li><strong>Obra</strong> — título do livro, artigo ou fonte</li>
+          <li><strong>Ano</strong> e <strong>páginas</strong> (ex: <code>p. 42</code> ou <code>pp. 42-45</code>)</li>
+          <li><strong>Tags</strong> — palavras-chave separadas por vírgula</li>
+          <li><strong>Coleção</strong> — agrupe em uma coleção temática</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>Salve.</strong> A referência ABNT é gerada automaticamente e aparece no card.</div>
+    </div>
+  </div>
+
+  <h3>Editar ou excluir uma citação</h3>
+  <p>Em cada card de citação há dois botões: <strong>Editar</strong> (abre o formulário preenchido) e <strong>Excluir</strong> (remove permanentemente após confirmação).</p>
+
+  <h3>Ler uma citação em destaque</h3>
+  <p>Clique em qualquer card ou no botão <strong>Ler</strong> para abrir a citação em modo leitura — exibição ampliada com a referência ABNT completa.</p>
+
+  <div class="tip"><strong>Referência ABNT automática:</strong> Se você preencher Autor, Obra, Ano e Páginas, o app gera automaticamente a referência ABNT e a citação inline (SOBRENOME, ano, p. XX). Clique na referência no card para copiá-la.</div>
+
+  <!-- 3. COLEÇÕES -->
+  <h2 id="colecoes"><span class="icon">📂</span> 3. Coleções e organização</h2>
+  <p>Coleções funcionam como pastas temáticas para suas citações. Cada coleção tem um nome e uma cor de identificação.</p>
+  <div class="card">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Criar coleção:</strong> No painel lateral esquerdo, clique em <strong>"+ Nova coleção"</strong>, dê um nome e escolha uma cor.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Associar citação a uma coleção:</strong> Ao criar ou editar uma citação, selecione a coleção no campo "Coleção".</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>Filtrar por coleção:</strong> Clique no nome da coleção no painel lateral para ver apenas suas citações. Clique em "Todas" para ver o acervo completo.</div>
+    </div>
+  </div>
+
+  <!-- 4. BUSCA -->
+  <h2 id="busca"><span class="icon">🔍</span> 4. Busca e filtros</h2>
+  <table>
+    <tr><th>Recurso</th><th>Como usar</th></tr>
+    <tr><td>Busca por texto</td><td>Use a barra de pesquisa no topo. Busca em texto da citação, autor e obra simultaneamente.</td></tr>
+    <tr><td>Filtro por tag</td><td>Clique em uma tag no painel superior para filtrar. Clique novamente para remover.</td></tr>
+    <tr><td>Ordenação</td><td>Use o menu "Ordenar por" para escolher: Mais recente, Autor A→Z, Autor Z→A, Obra A→Z.</td></tr>
+    <tr><td>Busca semântica (IA)</td><td>Planos Doutor e Pesquisador Pro. Busca por significado, não apenas palavras exatas.</td></tr>
+  </table>
+
+  <!-- 5. IA -->
+  <h2 id="ia"><span class="icon">🤖</span> 5. Funções de inteligência artificial</h2>
+  <p>O Segundo Cérebro usa o Claude (Anthropic) para oferecer assistência inteligente ao seu trabalho acadêmico.</p>
+
+  <div class="card">
+    <div class="badge">Em cada citação</div>
+    <table>
+      <tr><th>Função</th><th>O que faz</th></tr>
+      <tr><td>Resumir</td><td>Gera um resumo conciso do trecho selecionado, ideal para fichamentos.</td></tr>
+      <tr><td>Expandir</td><td>Desenvolve o conteúdo da citação com contexto adicional e relações teóricas.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="badge">No módulo de Ideias</div>
+    <table>
+      <tr><th>Função</th><th>O que faz</th></tr>
+      <tr><td>Conectar a citações (automático)</td><td>Enquanto você digita uma ideia, a IA analisa o texto e seleciona automaticamente as citações do seu acervo mais relevantes para embasar aquela ideia.</td></tr>
+      <tr><td>Expandir ideia</td><td>A IA desenvolve sua ideia em um parágrafo acadêmico mais elaborado, que pode ser salvo como nova ideia.</td></tr>
+    </table>
+  </div>
+
+  <div class="tip"><strong>Como funciona a conexão automática:</strong> Após digitar ao menos 20 caracteres no campo de nova ideia, aguarde 1,5 segundos. A IA analisará seu texto e marcará automaticamente as citações mais relevantes do seu acervo. Você pode ajustar a seleção antes de salvar.</div>
+
+  <!-- 6. IDEIAS -->
+  <h2 id="ideias"><span class="icon">💡</span> 6. Módulo de ideias</h2>
+  <p>O módulo de ideias permite registrar reflexões, hipóteses e argumentos, conectando-os às citações que os fundamentam.</p>
+  <div class="card">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Abra a aba "Ideias"</strong> no menu superior.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Clique em "Nova Ideia"</strong> e comece a digitar sua reflexão ou argumento.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>A IA conecta automaticamente</strong> as citações relevantes do seu acervo enquanto você escreve (após 1,5s de pausa). Você verá as citações sugeridas selecionadas.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body"><strong>Ajuste e salve.</strong> As citações conectadas ficam associadas à ideia. Ao abrir uma ideia salva, você vê o texto e suas referências de apoio.</div>
+    </div>
+  </div>
+
+  <!-- 7. EXPORTAR -->
+  <h2 id="exportar"><span class="icon">📄</span> 7. Exportar referências (ABNT)</h2>
+  <p>O app gera referências ABNT em dois formatos:</p>
+  <table>
+    <tr><th>Formato</th><th>Exemplo</th><th>Uso</th></tr>
+    <tr><td>Referência completa</td><td>SOBRENOME, Nome. <em>Obra</em>. Ano, p. XX.</td><td>Lista de referências ao final do trabalho</td></tr>
+    <tr><td>Citação inline</td><td>(SOBRENOME, ano, p. XX)</td><td>Dentro do texto</td></tr>
+  </table>
+  <p>Clique na referência exibida no card para copiá-la para a área de transferência. Use o botão <strong>Exportar</strong> (disponível conforme seu plano) para gerar um arquivo com todas as referências selecionadas.</p>
+
+  <!-- 8. PLANOS -->
+  <h2 id="planos"><span class="icon">⭐</span> 8. Planos e assinatura</h2>
+  <table>
+    <tr><th>Plano</th><th>Avulso</th><th>Anual recorrente</th><th>Citações</th><th>Exportações/mês</th><th>IA</th><th>OCR</th></tr>
+    <tr><td>Leitor</td><td colspan="2" style="text-align:center">Gratuito</td><td>30</td><td>5</td><td>Não</td><td>Não</td></tr>
+    <tr><td>Mestre</td><td>R$ 29,90</td><td>R$ 19,90/mês</td><td>500</td><td>20</td><td>Básica (resumir)</td><td>Não</td></tr>
+    <tr><td>Doutor</td><td>R$ 49,90</td><td>R$ 39,90/mês</td><td>Ilimitadas</td><td>Ilimitadas</td><td>Completa + Semântica</td><td>Sim</td></tr>
+    <tr><td>Pesquisador Pro</td><td>R$ 89,90</td><td>R$ 79,90/mês</td><td>Ilimitadas</td><td>Ilimitadas</td><td>Completa + Semântica</td><td>Sim</td></tr>
+  </table>
+  <p>Para assinar, escolha seu plano na tela inicial e siga as instruções de pagamento. O acesso é liberado automaticamente após a confirmação.</p>
+
+  <!-- 9. DICAS -->
+  <h2 id="dicas"><span class="icon">✨</span> 9. Dicas e boas práticas</h2>
+  <div class="card">
+    <ul>
+      <li><strong>Use tags consistentes:</strong> defina um vocabulário controlado para suas tags (ex: "metodologia", "teoria", "dados") para filtrar com precisão.</li>
+      <li><strong>Preencha o autor no formato ABNT:</strong> Sobrenome, Nome (ex: <code>Freire, Paulo</code>) para que a referência automática saia correta.</li>
+      <li><strong>Crie coleções por projeto:</strong> separe suas citações por dissertação, artigo ou disciplina.</li>
+      <li><strong>Use ideias como rascunho de parágrafos:</strong> escreva seu argumento, deixe a IA conectar as citações e use o resultado como base do parágrafo acadêmico.</li>
+      <li><strong>Copie a referência inline diretamente para o Word:</strong> clique na referência no card e cole (<kbd>Ctrl+V</kbd>) onde precisar no texto.</li>
+      <li><strong>Mantenha-se conectado:</strong> o app salva na nuvem automaticamente. Um indicador no rodapé mostra se você está online.</li>
+    </ul>
+  </div>
+
+  <hr>
+  <p style="text-align:center;color:var(--text2);font-size:.85rem">Segundo Cérebro · <a href="/" style="color:var(--accent2)">Voltar ao app</a></p>
+</div>
+
+</body>
+</html>

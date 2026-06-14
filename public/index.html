@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<!-- v2 -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segundo Cérebro — Citações</title>
+<link rel="manifest" href="/manifest.json">
+<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+<style>
+:root{--bg:#f7f5f0;--surface:#ffffff;--surface2:#f0ede6;--border:#e0dbd0;--border2:#c8c2b4;--text:#1a1814;--text2:#6b6560;--text3:#9e9890;--accent:#3d2b1f}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+button{cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:48px 40px;max-width:400px;width:100%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.login-logo{font-family:Georgia,serif;font-style:italic;font-size:1.8rem;color:var(--accent);margin-bottom:8px}
+.login-sub{color:var(--text2);font-size:.9rem;margin-bottom:32px}
+.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text3);font-size:.85rem}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-google{width:100%;padding:12px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;gap:10px;font-size:.95rem;color:var(--text);transition:.15s}
+.btn-google:hover{background:var(--surface2)}
+.btn-google svg{width:18px;height:18px}
+.login-form input{width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--text);margin-bottom:10px}
+.login-form input:focus{outline:2px solid var(--accent);border-color:transparent}
+.btn-primary{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:500;transition:.15s}
+.btn-primary:hover{opacity:.88}
+.login-links{margin-top:14px;font-size:.85rem;color:var(--text2)}
+.login-links a{color:var(--accent);text-decoration:none;cursor:pointer}
+.login-error{color:#c0392b;font-size:.85rem;margin-top:8px;min-height:20px}
+#appRoot{display:none;flex-direction:column;height:100vh;overflow:hidden}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+.header-logo{font-family:Georgia,serif;font-style:italic;font-size:1.25rem;color:var(--accent);white-space:nowrap;flex-shrink:0}
+.header-search{display:flex;align-items:center;flex:1;max-width:360px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0 12px;gap:8px}
+.header-search input{border:none;background:transparent;padding:8px 0;flex:1;font-size:.9rem;color:var(--text)}
+.header-search input:focus{outline:none}
+.header-search .search-hint{font-size:.75rem;color:var(--text3);white-space:nowrap}
+.header-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.badge-plan{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;background:var(--surface2);color:var(--accent);border:1px solid var(--border2)}
+.badge-credits{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:500;background:#fff8e1;color:#7c5c00;border:1px solid #ffe082}
+.btn-sm{padding:7px 14px;border-radius:7px;font-size:.85rem;font-weight:500;border:1px solid var(--border2);background:var(--surface);color:var(--text);transition:.15s}
+.btn-sm:hover{background:var(--surface2)}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-accent:hover{opacity:.88}
+.user-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--border2)}
+.user-name{font-size:.85rem;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-body{display:flex;flex:1;overflow:hidden;min-height:0}
+aside{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:16px 0}
+.sidebar-section{padding:0 16px;margin-bottom:8px}
+.sidebar-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px}
+.collection-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;cursor:pointer;transition:.12s;color:var(--text);font-size:.88rem;border:none;background:none;width:100%;text-align:left}
+.collection-item:hover{background:var(--surface2)}
+.collection-item.active{background:var(--surface2);font-weight:600;color:var(--accent)}
+.col-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.col-count{margin-left:auto;font-size:.75rem;color:var(--text3)}
+.btn-new-col{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:7px;font-size:.85rem;color:var(--text2);border:1px dashed var(--border2);background:transparent;width:calc(100% - 32px);margin:4px 16px;transition:.12s}
+.btn-new-col:hover{background:var(--surface2);border-style:solid}
+.sidebar-sort{padding:0 16px;margin-top:12px}
+.sidebar-sort select{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;font-size:.85rem;background:var(--surface);color:var(--text)}
+main{flex:1;overflow-y:auto;padding:20px}
+.main-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;min-height:32px}
+.tag-chip{padding:4px 12px;border-radius:20px;font-size:.8rem;border:1px solid var(--border2);background:var(--surface);cursor:pointer;transition:.12s;color:var(--text2)}
+.tag-chip:hover,.tag-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.results-count{font-size:.82rem;color:var(--text3);margin-left:auto}
+.semantic-bar{display:flex;gap:8px;margin-bottom:16px}
+.semantic-bar input{flex:1;padding:9px 14px;border:1px solid var(--border2);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--text)}
+.semantic-bar input:focus{outline:2px solid var(--accent);border-color:transparent}
+.btn-semantic{padding:9px 16px;border-radius:8px;background:var(--accent);color:#fff;border:none;font-size:.85rem;font-weight:500}
+.btn-clear-sem{padding:9px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);font-size:.85rem;color:var(--text2)}
+.quotes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.quote-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:.15s;position:relative}
+.quote-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card-stripe{height:4px}
+.card-body{padding:16px}
+.card-text{font-family:Georgia,serif;font-size:.92rem;line-height:1.65;color:var(--text);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px}
+.card-meta{font-size:.78rem;color:var(--text2);margin-bottom:8px}
+.card-meta strong{color:var(--text);font-weight:600}
+.card-abnt{font-size:.75rem;color:var(--text3);padding:8px;background:var(--surface2);border-radius:6px;cursor:pointer;border:1px solid var(--border);transition:.12s;line-height:1.5}
+.card-abnt:hover{background:var(--border);color:var(--text2)}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.tag-pill{padding:2px 8px;border-radius:12px;font-size:.72rem;background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+.card-actions{display:flex;gap:6px;padding:8px 16px 12px;border-top:1px solid var(--border)}
+.card-btn{padding:5px 12px;border-radius:6px;font-size:.78rem;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:.12s}
+.card-btn:hover{background:var(--surface2);color:var(--text)}
+.card-btn.danger:hover{background:#fdecea;color:#c0392b;border-color:#f5c6c6}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3)}
+.empty-state .empty-icon{font-size:3rem;margin-bottom:12px}
+.statusbar{background:var(--surface);border-top:1px solid var(--border);padding:6px 20px;font-size:.75rem;color:var(--text3);display:flex;align-items:center;gap:6px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#4caf50}
+.status-dot.offline{background:#e53935}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:12px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-sm{max-width:480px}
+.modal-md{max-width:680px}
+.modal-lg{max-width:860px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border)}
+.modal-title{font-size:1.05rem;font-weight:600;color:var(--text)}
+.btn-close{background:none;border:none;font-size:1.3rem;color:var(--text3);line-height:1;padding:4px}
+.btn-close:hover{color:var(--text)}
+.modal-body{padding:24px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.85rem;font-weight:500;color:var(--text2);margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--text)}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:2px solid var(--accent);border-color:transparent}
+.form-group textarea{resize:vertical;min-height:90px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.color-picker{display:flex;gap:8px;flex-wrap:wrap}
+.color-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:.12s}
+.color-swatch.selected{border-color:var(--text)}
+.tags-input-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);cursor:text}
+.tags-input-wrap input{border:none;outline:none;font-size:.88rem;background:transparent;flex:1;min-width:100px;color:var(--text)}
+.tag-remove{cursor:pointer;margin-left:4px;color:var(--text3)}
+#readModal .modal-body{padding:28px}
+.read-text{font-family:Georgia,serif;font-size:1.05rem;line-height:1.8;color:var(--text);margin-bottom:24px;white-space:pre-wrap}
+.read-section{margin-bottom:16px}
+.read-section-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px}
+.read-copy-row{display:flex;align-items:flex-start;gap:10px}
+.read-copy-text{flex:1;font-size:.85rem;color:var(--text2);line-height:1.6;background:var(--surface2);padding:10px 12px;border-radius:6px;border:1px solid var(--border)}
+.btn-copy{padding:6px 14px;border-radius:6px;font-size:.8rem;border:1px solid var(--border2);background:var(--surface);color:var(--text2);white-space:nowrap;flex-shrink:0}
+.btn-copy:hover{background:var(--surface2)}
+.read-actions{display:flex;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px}
+.plan-card{border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;transition:.15s}
+.plan-card:hover{border-color:var(--accent)}
+.plan-card.current{border-color:var(--accent);background:var(--surface2)}
+.plan-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
+.plan-price{font-size:1.2rem;font-weight:700;color:var(--accent);margin-bottom:8px}
+.plan-features{font-size:.75rem;color:var(--text2);line-height:1.7;margin-bottom:12px;text-align:left}
+.avulsos-section{border-top:1px solid var(--border);padding-top:20px;margin-bottom:20px}
+.avulso-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.promo-section{border-top:1px solid var(--border);padding-top:20px}
+.promo-row{display:flex;gap:10px}
+.promo-row input{flex:1;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--text)}
+.pix-qr{text-align:center;padding:16px 0}
+.pix-qr img{max-width:200px;border-radius:8px;border:1px solid var(--border)}
+.pix-code-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.78rem;word-break:break-all;color:var(--text2);margin:12px 0;font-family:monospace}
+.nav-tabs{display:flex;gap:4px;padding:0 16px;margin-bottom:0;border-bottom:1px solid var(--border)}
+.nav-tab{padding:8px 16px;border-radius:8px 8px 0 0;font-size:.85rem;font-weight:500;border:1px solid transparent;border-bottom:none;background:none;color:var(--text2);cursor:pointer;transition:.12s;position:relative;bottom:-1px}
+.nav-tab.active{background:var(--surface);border-color:var(--border);color:var(--accent);font-weight:600}
+.nav-tab:hover:not(.active){background:var(--surface2)}
+.tab-panel{display:none}.tab-panel.active{display:flex;flex:1;overflow:hidden}
+.ideias-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:20px;flex:1;overflow-y:auto;align-content:start}
+.ideia-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:.15s;position:relative}
+.ideia-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.ideia-num{position:absolute;top:10px;right:12px;font-size:.72rem;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 7px;border-radius:10px}
+.ideia-body{padding:14px 14px 10px}
+.ideia-text{font-size:.92rem;line-height:1.65;color:var(--text);white-space:pre-wrap;margin-bottom:10px}
+.ideia-actions{display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--border);flex-wrap:wrap}
+.mic-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;background:var(--accent);color:#fff;border:none;font-size:.88rem;font-weight:500;transition:.15s}
+.mic-btn:hover{opacity:.88}
+.mic-btn.recording{background:#e53935;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.conexoes-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.conexao-pill{padding:2px 8px;border-radius:12px;font-size:.72rem;background:#e8f4fd;color:#1565c0;border:1px solid #bbdefb;cursor:pointer}
+.conexao-pill:hover{background:#bbdefb}
+.btn-ai{background:linear-gradient(135deg,#3d5afe,#7c4dff);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:.78rem;font-weight:500;cursor:pointer;transition:.15s}
+.btn-ai:hover{opacity:.88}
+.btn-ai:disabled{opacity:.5;cursor:wait}
+.ai-thinking{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:12px 20px;border-radius:8px;font-size:.88rem;z-index:999;transform:translateY(80px);opacity:0;transition:.25s;pointer-events:none;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:680px){
+.app-body{flex-direction:column}
+aside{width:100%;border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;overflow-y:hidden;padding:10px 16px;display:flex;gap:8px;align-items:center}
+.sidebar-section,.sidebar-sort,.btn-new-col{display:none}
+.collection-item{white-space:nowrap;padding:6px 12px}
+.quotes-grid{grid-template-columns:1fr}
+.header-search .search-hint{display:none}
+.user-name{display:none}
+.form-row{grid-template-columns:1fr}
+.plans-grid{grid-template-columns:1fr 1fr}
+.login-box{padding:32px 20px}
+}
+@media(max-width:480px){
+.login-box{padding:28px 16px;border-radius:8px}
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Segundo Cérebro</div>
+    <div class="login-sub">Gestão inteligente de citações acadêmicas</div>
+
+    <!-- TELA INICIAL: dois caminhos claros -->
+    <div id="loginHomeWrap">
+      <button class="btn-primary" id="btnLoginGoogle" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;padding:13px;font-size:1rem">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Entrar com Google
+      </button>
+      <button id="btnIrCadastro" style="width:100%;padding:13px;border-radius:8px;border:2px solid var(--accent);background:transparent;color:var(--accent);font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:10px;transition:.15s" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">
+        ✨ Crie sua conta
+      </button>
+      <button id="btnIrLogin" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:.9rem;cursor:pointer;transition:.15s">
+        Já tenho conta — Entrar com e-mail
+      </button>
+      <div class="login-error" id="loginError" style="margin-top:10px"></div>
+    </div>
+
+    <!-- LOGIN COM E-MAIL -->
+    <div class="login-form" id="loginFormWrap" style="display:none">
+      <input type="email" id="loginEmail" placeholder="E-mail" autocomplete="email">
+      <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password">
+      <button class="btn-primary" id="btnLoginEmail">Entrar</button>
+      <div class="login-links"><a id="linkReset">Esqueci a senha</a></div>
+      <div class="login-error" id="loginErrorEmail"></div>
+      <div style="margin-top:12px;text-align:center"><a id="linkVoltarHome" style="font-size:.85rem;color:var(--text2);cursor:pointer;text-decoration:underline">← Voltar</a></div>
+    </div>
+
+    <!-- CADASTRO -->
+    <div class="login-form" id="cadastroFormWrap" style="display:none">
+      <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px;text-align:left">Crie sua conta gratuita. Após o cadastro, escolha seu plano.</p>
+      <input type="email" id="cadEmail" placeholder="E-mail" autocomplete="email">
+      <input type="password" id="cadPassword" placeholder="Senha (min. 6 caracteres)" autocomplete="new-password">
+      <button class="btn-primary" id="btnCadastro" style="font-size:1rem;padding:13px">Criar minha conta →</button>
+      <div class="login-error" id="cadError"></div>
+      <div style="margin-top:12px;text-align:center"><a id="linkVoltarHome2" style="font-size:.85rem;color:var(--text2);cursor:pointer;text-decoration:underline">← Voltar</a></div>
+    </div>
+
+    <!-- RECUPERAR SENHA -->
+    <div class="login-form" id="resetFormWrap" style="display:none">
+      <input type="email" id="resetEmail" placeholder="Seu e-mail">
+      <button class="btn-primary" id="btnReset">Enviar link de recuperacao</button>
+      <div class="login-links"><a id="linkVoltarLogin2">← Voltar ao login</a></div>
+      <div class="login-error" id="resetMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div id="paywallScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;overflow-y:auto">
+  <div style="text-align:center;max-width:480px;margin:0 auto;padding:40px 24px 60px">
+    <div style="font-size:2.5rem;margin-bottom:8px">🔒</div>
+    <h2 style="font-size:1.4rem;font-weight:700;margin-bottom:8px" id="paywallName">Acesso restrito</h2>
+    <p style="color:var(--text2);font-size:.95rem;margin-bottom:8px">Escolha um plano para começar. O plano Leitor é gratuito.</p>
+    <button onclick="document.getElementById('comparePlansModal').style.display='flex'" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:.85rem;text-decoration:underline;margin-bottom:20px">📊 Comparar planos em detalhes</button>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">
+      <div style="border:2px solid var(--accent);border-radius:12px;padding:16px;text-align:left;position:relative">
+        <span style="position:absolute;top:-10px;left:12px;background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:20px">GRATUITO</span>
+        <strong>Plano Leitor</strong><span style="float:right;color:var(--accent)">R$ 0</span>
+        <p style="font-size:.82rem;color:var(--text2);margin-top:4px">30 citações · 5 exportações/mês · sem IA</p>
+        <button class="btn-primary" style="width:100%;margin-top:10px" onclick="ativarLeitor()">Começar grátis</button>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left">
+        <strong>Plano Mestre</strong>
+        <p style="font-size:.82rem;color:var(--text2);margin-top:4px">500 citações · 20 exportações/mês · IA básica (resumir)</p>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button onclick="iniciarPagamentoPix('mestre',29.90)" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);cursor:pointer;font-size:.8rem;font-weight:600">R$ 29,90<br><span style="font-size:.7rem;opacity:.8">PIX avulso</span></button>
+          <button onclick="iniciarAssinatura('mestre')" style="flex:1;padding:10px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:.8rem;font-weight:600">R$ 19,90/mês<br><span style="font-size:.7rem;opacity:.8">cartão recorrente</span></button>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left">
+        <strong>Plano Doutor</strong>
+        <p style="font-size:.82rem;color:var(--text2);margin-top:4px">Citações ilimitadas · exportações ilimitadas · IA completa · OCR</p>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button onclick="iniciarPagamentoPix('doutor',49.90)" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);cursor:pointer;font-size:.8rem;font-weight:600">R$ 49,90<br><span style="font-size:.7rem;opacity:.8">PIX avulso</span></button>
+          <button onclick="iniciarAssinatura('doutor')" style="flex:1;padding:10px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:.8rem;font-weight:600">R$ 39,90/mês<br><span style="font-size:.7rem;opacity:.8">cartão recorrente</span></button>
+        </div>
+      </div>
+      <div style="border:2px solid #c9a84c;border-radius:12px;padding:16px;text-align:left;background:#fffdf5;position:relative">
+        <span style="position:absolute;top:-10px;left:12px;background:#c9a84c;color:#fff;font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:20px">⭐ MAIS POPULAR</span>
+        <strong>Pesquisador Pro</strong>
+        <p style="font-size:.82rem;color:var(--text2);margin-top:4px">Tudo ilimitado · IA sem restrições · busca semântica · suporte prioritário</p>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button onclick="iniciarPagamentoPix('pesquisador_pro',89.90)" style="flex:1;padding:10px;border-radius:8px;border:1px solid #c9a84c;background:#fff;color:#7a5c00;cursor:pointer;font-size:.8rem;font-weight:600">R$ 89,90<br><span style="font-size:.7rem;opacity:.8">PIX avulso</span></button>
+          <button onclick="iniciarAssinatura('pesquisador_pro')" style="flex:1;padding:10px;border-radius:8px;border:none;background:#c9a84c;color:#fff;cursor:pointer;font-size:.8rem;font-weight:600">R$ 79,90/mês<br><span style="font-size:.7rem;opacity:.8">cartão recorrente</span></button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <p style="font-size:.8rem;color:var(--text2);margin-bottom:8px">Tem um código de convite?</p>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="paywallPromoInput" placeholder="CÓDIGO" style="flex:1;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--text);text-transform:uppercase">
+        <button class="btn-sm btn-accent" onclick="resgatarCodigoPaywall()">Resgatar</button>
+      </div>
+      <div id="paywallPromoMsg" style="font-size:.8rem;margin-top:6px;min-height:16px"></div>
+    </div>
+    <button onclick="sairPaywall()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.85rem;text-decoration:underline">Sair</button>
+  </div>
+</div>
+
+<!-- MODAL: Comparar Planos -->
+<div id="comparePlansModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10001;align-items:flex-start;justify-content:center;overflow-y:auto;padding:24px 12px">
+  <div style="background:var(--bg);border-radius:16px;padding:28px 20px;max-width:680px;width:100%;margin:auto;position:relative">
+    <button onclick="document.getElementById('comparePlansModal').style.display='none'" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text2)">×</button>
+    <h3 style="text-align:center;margin-bottom:20px;font-size:1.2rem">📊 Comparação de Planos</h3>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem;text-align:center">
+      <thead>
+        <tr style="background:var(--accent);color:#fff">
+          <th style="padding:10px 8px;text-align:left;border-radius:8px 0 0 0">Recurso</th>
+          <th style="padding:10px 8px">Leitor<br><span style="font-weight:400;font-size:.75rem">Grátis</span></th>
+          <th style="padding:10px 8px">Mestre<br><span style="font-weight:400;font-size:.75rem">R$19,90/mês</span></th>
+          <th style="padding:10px 8px">Doutor<br><span style="font-weight:400;font-size:.75rem">R$39,90/mês</span></th>
+          <th style="padding:10px 8px;border-radius:0 8px 0 0">Pro<br><span style="font-weight:400;font-size:.75rem">R$79,90/mês</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Citações salvas</td><td>30</td><td>500</td><td>∞</td><td>∞</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">Exportações/mês</td><td>5</td><td>20</td><td>∞</td><td>∞</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">IA (resumir, melhorar)</td><td>✗</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">OCR (extrair texto de imagem)</td><td>✗</td><td>✗</td><td>✓</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Busca semântica por conceito</td><td>✗</td><td>✗</td><td>✓</td><td>✓</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">Adaptar artigo às normas (IA)</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Suporte prioritário</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">Exportação ABNT Word (.docx)</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Coleções e tags</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">Ideias e conexões com citações</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="text-align:center;font-size:.78rem;color:var(--text2);margin-top:16px">Todos os planos incluem acesso web e sincronização em nuvem.</p>
+    <button onclick="document.getElementById('comparePlansModal').style.display='none'" class="btn-primary" style="margin-top:16px;max-width:200px;display:block;margin-left:auto;margin-right:auto">Fechar</button>
+  </div>
+</div>
+
+<!-- MODAL PIX PAGAMENTO -->
+<div id="pixModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10000;align-items:center;justify-content:center">
+  <div style="background:var(--bg);border-radius:16px;padding:28px;max-width:420px;width:90%;text-align:center">
+    <h3 style="margin-bottom:4px">Pagar via PIX</h3>
+    <p id="pixModalDesc" style="color:var(--text2);font-size:.85rem;margin-bottom:16px"></p>
+    <div id="pixLoadingMsg" style="color:var(--text2);font-size:.9rem;padding:24px 0">Gerando PIX...</div>
+    <div id="pixQrArea" style="display:none">
+      <img id="pixQrImg" src="" alt="QR Code PIX" style="width:180px;height:180px;border-radius:8px;border:1px solid var(--border);margin-bottom:12px">
+      <p style="font-size:.78rem;color:var(--text2);margin-bottom:8px">Ou copie o código:</p>
+      <div id="pixCodigoCopia" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:.75rem;word-break:break-all;cursor:pointer;margin-bottom:12px" onclick="copiarPixCodigo()"></div>
+      <button class="btn-primary" style="width:100%;margin-bottom:10px" onclick="copiarPixCodigo()">📋 Copiar código PIX</button>
+      <p style="font-size:.78rem;color:var(--text2);margin-bottom:12px">Após o pagamento, seu acesso é liberado automaticamente em até 1 minuto.</p>
+      <div id="pixStatusMsg" style="font-size:.85rem;min-height:20px;margin-bottom:8px"></div>
+    </div>
+    <div id="pixErroMsg" style="display:none;color:#c0392b;font-size:.85rem;margin-bottom:12px"></div>
+    <button onclick="fecharPixModal()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.85rem;text-decoration:underline">Fechar</button>
+  </div>
+</div>
+
+<!-- MODAL CARTÃO RECORRENTE -->
+<div id="cartaoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10000;align-items:center;justify-content:center">
+  <div style="background:var(--bg);border-radius:16px;padding:28px;max-width:440px;width:90%">
+    <h3 style="margin-bottom:4px;text-align:center">Assinatura com Cartão</h3>
+    <p id="cartaoModalDesc" style="color:var(--text2);font-size:.85rem;margin-bottom:20px;text-align:center"></p>
+    <div id="cartaoForm">
+      <div style="margin-bottom:12px">
+        <label style="font-size:.82rem;color:var(--text2);display:block;margin-bottom:4px">Número do cartão</label>
+        <input type="text" id="cartaoNumero" placeholder="0000 0000 0000 0000" maxlength="19" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--text)">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div>
+          <label style="font-size:.82rem;color:var(--text2);display:block;margin-bottom:4px">Validade (MM/AA)</label>
+          <input type="text" id="cartaoValidade" placeholder="12/28" maxlength="5" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--text)">
+        </div>
+        <div>
+          <label style="font-size:.82rem;color:var(--text2);display:block;margin-bottom:4px">CVV</label>
+          <input type="text" id="cartaoCvv" placeholder="123" maxlength="4" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--text)">
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:.82rem;color:var(--text2);display:block;margin-bottom:4px">Nome no cartão</label>
+        <input type="text" id="cartaoNome" placeholder="NOME COMO NO CARTÃO" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--text);text-transform:uppercase">
+      </div>
+      <p style="font-size:.75rem;color:var(--text2);margin-bottom:16px;text-align:center">🔒 Pagamento seguro via Mercado Pago. Seus dados não são armazenados.</p>
+      <div id="cartaoErroMsg" style="color:#c0392b;font-size:.82rem;margin-bottom:10px;min-height:18px;text-align:center"></div>
+      <button id="btnConfirmarCartao" class="btn-primary" onclick="confirmarAssinatura()" style="width:100%;margin-bottom:10px">Assinar agora</button>
+    </div>
+    <div style="text-align:center">
+      <button onclick="fecharCartaoModal()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.85rem;text-decoration:underline">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="appRoot">
+  <header>
+    <div class="header-logo">Segundo Cerebro</div>
+    <div class="header-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" id="searchInput" placeholder="Buscar citacoes...">
+      <span class="search-hint">Ctrl+K</span>
+    </div>
+    <div class="header-right">
+      <span class="badge-plan" id="badgePlan">Leitor</span>
+      <span class="badge-credits" id="badgeCredits">0 creditos</span>
+      <span id="creditAlertBadge" style="display:none;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;background:#fff3cd;color:#856404;border:1px solid #ffc107;cursor:pointer" onclick="openM('plansModal')">⚠️ Créditos baixos</span>
+      <button class="btn-sm" id="btnPlanos">Planos</button>
+      <button class="btn-sm btn-accent" id="btnNovaCitacao">+ Nova citacao</button>
+      <button class="btn-sm" id="btnAdminPanel" style="display:none;background:#1a1814;color:#f7c948;border-color:#f7c948;font-weight:700">⚙️ Admin</button>
+      <span class="user-name" id="userName"></span>
+      <img class="user-avatar" id="userAvatar" src="" alt="" style="display:none">
+      <a href="/como-usar.html" target="_blank" class="btn-sm" style="text-decoration:none">Como usar</a>
+      <button class="btn-sm" id="btnLogout">Sair</button>
+    </div>
+  </header>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tabCitacoes" onclick="switchTab('citacoes')">&#128218; Citacoes</button>
+    <button class="nav-tab" id="tabIdeias" onclick="switchTab('ideias')">&#128161; Minhas Ideias</button>
+  </div>
+  <div class="app-body">
+    <div class="tab-panel active" id="panelCitacoes" style="flex:1;display:flex;overflow:hidden">
+      <aside id="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-label">Colecoes</div>
+          <div id="colecoesList"></div>
+        </div>
+        <button class="btn-new-col" id="btnNovaColecao">+ nova colecao</button>
+        <div class="sidebar-sort">
+          <select id="sortSelect">
+            <option value="recente">Mais recente</option>
+            <option value="autor_az">Autor A-Z</option>
+            <option value="autor_za">Autor Z-A</option>
+            <option value="obra_az">Obra A-Z</option>
+          </select>
+        </div>
+      </aside>
+      <main>
+        <div class="semantic-bar">
+          <input type="text" id="semanticInput" placeholder="Busca semantica - descreva o conceito que procura...">
+          <button class="btn-semantic" id="btnSemantica">Buscar</button>
+          <button class="btn-clear-sem" id="btnClearSem" style="display:none">limpar</button>
+        </div>
+        <div class="main-toolbar" id="tagToolbar"></div>
+        <div class="quotes-grid" id="quotesGrid"></div>
+      </main>
+    </div>
+    <div class="tab-panel" id="panelIdeias" style="flex:1;flex-direction:column;overflow:hidden">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--surface)">
+        <button class="mic-btn" id="btnMic">&#127897;&#65039; Gravar ideia (voz)</button>
+        <button class="btn-sm btn-accent" id="btnNovaIdeia">+ Nova ideia (texto)</button>
+        <button class="btn-sm" id="btnExportIdeias">&#128196; Exportar DOCX</button>
+        <input type="text" id="ideiaSearch" placeholder="Buscar ideias..." style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border2);border-radius:8px;font-size:.88rem;background:var(--surface);color:var(--text)">
+        <div id="micStatus" style="font-size:.8rem;color:var(--text3);font-style:italic"></div>
+      </div>
+      <div class="ideias-grid" id="ideiasGrid"></div>
+    </div>
+  </div>
+  <div class="statusbar">
+    <span class="status-dot" id="statusDot"></span>
+    <span id="statusText">Conectado</span>
+    <span style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn-sm" id="btnOcr">OCR</button>
+      <button class="btn-sm" id="btnAdaptar">Adaptar normas</button>
+      <button class="btn-sm" id="btnExport">Exportar DOCX</button>
+    </span>
+  </div>
+</div>
+
+<div class="modal-overlay" id="quoteModal">
+  <div class="modal modal-md">
+    <div class="modal-header"><span class="modal-title" id="quoteModalTitle">Nova citacao</span><button class="btn-close" data-close="quoteModal">x</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Texto da citacao *</label><textarea id="qText" rows="5" placeholder="Cole ou digite o trecho..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Autor</label><input type="text" id="qAuthor" placeholder="Sobrenome, Nome"></div>
+        <div class="form-group"><label>Obra</label><input type="text" id="qWork" placeholder="Titulo do livro/artigo"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Ano</label><input type="number" id="qYear" placeholder="2024" min="1000" max="2100"></div>
+        <div class="form-group"><label>Pagina</label><input type="text" id="qPages" placeholder="p. 42 ou cap. 3"></div>
+      </div>
+      <div class="form-group"><label>Colecao</label><select id="qCollection"></select></div>
+      <div class="form-group"><label>Tags (pressione Enter para adicionar)</label><div class="tags-input-wrap" id="tagsWrap"><input type="text" id="tagInput" placeholder="adicionar tag..."></div></div>
+      <div class="form-group"><label>Comentario pessoal</label><textarea id="qComment" rows="3" placeholder="Anotacoes, contexto, relacoes..."></textarea></div>
+      <div class="form-footer"><button class="btn-sm" data-close="quoteModal">Cancelar</button><button class="btn-sm btn-accent" id="btnSaveQuote">Salvar</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="ideiaModal">
+  <div class="modal modal-md">
+    <div class="modal-header"><span class="modal-title" id="ideiaModalTitle">Nova Ideia</span><button class="btn-close" data-close="ideiaModal">x</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Ideia / Pensamento</label><textarea id="ideiaText" rows="5" placeholder="Escreva sua ideia, insight ou reflexao..."></textarea></div>
+      <div class="form-group"><label>Tema / Secao</label><input type="text" id="ideiaTema" placeholder="Ex: Metodologia, Revisao de literatura, Conclusao..."></div>
+      <div class="form-group"><label>Tags</label><div class="tags-input-wrap" id="ideiaTagsWrap"><input type="text" id="ideiaTagInput" placeholder="Tag + Enter..."></div></div>
+      <div class="form-group">
+        <label>Conexoes com citacoes <span id="aiConexoesStatus" style="font-size:.75rem;color:var(--accent);font-weight:400"></span></label>
+        <input type="text" id="conexaoBusca" placeholder="Digite autor ou titulo para buscar..." autocomplete="off" style="display:none">
+        <div id="conexoesSugestoes" style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;max-height:160px;overflow-y:auto;display:none;margin-top:2px"></div>
+        <div id="conexoesPreview" style="margin-top:4px;display:flex;flex-wrap:wrap;gap:6px;min-height:24px"></div>
+        <input type="hidden" id="ideiaConexoes">
+      </div>
+      <div class="form-group" id="aiConexoesSection" style="display:none">
+        <div style="padding:10px;background:#f0f4ff;border:1px solid #c5d3f7;border-radius:8px;font-size:.85rem" id="aiConexoesResult"></div>
+      </div>
+      <div class="form-footer" style="flex-wrap:wrap;gap:8px">
+        <button class="btn-sm" data-close="ideiaModal">Cancelar</button>
+        <button class="btn-sm" id="btnAiSugerir" style="color:#3d5afe;border-color:#c5d3f7;display:none">&#129302; Sugerir conexoes</button>
+        <button class="btn-sm btn-accent" id="btnSaveIdeia">Salvar ideia</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="readModal">
+  <div class="modal modal-md">
+    <div class="modal-header"><span class="modal-title" id="readModalTitle">Citacao</span><button class="btn-close" data-close="readModal">x</button></div>
+    <div class="modal-body">
+      <div class="read-text" id="readText"></div>
+      <div class="read-section"><div class="read-section-label">Referencia ABNT</div><div class="read-copy-row"><div class="read-copy-text" id="readAbnt"></div><button class="btn-copy" onclick="copyElem('readAbnt')">Copiar</button></div></div>
+      <div class="read-section"><div class="read-section-label">Citacao inline</div><div class="read-copy-row"><div class="read-copy-text" id="readInline"></div><button class="btn-copy" onclick="copyElem('readInline')">Copiar</button></div></div>
+      <div class="read-section" id="readCommentSection" style="display:none"><div class="read-section-label">Comentario pessoal</div><div class="read-copy-text" id="readComment"></div></div>
+      <div class="read-section" id="readTagsSection" style="display:none"><div class="read-section-label">Tags</div><div class="card-tags" id="readTags"></div></div>
+      <div class="read-actions">
+        <button class="btn-sm btn-accent" id="btnCopyFull">Copiar texto + inline</button>
+        <button class="btn-sm" id="btnEditFromRead">Editar</button>
+        <button class="btn-sm" style="margin-left:auto" data-close="readModal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="colModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><span class="modal-title">Nova colecao</span><button class="btn-close" data-close="colModal">x</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Nome da colecao *</label><input type="text" id="colName" placeholder="Ex.: Sociologia, Metodologia..."></div>
+      <div class="form-group"><label>Cor</label><div class="color-picker" id="colorPicker"></div></div>
+      <div class="form-footer"><button class="btn-sm" data-close="colModal">Cancelar</button><button class="btn-sm btn-accent" id="btnSaveCol">Criar</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="planosModal">
+  <div class="modal modal-lg">
+    <div class="modal-header"><span class="modal-title">Planos e Creditos</span><button class="btn-close" data-close="planosModal">x</button></div>
+    <div class="modal-body">
+      <div class="plans-grid" id="plansGrid"></div>
+      <div class="avulsos-section">
+        <div class="sidebar-label" style="font-size:.8rem;margin-bottom:12px">Avulsos</div>
+        <div class="avulso-row"><div><strong>100 Creditos IA</strong><div style="font-size:.8rem;color:var(--text2)">Resumir, melhorar, OCR</div></div><div style="display:flex;align-items:center;gap:12px"><strong>R$ 19,90</strong><button class="btn-sm btn-accent" onclick="comprar('creditos_100')">Comprar PIX</button></div></div>
+        <div class="avulso-row"><div><strong>1 Adaptacao de Artigo</strong><div style="font-size:.8rem;color:var(--text2)">Normas via IA Pro</div></div><div style="display:flex;align-items:center;gap:12px"><strong>R$ 19,90</strong><button class="btn-sm btn-accent" onclick="comprar('adaptacao_artigo')">Comprar PIX</button></div></div>
+      </div>
+      <div class="promo-section">
+        <div class="sidebar-label" style="font-size:.8rem;margin-bottom:10px">Codigo promocional</div>
+        <div class="promo-row"><input type="text" id="promoInput" placeholder="Digite o codigo" style="text-transform:uppercase"><button class="btn-sm btn-accent" id="btnPromo">Resgatar</button></div>
+        <div id="promoMsg" style="font-size:.82rem;margin-top:8px;min-height:18px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="pixModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><span class="modal-title">Pagamento PIX</span><button class="btn-close" data-close="pixModal">x</button></div>
+    <div class="modal-body">
+      <div class="pix-qr"><img id="pixQrImg" src="" alt="QR Code PIX" style="display:none"></div>
+      <div class="read-section-label" style="margin-bottom:6px">Copia e cola</div>
+      <div class="pix-code-box" id="pixCodeBox"></div>
+      <button class="btn-sm" style="width:100%" onclick="copyPixCode()">Copiar codigo PIX</button>
+      <p style="font-size:.78rem;color:var(--text3);margin-top:12px;text-align:center">Apos confirmacao do pagamento, seu plano e atualizado automaticamente.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="adminModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header"><span class="modal-title">⚙️ Painel Administrativo</span><button class="btn-close" data-close="adminModal">x</button></div>
+    <div class="modal-body">
+      <h4 style="margin-bottom:16px;font-size:.95rem;color:var(--text2)">🎟️ Emitir Código Promocional</h4>
+      <div class="form-group">
+        <label>Código (ex: AMIGO2024)</label>
+        <input type="text" id="adminPromoCode" placeholder="CODIGO" style="text-transform:uppercase;letter-spacing:2px;font-weight:700">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label>Plano concedido</label>
+          <select id="adminPromoPlano" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text)">
+            <option value="mestre">Mestre</option>
+            <option value="doutor">Doutor</option>
+            <option value="pesquisador_pro" selected>Pesquisador Pro</option>
+            <option value="ilimitado">Ilimitado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Créditos IA concedidos</label>
+          <input type="number" id="adminPromoCreditos" value="50" min="0" max="9999">
+        </div>
+        <div class="form-group">
+          <label>Validade</label>
+          <input type="date" id="adminPromoExpira">
+        </div>
+        <div class="form-group">
+          <label>Limite de usos</label>
+          <input type="number" id="adminPromoUsosMax" value="1" min="1" max="9999">
+        </div>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:10px">
+        <input type="checkbox" id="adminPromoMultiuso" style="width:auto;margin:0">
+        <label for="adminPromoMultiuso" style="margin:0;cursor:pointer">Multiuso (várias pessoas podem usar o mesmo código)</label>
+      </div>
+      <div class="form-footer" style="margin-top:16px">
+        <button class="btn-sm" data-close="adminModal">Cancelar</button>
+        <button class="btn-sm btn-accent" id="btnEmitirCodigo">🎟️ Emitir Código</button>
+      </div>
+      <div id="adminPromoMsg" style="font-size:.85rem;margin-top:12px;min-height:20px;text-align:center"></div>
+      <hr style="margin:20px 0;border:none;border-top:1px solid var(--border)">
+      <h4 style="margin-bottom:12px;font-size:.95rem;color:var(--text2)">📋 Códigos emitidos recentemente</h4>
+      <div id="adminCodigosList" style="font-size:.82rem;color:var(--text2)">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="ocrModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><span class="modal-title">OCR - Extrair texto de imagem</span><button class="btn-close" data-close="ocrModal">x</button></div>
+    <div class="modal-body">
+      <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Envie uma foto de pagina de livro ou artigo. A IA extrai o texto.<br><strong>Disponivel a partir do plano Doutor.</strong> Consome 1 credito.</p>
+      <div class="form-group"><label>Imagem (JPG/PNG, max. 4 MB)</label><input type="file" id="ocrFileInput" accept="image/jpeg,image/png" style="padding:6px"></div>
+      <div id="ocrPreview" style="display:none;margin-bottom:12px"><img id="ocrImg" style="max-width:100%;border-radius:6px;border:1px solid var(--border)" alt=""></div>
+      <div class="form-footer"><button class="btn-sm" data-close="ocrModal">Cancelar</button><button class="btn-sm btn-accent" id="btnRunOcr">Extrair texto</button></div>
+      <div id="ocrResult" style="display:none;margin-top:16px">
+        <div class="read-section-label" style="margin-bottom:6px">Texto extraido</div>
+        <textarea id="ocrResultText" rows="6" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;font-size:.88rem;resize:vertical"></textarea>
+        <button class="btn-sm btn-accent" style="margin-top:10px;width:100%" id="btnOcrUseText">Usar como texto de nova citacao</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="adaptarModal">
+  <div class="modal modal-md">
+    <div class="modal-header"><span class="modal-title">Adaptar Artigo as Normas</span><button class="btn-close" data-close="adaptarModal">x</button></div>
+    <div class="modal-body">
+      <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Cole seu artigo e as normas. A IA reescreve aplicando as normas rigorosamente.<br><strong>Pesquisador Pro</strong> (1 adaptacao/uso). Previa gratuita dos primeiros 15%.</p>
+      <div class="form-group"><label>Normas a aplicar</label><textarea id="adaptNormas" rows="3" placeholder="Ex: ABNT NBR 6023:2018, margens 3cm, Times New Roman 12pt..."></textarea></div>
+      <div class="form-group">
+        <label>Artigo (max. ~125 mil caracteres)</label>
+        <textarea id="adaptArtigo" rows="8" placeholder="Cole o texto completo do artigo aqui..."></textarea>
+        <div style="font-size:.75rem;color:var(--text3);margin-top:4px" id="adaptCharCount">0 caracteres</div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-sm" data-close="adaptarModal">Cancelar</button>
+        <button class="btn-sm" id="btnAdaptPreview">Previa gratuita (15%)</button>
+        <button class="btn-sm btn-accent" id="btnAdaptFull">Adaptar completo (1 adaptacao)</button>
+      </div>
+      <div id="adaptResult" style="display:none;margin-top:20px">
+        <div class="read-section-label" style="margin-bottom:6px" id="adaptResultLabel">Resultado</div>
+        <textarea id="adaptResultText" rows="10" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;font-size:.88rem;resize:vertical;color:var(--text)"></textarea>
+        <button class="btn-sm" style="margin-top:8px" id="btnCopyAdapt">Copiar resultado</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getAuth,GoogleAuthProvider,signInWithPopup,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import{getFirestore,doc,getDoc,setDoc,deleteDoc,collection,getDocs,serverTimestamp,increment}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{getFunctions,httpsCallable}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js';
+
+const FC={apiKey:"AIzaSyAfaddZQi_QILdYZZQv5zb3R3nHRvp7z4s",authDomain:"segundo-cerebro-bfb66.firebaseapp.com",projectId:"segundo-cerebro-bfb66",storageBucket:"segundo-cerebro-bfb66.firebasestorage.app",messagingSenderId:"850519671097",appId:"1:850519671097:web:d0c2125bd42e5d5a1668e8"};
+const LIMITES={
+  leitor:       {citacoes:30,  exportMes:5,        semantica:false,ocr:false,adaptacao:false,ia:false},
+  mestre:       {citacoes:500, exportMes:20,        semantica:false,ocr:false,adaptacao:false,ia:true},
+  mestre_offline:{citacoes:500,exportMes:20,        semantica:false,ocr:false,adaptacao:false,ia:true},
+  doutor:       {citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:false,ia:true},
+  pesquisador_pro:{citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:true,ia:true},
+  ilimitado:    {citacoes:Infinity,exportMes:Infinity,semantica:true,ocr:true,adaptacao:true,ia:true}
+};
+const CORES=['#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c','#3498db','#9b59b6','#e91e63','#795548','#607d8b'];
+
+const app=initializeApp(FC);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const fns=getFunctions(app);
+const fnInit=httpsCallable(fns,'inicializarUsuario');
+const fnGemini=httpsCallable(fns,'callGemini');
+const fnEmbed=httpsCallable(fns,'gerarEmbedding');
+const fnSemantica=httpsCallable(fns,'buscaSemantica');
+const fnCobranca=httpsCallable(fns,'criarCobranca');
+const fnPromo=httpsCallable(fns,'resgatarCodigo');
+
+let CU=null,UD=null,quotes=[],cols=[],activeCol='all',activeTag=null,sortOrder='recente',searchQ='',semOrder=null,editId=null,curTags=[],selColor=CORES[0],readQ=null;
+
+if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+
+const OWNER_EMAIL='felipevigneron@gmail.com';
+// Planos que têm acesso completo ao app (leitor também entra, mas com limites)
+function hasAppAccess(p){return['leitor','mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'].includes(p);}
+
+onAuthStateChanged(auth,async u=>{
+  if(u){
+    CU=u;
+    await fnInit().catch(()=>{});
+    await loadUD();
+    if(u.email===OWNER_EMAIL){
+      await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+    } else if(hasAppAccess(UD?.plano)){
+      // Verifica se o plano veio de código promo expirado
+      const planoValido=await verificarPlanoValido();
+      if(planoValido){
+        await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+      } else {
+        showPaywall();
+      }
+    } else {
+      showPaywall();
+    }
+  } else {CU=null;UD=null;showLogin();}
+});
+
+// --- Login: navegação entre telas ---
+function showLoginHome(){document.getElementById('loginHomeWrap').style.display='';document.getElementById('loginFormWrap').style.display='none';document.getElementById('cadastroFormWrap').style.display='none';document.getElementById('resetFormWrap').style.display='none';}
+document.getElementById('btnIrLogin').onclick=()=>{document.getElementById('loginHomeWrap').style.display='none';document.getElementById('loginFormWrap').style.display='';};
+document.getElementById('btnIrCadastro').onclick=()=>{document.getElementById('loginHomeWrap').style.display='none';document.getElementById('cadastroFormWrap').style.display='';};
+document.getElementById('linkVoltarHome').onclick=showLoginHome;
+document.getElementById('linkVoltarHome2').onclick=showLoginHome;
+document.getElementById('linkReset').onclick=()=>{document.getElementById('loginFormWrap').style.display='none';document.getElementById('resetFormWrap').style.display='';};
+document.getElementById('linkVoltarLogin2').onclick=()=>{document.getElementById('resetFormWrap').style.display='none';document.getElementById('loginFormWrap').style.display='';};
+
+// --- Login Google ---
+const gProvider=new GoogleAuthProvider();
+document.getElementById('btnLoginGoogle').onclick=async()=>{
+  try{await signInWithPopup(auth,gProvider);}
+  catch(e){if(e.code!=='auth/popup-closed-by-user')showLErr(friendlyErr(e.code));}
+};
+
+// --- Login e-mail ---
+document.getElementById('btnLoginEmail').onclick=async()=>{
+  const e=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPassword').value;
+  try{await signInWithEmailAndPassword(auth,e,p);}
+  catch(e){document.getElementById('loginErrorEmail').textContent=friendlyErr(e.code);}
+};
+
+// --- Cadastro ---
+document.getElementById('btnCadastro').onclick=async()=>{
+  const e=document.getElementById('cadEmail').value.trim(),p=document.getElementById('cadPassword').value;
+  try{await createUserWithEmailAndPassword(auth,e,p);}
+  catch(e){document.getElementById('cadError').textContent=friendlyErr(e.code);}
+};
+
+// --- Reset senha ---
+document.getElementById('btnReset').onclick=async()=>{
+  const e=document.getElementById('resetEmail').value.trim(),m=document.getElementById('resetMsg');
+  try{await sendPasswordResetEmail(auth,e);m.style.color='#27ae60';m.textContent='E-mail enviado!';}
+  catch(e){m.style.color='#c0392b';m.textContent=friendlyErr(e.code);}
+};
+
+document.getElementById('btnLogout').onclick=()=>signOut(auth);
+
+function friendlyErr(c){const m={'auth/user-not-found':'Usuario nao encontrado.','auth/wrong-password':'Senha incorreta.','auth/email-already-in-use':'E-mail ja cadastrado.','auth/weak-password':'Senha fraca (min. 6 caracteres).','auth/invalid-email':'E-mail invalido.','auth/too-many-requests':'Muitas tentativas. Tente mais tarde.','auth/popup-closed-by-user':'Login cancelado.','auth/cancelled-popup-request':'Login cancelado.'};return m[c]||'Erro ao autenticar.';}
+function showLErr(m){document.getElementById('loginError').textContent=m;}
+function showLogin(){document.getElementById('loginScreen').style.display='flex';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='none';showLoginHome();}
+function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('paywallScreen').style.display='none';document.getElementById('appRoot').style.display='flex';updateHeader();}
+function showPaywall(){document.getElementById('loginScreen').style.display='none';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='flex';const nm=CU?.displayName||CU?.email||'';document.getElementById('paywallName').textContent=nm?`Olá, ${nm}!`:'Escolha seu plano';}
+
+async function loadUD(){const s=await getDoc(doc(db,'usuarios',CU.uid));UD=s.exists()?s.data():{plano:null,creditos:0};}
+
+// Verifica se o plano atual ainda é válido (código promo pode ter expirado)
+async function verificarPlanoValido(){
+  if(!UD?.promoCode) return true; // plano pago normal, sempre válido
+  try{
+    const cSnap=await getDoc(doc(db,'codigos_promo',UD.promoCode));
+    if(!cSnap.exists()) return false;
+    const cd=cSnap.data();
+    if(cd.expira && cd.expira.toDate()<new Date()){
+      // Código expirado — remove o plano do usuário e manda para paywall
+      await setDoc(doc(db,'usuarios',CU.uid),{plano:null,promoCode:null},{merge:true});
+      UD.plano=null;
+      return false;
+    }
+    return true;
+  }catch(e){return true;} // em caso de erro de rede, deixa passar
+}
+function updateHeader(){
+  if(!CU||!UD)return;
+  const plano=UD.plano||'leitor';
+  const isOwner=CU.email===OWNER_EMAIL;
+  const isUnlim=(plano==='pesquisador_pro'||plano==='ilimitado'||isOwner);
+  const creditos=UD.creditos||0;
+  document.getElementById('badgePlan').textContent=isOwner?'Admin':planLabel(plano);
+  document.getElementById('badgeCredits').textContent=isUnlim?'creditos ilimitados':`${creditos} creditos`;
+  document.getElementById('userName').textContent=CU.displayName||CU.email;
+  const av=document.getElementById('userAvatar');
+  if(CU.photoURL){av.src=CU.photoURL;av.style.display='';}
+  // Botão admin — só para owner
+  document.getElementById('btnAdminPanel').style.display=isOwner?'':'none';
+  // Alerta de créditos baixos (≤5, só para planos com IA, não owner)
+  const alertBadge=document.getElementById('creditAlertBadge');
+  if(!isOwner&&!isUnlim&&LIMITES[plano]?.ia&&creditos<=5&&creditos>0){
+    alertBadge.style.display='';
+    alertBadge.textContent=`⚠️ ${creditos} crédito${creditos===1?'':'s'} restante${creditos===1?'':'s'}`;
+  } else if(!isOwner&&!isUnlim&&LIMITES[plano]?.ia&&creditos===0){
+    alertBadge.style.display='';
+    alertBadge.textContent='⚠️ Sem créditos IA';
+    alertBadge.style.background='#f8d7da';alertBadge.style.color='#721c24';alertBadge.style.borderColor='#f5c6cb';
+  } else {
+    alertBadge.style.display='none';
+  }
+}
+function planLabel(p){return{leitor:'Leitor',mestre:'Mestre',mestre_offline:'Mestre+Offline',doutor:'Doutor',pesquisador_pro:'Pesquisador Pro',ilimitado:'Pesquisador Pro'}[p]||p;}
+
+async function loadCols(){const s=await getDocs(collection(db,'usuarios',CU.uid,'colecoes'));cols=s.docs.map(d=>({id:d.id,...d.data()}));renderSidebar();renderColSel();renderColorPicker();}
+function renderSidebar(){const l=document.getElementById('colecoesList');l.innerHTML=`<button class="collection-item ${activeCol==='all'?'active':''}" data-col="all"><span class="col-dot" style="background:var(--border2)"></span>Todas<span class="col-count">${quotes.length}</span></button>`;cols.forEach(c=>{const b=document.createElement('button');b.className=`collection-item ${activeCol===c.id?'active':''}`;b.dataset.col=c.id;b.innerHTML=`<span class="col-dot" style="background:${c.color}"></span>${esc(c.name)}<span class="col-count">${quotes.filter(q=>q.collectionId===c.id).length}</span>`;l.appendChild(b);});l.querySelectorAll('.collection-item').forEach(b=>{b.onclick=()=>{activeCol=b.dataset.col;activeTag=null;renderSidebar();renderTagToolbar();renderGrid();};});}
+function renderColSel(){const s=document.getElementById('qCollection');s.innerHTML='<option value="">-- Sem colecao --</option>';cols.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;s.appendChild(o);});}
+function renderColorPicker(){const p=document.getElementById('colorPicker');p.innerHTML='';CORES.forEach(c=>{const s=document.createElement('div');s.className='color-swatch'+(c===selColor?' selected':'');s.style.background=c;s.onclick=()=>{selColor=c;p.querySelectorAll('.color-swatch').forEach(x=>x.classList.remove('selected'));s.classList.add('selected');};p.appendChild(s);});}
+document.getElementById('btnNovaColecao').onclick=()=>openM('colModal');
+document.getElementById('btnSaveCol').onclick=async()=>{const n=document.getElementById('colName').value.trim();if(!n)return;const id='col_'+Date.now(),c={name:n,color:selColor};await setDoc(doc(db,'usuarios',CU.uid,'colecoes',id),c);cols.push({id,...c});renderSidebar();renderColSel();document.getElementById('colName').value='';closeM('colModal');toast('Colecao criada!');};
+
+async function loadQuotes(){const s=await getDocs(collection(db,'usuarios',CU.uid,'citacoes'));quotes=s.docs.map(d=>({id:d.id,...d.data()}));renderTagToolbar();renderGrid();renderSidebar();}
+
+function getFiltered(){let r=[...quotes];if(activeCol!=='all')r=r.filter(q=>q.collectionId===activeCol);if(activeTag)r=r.filter(q=>(q.tags||[]).includes(activeTag));if(searchQ){const s=searchQ.toLowerCase();r=r.filter(q=>(q.text||'').toLowerCase().includes(s)||(q.author||'').toLowerCase().includes(s)||(q.work||'').toLowerCase().includes(s));}if(semOrder){const o=[];semOrder.forEach(id=>{const f=r.find(x=>x.id===id);if(f)o.push(f);});r.forEach(x=>{if(!semOrder.includes(x.id))o.push(x);});return o;}r.sort((a,b)=>{if(sortOrder==='recente')return(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0);if(sortOrder==='autor_az')return(a.author||'').localeCompare(b.author||'');if(sortOrder==='autor_za')return(b.author||'').localeCompare(a.author||'');if(sortOrder==='obra_az')return(a.work||'').localeCompare(b.work||'');return 0;});return r;}
+
+function renderGrid(){const f=getFiltered(),g=document.getElementById('quotesGrid'),c=document.getElementById('resultsCount');if(c)c.textContent=`${f.length} de ${quotes.length} citacoes`;if(!f.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">&#128218;</div><p>${quotes.length?'Nenhuma citacao encontrada.':'Ainda sem citacoes. Adicione a primeira!'}</p></div>`;return;}g.innerHTML='';f.forEach(q=>g.appendChild(buildCard(q)));}
+
+function buildCard(q){const col=cols.find(c=>c.id===q.collectionId),color=col?.color||'var(--border2)',abnt=buildAbnt(q),card=document.createElement('div');card.className='quote-card';card.dataset.id=q.id;card.innerHTML=`<div class="card-stripe" style="background:${color}"></div><div class="card-body"><div class="card-text">${esc(q.text||'')}</div><div class="card-meta">${q.author?`<strong>${esc(q.author)}</strong>`:''} ${q.work?`<em>${esc(q.work)}</em>`:''} ${q.year?`(${q.year})`:''} ${q.pages?`, ${esc(q.pages)}`:''}</div>${abnt?`<div class="card-abnt" title="Clique para copiar ABNT" onclick="event.stopPropagation();copyAbnt('${q.id}')">${esc(abnt)}</div>`:''} ${(q.tags||[]).length?`<div class="card-tags">${(q.tags||[]).map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('')}</div>`:''}</div><div class="card-actions"><button class="card-btn" onclick="event.stopPropagation();openRead('${q.id}')">Ler</button><button class="card-btn" onclick="event.stopPropagation();openEdit('${q.id}')">Editar</button><button class="card-btn danger" onclick="event.stopPropagation();delQuote('${q.id}')">Excluir</button></div>`;card.onclick=()=>openRead(q.id);return card;}
+
+function buildAbnt(q){if(!q.author&&!q.work)return'';let s='';const p=(q.author||'').split(',');s+=p.length>=2?`${p[0].trim().toUpperCase()}, ${p.slice(1).join(',').trim()}.`:q.author?`${q.author.toUpperCase()}.`:'';if(q.work)s+=` ${q.work}.`;if(q.year)s+=` ${q.year}`;if(q.pages)s+=`, ${q.pages}`;if(q.year||q.pages)s+='.';return s.trim();}
+function buildInline(q){if(!q.author&&!q.year)return'';const s=(q.author||'').split(',')[0].trim().toUpperCase();return`(${s}${q.year?`, ${q.year}`:''}${q.pages?`, ${q.pages}`:''})`;}
+
+window.copyAbnt=function(id){const q=quotes.find(x=>x.id===id);if(!q)return;navigator.clipboard.writeText(buildAbnt(q)).then(()=>toast('ABNT copiado!'));};
+window.openRead=function(id){const q=quotes.find(x=>x.id===id);if(!q)return;readQ=q;document.getElementById('readModalTitle').textContent=q.author||'Citacao';document.getElementById('readText').textContent=q.text||'';document.getElementById('readAbnt').textContent=buildAbnt(q)||'-';document.getElementById('readInline').textContent=buildInline(q)||'-';const cs=document.getElementById('readCommentSection');if(q.comment){document.getElementById('readComment').textContent=q.comment;cs.style.display='';}else cs.style.display='none';const ts=document.getElementById('readTagsSection');if((q.tags||[]).length){document.getElementById('readTags').innerHTML=(q.tags||[]).map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('');ts.style.display='';}else ts.style.display='none';openM('readModal');};
+window.openEdit=function(id){closeM('readModal');const q=quotes.find(x=>x.id===id);if(!q)return;editId=id;document.getElementById('quoteModalTitle').textContent='Editar citacao';document.getElementById('qText').value=q.text||'';document.getElementById('qAuthor').value=q.author||'';document.getElementById('qWork').value=q.work||'';document.getElementById('qYear').value=q.year||'';document.getElementById('qPages').value=q.pages||'';document.getElementById('qCollection').value=q.collectionId||'';document.getElementById('qComment').value=q.comment||'';curTags=[...(q.tags||[])];renderTagsForm();openM('quoteModal');};
+window.delQuote=async function(id){if(!confirm('Excluir esta citacao?'))return;await deleteDoc(doc(db,'usuarios',CU.uid,'citacoes',id));quotes=quotes.filter(q=>q.id!==id);renderTagToolbar();renderGrid();renderSidebar();toast('Citacao excluida.');};
+
+document.getElementById('btnNovaCitacao').onclick=()=>{editId=null;document.getElementById('quoteModalTitle').textContent='Nova citacao';['qText','qAuthor','qWork','qYear','qPages','qComment'].forEach(i=>document.getElementById(i).value='');document.getElementById('qCollection').value='';curTags=[];renderTagsForm();openM('quoteModal');};
+document.getElementById('btnSaveQuote').onclick=async()=>{const text=document.getElementById('qText').value.trim();if(!text){toast('O texto da citacao e obrigatorio.');return;}const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.citacoes??30;if(!editId&&quotes.length>=lim){toast(`Limite de ${lim} citacoes. Faca upgrade!`);return;}const id=editId||'cit_'+Date.now(),data={text,author:document.getElementById('qAuthor').value.trim(),work:document.getElementById('qWork').value.trim(),year:parseInt(document.getElementById('qYear').value)||null,pages:document.getElementById('qPages').value.trim(),collectionId:document.getElementById('qCollection').value||null,tags:[...curTags],comment:document.getElementById('qComment').value.trim(),createdAt:editId?(quotes.find(q=>q.id===id)?.createdAt||serverTimestamp()):serverTimestamp()};await setDoc(doc(db,'usuarios',CU.uid,'citacoes',id),data);if(editId){const i=quotes.findIndex(q=>q.id===id);if(i>=0)quotes[i]={id,...data};}else quotes.unshift({id,...data});closeM('quoteModal');renderTagToolbar();renderGrid();renderSidebar();toast(editId?'Citacao atualizada!':'Citacao salva!');if(LIMITES[pl]?.semantica)fnEmbed({quoteId:id,texto:text,autor:data.author,obra:data.work}).catch(()=>{});};
+
+function renderTagsForm(){const w=document.getElementById('tagsWrap');w.querySelectorAll('.tag-pill').forEach(e=>e.remove());curTags.forEach(t=>{const p=document.createElement('span');p.className='tag-pill';p.style.cursor='pointer';p.innerHTML=`${esc(t)} <span class="tag-remove">x</span>`;p.querySelector('.tag-remove').onclick=()=>{curTags=curTags.filter(x=>x!==t);renderTagsForm();};w.insertBefore(p,document.getElementById('tagInput'));});}
+document.getElementById('tagInput').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==',')return;e.preventDefault();const v=e.target.value.trim().replace(/,/g,'');if(v&&!curTags.includes(v)){curTags.push(v);renderTagsForm();}e.target.value='';});
+
+function renderTagToolbar(){const all=new Set(quotes.flatMap(q=>q.tags||[])),tb=document.getElementById('tagToolbar');tb.innerHTML='';all.forEach(t=>{const c=document.createElement('button');c.className='tag-chip'+(activeTag===t?' active':'');c.textContent=t;c.onclick=()=>{activeTag=activeTag===t?null:t;renderTagToolbar();renderGrid();};tb.appendChild(c);});const cnt=document.createElement('span');cnt.className='results-count';cnt.id='resultsCount';tb.appendChild(cnt);}
+
+document.getElementById('searchInput').addEventListener('input',e=>{searchQ=e.target.value;renderGrid();});
+document.getElementById('sortSelect').addEventListener('change',e=>{sortOrder=e.target.value;renderGrid();});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();document.getElementById('searchInput').focus();}if(e.key==='Escape')closeAllM();});
+
+document.getElementById('btnSemantica').onclick=runSem;
+document.getElementById('semanticInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSem();});
+async function runSem(){const q=document.getElementById('semanticInput').value.trim();if(!q)return;if(!LIMITES[UD?.plano||'leitor']?.semantica){toast('Busca semantica disponivel a partir do plano Mestre.');return;}try{setBtnLoading('btnSemantica',true,'Buscando...');const r=await fnSemantica({query:q});semOrder=r.data.resultados.map(x=>x.id);document.getElementById('btnClearSem').style.display='';toast(`${semOrder.length} resultado(s).`);renderGrid();}catch(e){toast('Erro: '+e.message);}finally{setBtnLoading('btnSemantica',false,'Buscar');}}
+document.getElementById('btnClearSem').onclick=()=>{semOrder=null;document.getElementById('semanticInput').value='';document.getElementById('btnClearSem').style.display='none';renderGrid();};
+
+document.getElementById('btnCopyFull').onclick=()=>{if(!readQ)return;navigator.clipboard.writeText(`"${readQ.text}"\n\n${buildInline(readQ)}`).then(()=>toast('Copiado!'));};
+document.getElementById('btnEditFromRead').onclick=()=>{if(readQ){closeM('readModal');openEdit(readQ.id);}};
+
+document.getElementById('btnExport').onclick=async()=>{const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.exportMes??5;if((UD?.exportacoesMes||0)>=lim){toast(`Limite de ${lim} exportacoes/mes atingido.`);return;}const f=getFiltered();if(!f.length){toast('Nenhuma citacao para exportar.');return;}try{const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx,g={};f.forEach(q=>{const n=cols.find(c=>c.id===q.collectionId)?.name||'Sem colecao';(g[n]=g[n]||[]).push(q);});const ch=[];Object.entries(g).forEach(([n,qs])=>{ch.push(new Paragraph({text:n,heading:HeadingLevel.HEADING_2}));qs.forEach(q=>{ch.push(new Paragraph({children:[new TextRun({text:`"${q.text}"`,italics:true,font:'Georgia',size:24})]}));if(q.author||q.work)ch.push(new Paragraph({children:[new TextRun({text:buildAbnt(q),bold:true,font:'Arial',size:20})]}));if((q.tags||[]).length)ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+q.tags.join(', '),font:'Arial',size:18,color:'888888'})]}));if(q.comment)ch.push(new Paragraph({children:[new TextRun({text:q.comment,font:'Arial',size:18,italics:true})]}));ch.push(new Paragraph({text:''}));});});const blob=await Packer.toBlob(new Document({sections:[{children:ch}]})),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`citacoes-${new Date().toISOString().slice(0,10)}.docx`;a.click();await setDoc(doc(db,'usuarios',CU.uid),{exportacoesMes:increment(1)},{merge:true});UD.exportacoesMes=(UD.exportacoesMes||0)+1;toast('DOCX exportado!');}catch(e){toast('Erro ao exportar: '+e.message);}};
+
+document.getElementById('btnOcr').onclick=()=>{const pl=UD?.plano||'leitor';if(!LIMITES[pl]?.ocr){toast('OCR disponivel a partir do plano Doutor.');return;}document.getElementById('ocrFileInput').value='';document.getElementById('ocrPreview').style.display='none';document.getElementById('ocrResult').style.display='none';openM('ocrModal');};
+document.getElementById('ocrFileInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(f.size>4*1024*1024){toast('Imagem muito grande (max. 4 MB).');e.target.value='';return;}const r=new FileReader();r.onload=ev=>{document.getElementById('ocrImg').src=ev.target.result;document.getElementById('ocrPreview').style.display='';};r.readAsDataURL(f);});
+document.getElementById('btnRunOcr').onclick=async()=>{const f=document.getElementById('ocrFileInput').files[0];if(!f){toast('Selecione uma imagem.');return;}try{setBtnLoading('btnRunOcr',true,'Processando...');const b64=await file2b64(f),r=await fnGemini({operacao:'ocr',imagemBase64:b64});document.getElementById('ocrResultText').value=r.data.resultado;document.getElementById('ocrResult').style.display='';await loadUD();updateHeader();}catch(e){toast('Erro OCR: '+e.message);}finally{setBtnLoading('btnRunOcr',false,'Extrair texto');}};
+document.getElementById('btnOcrUseText').onclick=()=>{const t=document.getElementById('ocrResultText').value.trim();if(!t)return;closeM('ocrModal');editId=null;document.getElementById('quoteModalTitle').textContent='Nova citacao (via OCR)';['qAuthor','qWork','qYear','qPages','qComment'].forEach(i=>document.getElementById(i).value='');document.getElementById('qText').value=t;document.getElementById('qCollection').value='';curTags=[];renderTagsForm();openM('quoteModal');};
+
+document.getElementById('btnAdaptar').onclick=()=>{document.getElementById('adaptNormas').value='';document.getElementById('adaptArtigo').value='';document.getElementById('adaptCharCount').textContent='0 caracteres';document.getElementById('adaptResult').style.display='none';openM('adaptarModal');};
+document.getElementById('adaptArtigo').addEventListener('input',e=>{document.getElementById('adaptCharCount').textContent=`${e.target.value.length} caracteres`;});
+document.getElementById('btnAdaptPreview').onclick=()=>runAdapt(true);
+document.getElementById('btnAdaptFull').onclick=()=>runAdapt(false);
+async function runAdapt(preview){const pl=UD?.plano||'leitor';if(!preview&&!LIMITES[pl]?.adaptacao){toast('Adaptacao completa disponivel no plano Pesquisador Pro.');return;}const normas=document.getElementById('adaptNormas').value.trim(),art=document.getElementById('adaptArtigo').value.trim();if(!normas||!art){toast('Preencha as normas e o artigo.');return;}if(art.length>125000){toast('Artigo muito extenso (max. ~125 mil caracteres).');return;}const bid=preview?'btnAdaptPreview':'btnAdaptFull';try{setBtnLoading(bid,true,preview?'Gerando previa...':'Adaptando...');const r=await fnGemini({operacao:'adaptar_normas',textoArtigo:art,normas,preview});document.getElementById('adaptResultLabel').textContent=preview?'Previa (15% do artigo)':'Artigo adaptado';document.getElementById('adaptResultText').value=r.data.resultado;document.getElementById('adaptResult').style.display='';if(!preview){await loadUD();updateHeader();}}catch(e){toast('Erro: '+e.message);}finally{setBtnLoading(bid,false,preview?'Previa gratuita (15%)':'Adaptar completo (1 adaptacao)');}}
+document.getElementById('btnCopyAdapt').onclick=()=>{navigator.clipboard.writeText(document.getElementById('adaptResultText').value||'').then(()=>toast('Copiado!'));};
+
+document.getElementById('btnPlanos').onclick=()=>{renderPlans();openM('planosModal');};
+function renderPlans(){
+  const pl=UD?.plano||'leitor';
+  const planos=[
+    {id:'leitor',    nome:'Leitor',         avulso:'Gratuito', anual:null,           feat:'30 citacoes · 5 exportacoes/mes · Sem IA'},
+    {id:'mestre',    nome:'Mestre',         avulso:'R$ 29,90', anual:'R$ 19,90/mes', feat:'500 citacoes · 20 exportacoes/mes · IA basica'},
+    {id:'doutor',    nome:'Doutor',         avulso:'R$ 49,90', anual:'R$ 39,90/mes', feat:'Citacoes ilimitadas · IA completa · OCR'},
+    {id:'pesquisador_pro',nome:'Pesquisador Pro',avulso:'R$ 89,90',anual:'R$ 79,90/mes',feat:'Tudo ilimitado · IA sem restricoes · Busca semantica'}
+  ];
+  const pm={mestre:'plano_mestre',doutor:'plano_doutor',pesquisador_pro:'plano_pesquisador_pro'};
+  const g=document.getElementById('plansGrid');
+  g.innerHTML='';
+  planos.forEach(p=>{
+    const c=document.createElement('div');
+    c.className='plan-card'+(p.id===pl?' current':'');
+    const btnHtml=p.id==='leitor'||p.id===pl
+      ? (p.id===pl?'<span style="font-size:.78rem;color:var(--accent);font-weight:600">Plano atual</span>':'')
+      : `<div style="display:flex;gap:6px;margin-top:8px">
+           <button class="btn-sm btn-accent" style="flex:1;font-size:.75rem" onclick="comprar('${pm[p.id]}_avulso')" disabled title="Em breve">${p.avulso}<br><small>avulso</small></button>
+           <button class="btn-sm btn-accent" style="flex:1;font-size:.75rem" onclick="comprar('${pm[p.id]}')" disabled title="Em breve">${p.anual}<br><small>recorrente</small></button>
+         </div>
+         <p style="font-size:.7rem;color:var(--text3);margin-top:4px;text-align:center">🔜 Pagamentos em breve</p>`;
+    c.innerHTML=`<div class="plan-name">${p.nome}</div><div class="plan-price">${p.avulso}${p.anual?` / ${p.anual}`:''}</div><div class="plan-features">${p.feat}</div>${btnHtml}`;
+    g.appendChild(c);
+  });
+}
+window.comprar=async function(prod){try{toast('Gerando cobranca PIX...');const r=await fnCobranca({produto:prod});closeM('planosModal');openPix(r.data.pixQrCodeUrl,r.data.pixCode||r.data.invoiceUrl||'');}catch(e){toast('Erro: '+e.message);}};
+function openPix(qr,code){const i=document.getElementById('pixQrImg');if(qr){i.src=qr;i.style.display='';}else i.style.display='none';document.getElementById('pixCodeBox').textContent=code||'Codigo nao disponivel';openM('pixModal');}
+window.copyPixCode=function(){navigator.clipboard.writeText(document.getElementById('pixCodeBox').textContent).then(()=>toast('Copiado!'));};
+document.getElementById('btnPromo').onclick=async()=>{
+  const code=document.getElementById('promoInput').value.trim().toUpperCase();
+  const m=document.getElementById('promoMsg');
+  if(!code)return;
+  m.textContent='Verificando...';m.style.color=getComputedStyle(document.documentElement).getPropertyValue('--text2');
+  try{
+    // Busca o código no Firestore (coleção 'codigos_promo')
+    const cSnap=await getDoc(doc(db,'codigos_promo',code));
+    if(!cSnap.exists()){m.style.color='#c0392b';m.textContent='Código inválido.';return;}
+    const cd=cSnap.data();
+    if(cd.usado&&!cd.multiuso){m.style.color='#c0392b';m.textContent='Este código já foi utilizado.';return;}
+    if(cd.expira&&cd.expira.toDate()<new Date()){m.style.color='#c0392b';m.textContent='Código expirado.';return;}
+    if(cd.usosMax&&(cd.usosAtual||0)>=cd.usosMax){m.style.color='#c0392b';m.textContent='Limite de usos atingido.';return;}
+    // Aplica o benefício
+    const upd={plano:cd.plano||'pesquisador_pro',creditosPromo:cd.creditos||50,promoCode:code};
+    await setDoc(doc(db,'usuarios',CU.uid),upd,{merge:true});
+    // Registra uso
+    await setDoc(doc(db,'codigos_promo',code),{usosAtual:(cd.usosAtual||0)+1,usado:true},{merge:true});
+    await loadUD();updateHeader();
+    m.style.color='#27ae60';
+    m.textContent=`✓ Código resgatado! Plano ${planLabel(cd.plano||'pesquisador_pro')} ativado com ${cd.creditos||50} créditos.`;
+    // Se estava na paywall, abrir o app agora
+    if(document.getElementById('paywallScreen')?.style.display!=='none'){
+      await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+    }
+  }catch(e){m.style.color='#c0392b';m.textContent='Erro: '+e.message;}
+};
+
+window.copyElem=function(id){const e=document.getElementById(id);navigator.clipboard.writeText(e.textContent||e.value||'').then(()=>toast('Copiado!'));};
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function closeAllM(){document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));}
+document.querySelectorAll('[data-close]').forEach(b=>{b.onclick=()=>closeM(b.dataset.close);});
+document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
+
+let tTimer;
+function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(()=>e.classList.remove('show'),3000);}
+function setBtnLoading(id,on,label){const b=document.getElementById(id);if(!b)return;b.disabled=on;b.innerHTML=on?`<span class="spinner"></span>${label}`:label;}
+function file2b64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ===== MODULO IDEIAS =====
+let ideias=[],editIdeiaId=null,ideiaTagsCur=[],conexoesSelecionadas=[],micRecognition=null,isRecording=false;
+
+window.switchTab=function(tab){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  document.getElementById('panel'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  if(tab==='ideias')renderIdeias();
+};
+
+async function loadIdeias(){
+  const snap=await getDocs(collection(db,'usuarios',CU.uid,'ideias'));
+  ideias=[];snap.forEach(d=>ideias.push({id:d.id,...d.data()}));
+  ideias.sort((a,b)=>(b.num||0)-(a.num||0));
+}
+
+function renderIdeias(){
+  const q=(document.getElementById('ideiaSearch')?.value||'').toLowerCase();
+  const grid=document.getElementById('ideiasGrid');
+  const filtradas=ideias.filter(i=>!q||i.text?.toLowerCase().includes(q)||i.tema?.toLowerCase().includes(q)||(i.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  if(!filtradas.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">&#128161;</div><p>Nenhuma ideia ainda. Grave pelo microfone ou escreva!</p></div>';return;}
+  grid.innerHTML=filtradas.map(i=>{
+    const conexoesHtml=(i.conexoes||[]).map(cid=>{const q=quotes.find(x=>x.id===cid);return q?`<span class="conexao-pill" title="${esc((q.text||'').slice(0,60))}" onclick="openRead('${cid}')">&#128206; ${esc((q.author||'Citacao').slice(0,20))}</span>`:''}).join('');
+    return `<div class="ideia-card">
+      <span class="ideia-num">#${i.num||'?'}</span>
+      <div class="ideia-body">
+        ${i.tema?`<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:6px">${esc(i.tema)}</div>`:''}
+        <div class="ideia-text">${esc(i.text||'')}</div>
+        ${(i.tags||[]).length?`<div class="card-tags">${i.tags.map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('')}</div>`:''}
+        ${conexoesHtml?`<div class="conexoes-tags" style="margin-top:8px">${conexoesHtml}</div>`:''}
+      </div>
+      <div class="ideia-actions">
+        <button class="card-btn" onclick="openEditIdeia('${i.id}')">Editar</button>
+        <button class="card-btn" onclick="copyIdeia('${i.id}')">Copiar</button>
+        <button class="btn-ai" id="btnResumir_${i.id}" onclick="aiResumir('${i.id}')">&#129302; Resumir</button>
+        <button class="btn-ai" id="btnExpandir_${i.id}" onclick="aiExpandir('${i.id}')">&#10024; Expandir</button>
+        <button class="card-btn danger" onclick="deleteIdeia('${i.id}')">Excluir</button>
+      </div>
+      <div id="aiResult_${i.id}" style="display:none;padding:10px 14px;background:#f0f4ff;border-top:1px solid #c5d3f7;font-size:.85rem;line-height:1.6;color:#1a237e"></div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('ideiaSearch').addEventListener('input',renderIdeias);
+
+function openNovaIdeia(textoInicial){
+  textoInicial=textoInicial||'';
+  editIdeiaId=null;ideiaTagsCur=[];conexoesSelecionadas=[];
+  document.getElementById('ideiaModalTitle').textContent='Nova Ideia';
+  document.getElementById('ideiaText').value=textoInicial;
+  document.getElementById('ideiaTema').value='';
+  document.getElementById('conexaoBusca').value='';
+  document.getElementById('conexoesPreview').innerHTML='';
+  document.getElementById('aiConexoesSection').style.display='none';
+  document.getElementById('aiConexoesResult').innerHTML='';
+  document.getElementById('aiConexoesStatus').textContent='';
+  renderIdeiaTagsForm();openM('ideiaModal');
+  if(textoInicial&&textoInicial.length>=20){clearTimeout(_aiConexoesTimer);_aiConexoesTimer=setTimeout(autoSugerirConexoes,800);}
+}
+
+function openEditIdeia(id){
+  const i=ideias.find(x=>x.id===id);if(!i)return;
+  editIdeiaId=id;ideiaTagsCur=[...(i.tags||[])];conexoesSelecionadas=[...(i.conexoes||[])];
+  document.getElementById('ideiaModalTitle').textContent='Editar Ideia #'+(i.num||'');
+  document.getElementById('ideiaText').value=i.text||'';
+  document.getElementById('ideiaTema').value=i.tema||'';
+  document.getElementById('conexaoBusca').value='';
+  document.getElementById('aiConexoesSection').style.display='none';
+  document.getElementById('aiConexoesResult').innerHTML='';
+  renderIdeiaTagsForm();renderConexoesPreview();openM('ideiaModal');
+}
+window.openEditIdeia=openEditIdeia;
+
+function renderIdeiaTagsForm(){
+  const wrap=document.getElementById('ideiaTagsWrap');wrap.innerHTML='';
+  ideiaTagsCur.forEach(t=>{
+    const pill=document.createElement('span');pill.className='tag-pill';
+    pill.innerHTML=`${esc(t)} <span class="tag-remove" style="cursor:pointer">x</span>`;
+    pill.querySelector('.tag-remove').onclick=()=>{ideiaTagsCur=ideiaTagsCur.filter(x=>x!==t);renderIdeiaTagsForm();};
+    wrap.appendChild(pill);
+  });
+  const inp=document.createElement('input');inp.type='text';inp.id='ideiaTagInput';inp.placeholder='Tag + Enter...';
+  inp.onkeydown=function(e){if(e.key==='Enter'&&inp.value.trim()){e.preventDefault();const t=inp.value.trim();if(!ideiaTagsCur.includes(t)){ideiaTagsCur.push(t);renderIdeiaTagsForm();}}};
+  wrap.appendChild(inp);
+}
+
+function renderConexoesPreview(){
+  const prev=document.getElementById('conexoesPreview');
+  prev.innerHTML=conexoesSelecionadas.map(id=>{
+    const q=quotes.find(x=>x.id===id);
+    const label=q?`&#128206; ${esc((q.author||'?').slice(0,25))}${q.work?' — '+esc(q.work.slice(0,25)):''}`:id;
+    return `<span class="conexao-pill" style="cursor:default">${label} <span style="cursor:pointer;font-weight:700" onclick="removerConexao('${id}')">x</span></span>`;
+  }).join('');
+  document.getElementById('ideiaConexoes').value=conexoesSelecionadas.join(',');
+}
+window.removerConexao=function(id){conexoesSelecionadas=conexoesSelecionadas.filter(x=>x!==id);renderConexoesPreview();};
+
+document.getElementById('conexaoBusca').addEventListener('input',function(){
+  const q=this.value.trim().toLowerCase(),sug=document.getElementById('conexoesSugestoes');
+  if(!q){sug.style.display='none';return;}
+  const matches=quotes.filter(x=>!conexoesSelecionadas.includes(x.id)&&((x.author||'').toLowerCase().includes(q)||(x.work||'').toLowerCase().includes(q)||(x.text||'').toLowerCase().includes(q))).slice(0,8);
+  if(!matches.length){sug.style.display='none';return;}
+  sug.style.display='block';
+  sug.innerHTML=matches.map(x=>`<div style="padding:8px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid var(--border)" onmousedown="event.preventDefault();adicionarConexao('${x.id}')"><strong>${esc((x.author||'').slice(0,30))}</strong>${x.work?' — '+esc(x.work.slice(0,30)):''}<br><span style="color:var(--text3);font-size:.78rem">${esc((x.text||'').slice(0,60))}...</span></div>`).join('');
+});
+document.getElementById('conexaoBusca').addEventListener('blur',()=>setTimeout(()=>{document.getElementById('conexoesSugestoes').style.display='none';},150));
+window.adicionarConexao=function(id){if(!conexoesSelecionadas.includes(id))conexoesSelecionadas.push(id);document.getElementById('conexaoBusca').value='';document.getElementById('conexoesSugestoes').style.display='none';renderConexoesPreview();};
+
+document.getElementById('btnSaveIdeia').onclick=async function(){
+  const text=document.getElementById('ideiaText').value.trim();
+  if(!text){toast('Escreva a ideia antes de salvar.');return;}
+  const tema=document.getElementById('ideiaTema').value.trim();
+  const id=editIdeiaId||'ideia_'+Date.now();
+  const num=editIdeiaId?(ideias.find(x=>x.id===editIdeiaId)?.num||ideias.length+1):ideias.length+1;
+  const data={text,tema,tags:[...ideiaTagsCur],conexoes:[...conexoesSelecionadas],num,updatedAt:serverTimestamp()};
+  if(!editIdeiaId)data.createdAt=serverTimestamp();
+  await setDoc(doc(db,'usuarios',CU.uid,'ideias',id),data,{merge:true});
+  if(editIdeiaId){const idx=ideias.findIndex(x=>x.id===editIdeiaId);if(idx>=0)ideias[idx]={id,...ideias[idx],...data};}
+  else ideias.unshift({id,...data});
+  closeM('ideiaModal');renderIdeias();toast(editIdeiaId?'Ideia atualizada!':'Ideia salva!');
+};
+
+window.deleteIdeia=async function(id){if(!confirm('Excluir esta ideia?'))return;await deleteDoc(doc(db,'usuarios',CU.uid,'ideias',id));ideias=ideias.filter(x=>x.id!==id);renderIdeias();toast('Ideia excluida.');};
+window.copyIdeia=function(id){const i=ideias.find(x=>x.id===id);if(!i)return;const txt=`[#${i.num}${i.tema?' — '+i.tema:''}]\n${i.text}${i.tags&&i.tags.length?'\nTags: '+i.tags.join(', '):''}`;navigator.clipboard.writeText(txt).then(()=>toast('Copiado!'));};
+
+document.getElementById('btnMic').onclick=function(){
+  if(isRecording){stopRecording();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('Seu navegador nao suporta reconhecimento de voz. Use Chrome.');return;}
+  micRecognition=new SR();micRecognition.lang='pt-BR';micRecognition.continuous=true;micRecognition.interimResults=true;
+  let finalText='';
+  micRecognition.onresult=function(e){let interim='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)finalText+=e.results[i][0].transcript+' ';else interim+=e.results[i][0].transcript;}document.getElementById('micStatus').textContent=finalText+interim;};
+  micRecognition.onerror=function(e){toast('Erro no microfone: '+e.error);stopRecording();};
+  micRecognition.onend=function(){if(isRecording)micRecognition.start();};
+  micRecognition.start();isRecording=true;
+  document.getElementById('btnMic').classList.add('recording');document.getElementById('btnMic').textContent='Parar gravacao';
+  document.getElementById('micStatus').textContent='Gravando... fale sua ideia';
+};
+
+function stopRecording(){
+  if(micRecognition)micRecognition.stop();isRecording=false;
+  document.getElementById('btnMic').classList.remove('recording');document.getElementById('btnMic').textContent='Gravar ideia (voz)';
+  const txt=document.getElementById('micStatus').textContent.trim();document.getElementById('micStatus').textContent='';
+  if(txt&&txt!=='Gravando... fale sua ideia')openNovaIdeia(txt);
+}
+
+document.getElementById('btnExportIdeias').onclick=async function(){
+  if(!ideias.length){toast('Nenhuma ideia para exportar.');return;}
+  try{
+    const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx,grupos={};
+    ideias.forEach(i=>{const t=i.tema||'Sem tema';(grupos[t]=grupos[t]||[]).push(i);});
+    const ch=[new Paragraph({children:[new TextRun({text:'Minhas Ideias de Pesquisa',bold:true,size:36,font:'Georgia'})],heading:HeadingLevel.HEADING_1}),new Paragraph({text:''})];
+    Object.entries(grupos).forEach(([tema,ids])=>{
+      ch.push(new Paragraph({children:[new TextRun({text:tema,bold:true,size:28,font:'Arial'})],heading:HeadingLevel.HEADING_2}));
+      ids.forEach(i=>{
+        ch.push(new Paragraph({children:[new TextRun({text:`${i.num}. ${i.text}`,font:'Georgia',size:24})]}));
+        if(i.tags&&i.tags.length)ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+i.tags.join(', '),font:'Arial',size:18,color:'888888',italics:true})]}));
+        if(i.conexoes&&i.conexoes.length){const refs=i.conexoes.map(cid=>{const q=quotes.find(x=>x.id===cid);return q?buildAbnt(q):cid;});ch.push(new Paragraph({children:[new TextRun({text:'Conexoes: '+refs.join(' | '),font:'Arial',size:18,color:'1565c0'})]}));}
+        ch.push(new Paragraph({text:''}));
+      });
+    });
+    const blob=await Packer.toBlob(new Document({sections:[{children:ch}]})),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ideias-${new Date().toISOString().slice(0,10)}.docx`;a.click();toast('DOCX de ideias exportado!');
+  }catch(e){toast('Erro: '+e.message);}
+};
+
+document.getElementById('btnNovaIdeia').onclick=function(){openNovaIdeia();};
+
+// ===== IA ANTHROPIC (via proxy Render) =====
+const PROXY_URL='https://proxy-anthropic.onrender.com/claude';
+
+async function callAI(messages,system,max_tokens){
+  if(!checkAILimit())throw new Error('Limite de IA atingido');
+  system=system||'Voce e um assistente academico brasileiro. Responda sempre em portugues.';
+  max_tokens=max_tokens||300;
+  try{
+    const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,system,max_tokens})});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Erro no proxy');
+    return d.text;
+  }catch(e){
+    if(e.message&&e.message.includes('Failed to fetch'))throw new Error('Proxy offline. Verifique se o servico Render esta ativo.');
+    throw e;
+  }
+}
+
+// Auto-sugestao de conexoes por IA com debounce
+let _aiConexoesTimer=null;
+async function autoSugerirConexoes(){
+  const text=document.getElementById('ideiaText').value.trim();
+  const status=document.getElementById('aiConexoesStatus');
+  if(!text||text.length<20||!quotes.length){status.textContent='';return;}
+  status.textContent='&#129302; analisando...';
+  try{
+    const listaCtx=quotes.slice(0,40).map((q,i)=>`[${i}] ${(q.author||'').slice(0,30)} "${(q.text||'').slice(0,80)}"`).join('\n');
+    const resp=await callAI([{role:'user',content:`Ideia do pesquisador:\n"${text}"\n\nCitacoes disponiveis (formato [indice] Autor "trecho"):\n${listaCtx}\n\nIndique os indices (ex: 0,3,7) das citacoes mais relevantes para conectar a essa ideia. Responda APENAS com os indices separados por virgula, sem explicacao.`}],'Voce e um assistente academico. Analise a relacao entre ideias e citacoes. Responda APENAS com numeros separados por virgula.',80);
+    const indices=(resp.match(/\d+/g)||[]).map(Number).filter(n=>n<quotes.length&&n>=0);
+    conexoesSelecionadas=[];
+    if(indices.length){
+      const sugeridas=indices.map(i=>quotes[i]).filter(Boolean);
+      sugeridas.forEach(q=>{if(!conexoesSelecionadas.includes(q.id))conexoesSelecionadas.push(q.id);});
+      status.textContent='&#10003; '+sugeridas.length+' conexao(oes) sugerida(s)';
+    }else{status.textContent='nenhuma conexao encontrada';}
+    renderConexoesPreview();
+  }catch(e){status.textContent='';}
+}
+document.getElementById('ideiaText').addEventListener('input',function(){
+  clearTimeout(_aiConexoesTimer);
+  _aiConexoesTimer=setTimeout(autoSugerirConexoes,1500);
+});
+
+document.getElementById('btnAiSugerir').onclick=async function(){
+  clearTimeout(_aiConexoesTimer);
+  await autoSugerirConexoes();
+};
+
+window.aiResumir=async function(id){
+  const i=ideias.find(x=>x.id===id);if(!i)return;
+  const btn=document.getElementById('btnResumir_'+id),res=document.getElementById('aiResult_'+id);
+  if(!btn||!res)return;btn.disabled=true;btn.textContent='...';res.style.display='none';
+  try{
+    const txt=await callAI([{role:'user',content:`Resuma em 1-2 frases objetivas esta ideia academica:\n"${i.text}"`}],'Voce e um assistente academico. Seja conciso e preciso.',150);
+    res.style.display='block';res.innerHTML='<strong>Resumo:</strong> '+esc(txt);
+  }catch(e){toast('Erro IA: '+e.message);}
+  finally{btn.disabled=false;btn.textContent='Resumir';}
+};
+
+window.aiExpandir=async function(id){
+  const i=ideias.find(x=>x.id===id);if(!i)return;
+  const btn=document.getElementById('btnExpandir_'+id),res=document.getElementById('aiResult_'+id);
+  if(!btn||!res)return;btn.disabled=true;btn.textContent='...';res.style.display='none';
+  try{
+    let ctx='';
+    if(i.conexoes&&i.conexoes.length){const refs=i.conexoes.map(cid=>{const q=quotes.find(x=>x.id===cid);return q?'"'+(q.text||'').slice(0,100)+'" ('+(q.author||'')+')':'';}).filter(Boolean);if(refs.length)ctx='\n\nCitacoes relacionadas:\n'+refs.join('\n');}
+    const txt=await callAI([{role:'user',content:`Expanda e aprofunde esta ideia academica em 3-4 frases, mantendo rigor cientifico:${ctx}\n\nIdeia: "${i.text}"`}],'Voce e um assistente academico brasileiro especializado em pesquisa. Escreva em portugues formal.',400);
+    res.style.display='block';
+    res.innerHTML='<strong>Expansao:</strong> '+esc(txt)+'<br><button class="btn-ai" style="margin-top:8px;font-size:.75rem" onclick="usarExpansao(\''+id+'\')">Usar como nova ideia</button>';
+  }catch(e){toast('Erro IA: '+e.message);}
+  finally{btn.disabled=false;btn.textContent='Expandir';}
+};
+
+window.usarExpansao=function(id){
+  const res=document.getElementById('aiResult_'+id);if(!res)return;
+  const match=res.innerHTML.match(/Expansao:<\/strong>\s*([^<]+)/);
+  if(match)openNovaIdeia(match[1].trim());
+};
+// ===== FIM MODULO IDEIAS =====
+
+window.sairPaywall=()=>signOut(auth);
+
+window.resgatarCodigoPaywall=async function(){
+  const code=document.getElementById('paywallPromoInput').value.trim().toUpperCase();
+  const m=document.getElementById('paywallPromoMsg');
+  if(!code)return;
+  m.textContent='Verificando...';m.style.color='var(--text2)';
+  try{
+    const cSnap=await getDoc(doc(db,'codigos_promo',code));
+    if(!cSnap.exists()){m.style.color='#c0392b';m.textContent='Código inválido.';return;}
+    const cd=cSnap.data();
+    if(cd.usado&&!cd.multiuso){m.style.color='#c0392b';m.textContent='Código já utilizado.';return;}
+    if(cd.expira&&cd.expira.toDate()<new Date()){m.style.color='#c0392b';m.textContent='Código expirado.';return;}
+    if(cd.usosMax&&(cd.usosAtual||0)>=cd.usosMax){m.style.color='#c0392b';m.textContent='Limite de usos atingido.';return;}
+    await setDoc(doc(db,'usuarios',CU.uid),{plano:cd.plano||'pesquisador_pro',creditosPromo:cd.creditos||50,promoCode:code},{merge:true});
+    await setDoc(doc(db,'codigos_promo',code),{usosAtual:(cd.usosAtual||0)+1,usado:true},{merge:true});
+    await loadUD();
+    m.style.color='#27ae60';m.textContent='✓ Acesso liberado!';
+    setTimeout(async()=>{await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();},800);
+  }catch(e){m.style.color='#c0392b';m.textContent='Erro: '+e.message;}
+};
+
+// Ativar plano Leitor (gratuito) — salva no Firestore e abre o app
+window.ativarLeitor=async function(){
+  if(!CU)return;
+  try{
+    await setDoc(doc(db,'usuarios',CU.uid),{plano:'leitor',creditos:0},{merge:true});
+    UD={plano:'leitor',creditos:0};
+    await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+  }catch(e){toast('Erro ao ativar plano: '+e.message);}
+};
+
+window.solicitarAcesso=function(plano){
+  document.getElementById('pixModal').style.display='flex';
+};
+window.copyPixKey=function(){
+  navigator.clipboard.writeText('segundocerebro.app@gmail.com').then(()=>{toast('Copiado!');}).catch(()=>{});
+};
+
+// ===== PAGAMENTOS MERCADO PAGO =====
+const PROXY='https://proxy-anthropic.onrender.com';
+const PLANO_LABELS={mestre:'Plano Mestre',doutor:'Plano Doutor',pesquisador_pro:'Pesquisador Pro'};
+const PLANO_DURACAO={mestre:365,doutor:365,pesquisador_pro:365}; // dias para PIX avulso
+
+let _pixPaymentId=null,_pixPlano=null,_pixPollTimer=null;
+let _cartaoPlano=null,_mpPublicKey=null;
+
+// Formata número do cartão com espaços
+document.addEventListener('input',e=>{
+  if(e.target.id==='cartaoNumero'){
+    e.target.value=e.target.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim().slice(0,19);
+  }
+  if(e.target.id==='cartaoValidade'){
+    e.target.value=e.target.value.replace(/\D/g,'').replace(/(\d{2})(\d)/,'$1/$2').slice(0,5);
+  }
+});
+
+window.iniciarPagamentoPix=async function(plano,valor){
+  if(!CU){toast('Faça login primeiro.');return;}
+  _pixPlano=plano;_pixPaymentId=null;
+  clearInterval(_pixPollTimer);
+  document.getElementById('pixModalDesc').textContent=`${PLANO_LABELS[plano]||plano} — R$ ${valor.toFixed(2).replace('.',',')} (acesso por 1 ano)`;
+  document.getElementById('pixLoadingMsg').style.display='';
+  document.getElementById('pixQrArea').style.display='none';
+  document.getElementById('pixErroMsg').style.display='none';
+  document.getElementById('pixStatusMsg').textContent='';
+  document.getElementById('pixModal').style.display='flex';
+  try{
+    const resp=await fetch(`${PROXY}/mp/pix`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({valor,descricao:`Segundo Cerebro - ${plano}`,email_pagador:CU.email,plano,uid:CU.uid})
+    });
+    const data=await resp.json();
+    if(!resp.ok||data.error)throw new Error(data.error||data.message||'Erro ao gerar PIX');
+    _pixPaymentId=data.id;
+    document.getElementById('pixLoadingMsg').style.display='none';
+    if(data.qr_code_base64){
+      document.getElementById('pixQrImg').src=`data:image/png;base64,${data.qr_code_base64}`;
+    }
+    document.getElementById('pixCodigoCopia').textContent=data.qr_code||'';
+    document.getElementById('pixQrArea').style.display='';
+    // Inicia polling para verificar pagamento
+    iniciarPixPolling();
+  }catch(e){
+    document.getElementById('pixLoadingMsg').style.display='none';
+    document.getElementById('pixErroMsg').textContent='Erro: '+e.message;
+    document.getElementById('pixErroMsg').style.display='';
+  }
+};
+
+function iniciarPixPolling(){
+  if(!_pixPaymentId)return;
+  let tentativas=0;
+  _pixPollTimer=setInterval(async()=>{
+    tentativas++;
+    if(tentativas>60){clearInterval(_pixPollTimer);return;}
+    try{
+      const resp=await fetch(`${PROXY}/mp/status/${_pixPaymentId}`);
+      const data=await resp.json();
+      if(data.status==='approved'){
+        clearInterval(_pixPollTimer);
+        document.getElementById('pixStatusMsg').textContent='✅ Pagamento confirmado! Liberando acesso...';
+        document.getElementById('pixStatusMsg').style.color='#27ae60';
+        // Atualiza plano no Firestore
+        const expira=new Date();expira.setDate(expira.getDate()+(PLANO_DURACAO[_pixPlano]||365));
+        await setDoc(doc(db,'usuarios',CU.uid),{plano:_pixPlano,pagamentoId:String(_pixPaymentId),planoExpira:expira.toISOString()},{merge:true});
+        await loadUD();updateHeader();
+        setTimeout(async()=>{
+          fecharPixModal();
+          if(!hasAppAccess(UD?.plano)){return;}
+          await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+        },1500);
+      }
+    }catch(e){}
+  },5000);
+}
+
+window.copiarPixCodigo=function(){
+  const txt=document.getElementById('pixCodigoCopia').textContent;
+  navigator.clipboard.writeText(txt).then(()=>toast('Código PIX copiado!'));
+};
+
+window.fecharPixModal=function(){
+  clearInterval(_pixPollTimer);
+  document.getElementById('pixModal').style.display='none';
+};
+
+// --- CARTÃO RECORRENTE ---
+window.iniciarAssinatura=async function(plano){
+  if(!CU){toast('Faça login primeiro.');return;}
+  _cartaoPlano=plano;
+  const precos={mestre:'R$ 19,90/mês',doutor:'R$ 39,90/mês',pesquisador_pro:'R$ 79,90/mês'};
+  document.getElementById('cartaoModalDesc').textContent=`${PLANO_LABELS[plano]||plano} — ${precos[plano]||''} (renovação automática)`;
+  document.getElementById('cartaoErroMsg').textContent='';
+  document.getElementById('cartaoNumero').value='';
+  document.getElementById('cartaoValidade').value='';
+  document.getElementById('cartaoCvv').value='';
+  document.getElementById('cartaoNome').value='';
+  document.getElementById('cartaoModal').style.display='flex';
+};
+
+window.confirmarAssinatura=async function(){
+  const numero=document.getElementById('cartaoNumero').value.replace(/\s/g,'');
+  const validade=document.getElementById('cartaoValidade').value;
+  const cvv=document.getElementById('cartaoCvv').value;
+  const nome=document.getElementById('cartaoNome').value.trim();
+  const errEl=document.getElementById('cartaoErroMsg');
+  errEl.textContent='';
+  if(numero.length<15||!validade.includes('/')||cvv.length<3||!nome){
+    errEl.textContent='Preencha todos os dados corretamente.';return;
+  }
+  const [mes,ano]=validade.split('/');
+  const btn=document.getElementById('btnConfirmarCartao');
+  btn.disabled=true;btn.textContent='Processando...';
+  try{
+    // Tokeniza o cartão via MP SDK (carrega dinamicamente)
+    if(!window.MercadoPago){
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://sdk.mercadopago.com/js/v2';
+        s.onload=res;s.onerror=rej;
+        document.head.appendChild(s);
+      });
+    }
+    // Public Key — busca do proxy
+    if(!_mpPublicKey){
+      const r=await fetch(`${PROXY}/mp/pubkey`);
+      const d=await r.json();
+      _mpPublicKey=d.public_key;
+    }
+    const mp=new window.MercadoPago(_mpPublicKey);
+    const tokenResp=await mp.createCardToken({
+      cardNumber:numero,cardExpirationMonth:mes,cardExpirationYear:'20'+ano,
+      securityCode:cvv,cardholderName:nome
+    });
+    if(tokenResp.error)throw new Error(tokenResp.error);
+    // Envia para o proxy criar a assinatura
+    const resp=await fetch(`${PROXY}/mp/assinatura`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({plano:_cartaoPlano,email_pagador:CU.email,token_cartao:tokenResp.id,uid:CU.uid})
+    });
+    const data=await resp.json();
+    if(!resp.ok||data.error)throw new Error(data.error||data.message||'Erro ao processar');
+    // Atualiza plano localmente
+    await setDoc(doc(db,'usuarios',CU.uid),{plano:_cartaoPlano,assinaturaId:data.id},{merge:true});
+    await loadUD();updateHeader();
+    fecharCartaoModal();
+    await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
+    toast('✅ Assinatura ativada com sucesso!');
+  }catch(e){
+    errEl.textContent='Erro: '+e.message;
+  }finally{
+    btn.disabled=false;btn.textContent='Assinar agora';
+  }
+};
+
+window.fecharCartaoModal=function(){
+  document.getElementById('cartaoModal').style.display='none';
+};
+window.copyPixKey=function(){
+  navigator.clipboard.writeText('segundocerebro.app@gmail.com').then(()=>{toast('Copiado!');}).catch(()=>{});
+};
+// ===== FIM PAGAMENTOS =====
+
+// ===== PAINEL ADMIN =====
+document.getElementById('btnAdminPanel').onclick=()=>{
+  if(CU?.email!==OWNER_EMAIL)return;
+  // Preenche data padrão: 30 dias a partir de hoje
+  const d=new Date();d.setDate(d.getDate()+30);
+  document.getElementById('adminPromoExpira').value=d.toISOString().split('T')[0];
+  document.getElementById('adminPromoCode').value='';
+  document.getElementById('adminPromoMsg').textContent='';
+  openM('adminModal');
+  carregarCodigosAdmin();
+};
+
+async function carregarCodigosAdmin(){
+  if(CU?.email!==OWNER_EMAIL)return;
+  const lista=document.getElementById('adminCodigosList');
+  try{
+    const {getDocs,collection:col,orderBy,query,limit:lim}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const q=query(col(db,'codigos_promo'),lim(10));
+    const snap=await getDocs(q);
+    if(snap.empty){lista.textContent='Nenhum código emitido ainda.';return;}
+    let html='<table style="width:100%;border-collapse:collapse">';
+    html+='<tr style="font-weight:700;border-bottom:1px solid var(--border)"><td style="padding:4px 6px">Código</td><td>Plano</td><td>Usos</td><td>Validade</td></tr>';
+    snap.forEach(d=>{
+      const c=d.data();
+      const exp=c.expira?c.expira.toDate().toLocaleDateString('pt-BR'):'∞';
+      const expirado=c.expira&&c.expira.toDate()<new Date();
+      html+=`<tr style="border-bottom:1px solid var(--border);opacity:${expirado?.5:1}">
+        <td style="padding:4px 6px;font-weight:700;font-family:monospace">${d.id}</td>
+        <td>${planLabel(c.plano||'pesquisador_pro')}</td>
+        <td>${c.usosAtual||0}/${c.usosMax||1}</td>
+        <td style="color:${expirado?'#c0392b':'var(--text2)'}">${exp}${expirado?' ✗':''}</td>
+      </tr>`;
+    });
+    html+='</table>';
+    lista.innerHTML=html;
+  }catch(e){lista.textContent='Erro ao carregar: '+e.message;}
+}
+
+document.getElementById('btnEmitirCodigo').onclick=async function(){
+  if(CU?.email!==OWNER_EMAIL)return;
+  const code=document.getElementById('adminPromoCode').value.trim().toUpperCase().replace(/\s/g,'');
+  const plano=document.getElementById('adminPromoPlano').value;
+  const creditos=parseInt(document.getElementById('adminPromoCreditos').value)||50;
+  const usosMax=parseInt(document.getElementById('adminPromoUsosMax').value)||1;
+  const multiuso=document.getElementById('adminPromoMultiuso').checked;
+  const expiraStr=document.getElementById('adminPromoExpira').value;
+  const m=document.getElementById('adminPromoMsg');
+  if(!code||code.length<4){m.style.color='#c0392b';m.textContent='Código deve ter ao menos 4 caracteres.';return;}
+  m.textContent='Salvando...';m.style.color='var(--text2)';
+  try{
+    const dados={plano,creditos,usosMax,multiuso,usosAtual:0,usado:false,criadoEm:serverTimestamp()};
+    if(expiraStr){
+      const {Timestamp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      dados.expira=Timestamp.fromDate(new Date(expiraStr+'T23:59:59'));
+    }
+    await setDoc(doc(db,'codigos_promo',code),dados);
+    m.style.color='#27ae60';
+    m.textContent=`✓ Código "${code}" emitido com sucesso!`;
+    document.getElementById('adminPromoCode').value='';
+    carregarCodigosAdmin();
+  }catch(e){m.style.color='#c0392b';m.textContent='Erro: '+e.message;}
+};
+// ===== FIM PAINEL ADMIN =====
+
+// ===== COMPRA (fallback PIX se Firebase Functions indisponível) =====
+window.comprar=async function(prod){
+  try{await fnCobranca({produto:prod});}
+  catch(e){
+    // Firebase Functions indisponível no plano Spark — exibir fluxo PIX manual
+    solicitarAcesso(prod);
+  }
+};
+
+// ===== RATE LIMIT: máx. 20 chamadas IA por sessão para não-owner =====
+let _aiCallCount=0;
+const _AI_LIMIT=20;
+function getLimite(){return LIMITES[UD?.plano||'leitor']||LIMITES.leitor;}
+function checkAILimit(){
+  if(!CU)return false;
+  if(CU.email===OWNER_EMAIL)return true;
+  const lim=getLimite();
+  if(!lim.ia){toast('IA disponível a partir do Plano Mestre. Faça upgrade para usar esta função.');return false;}
+  if(_aiCallCount>=_AI_LIMIT){toast('Limite de uso de IA atingido nesta sessão. Faça login novamente para renovar.');return false;}
+  _aiCallCount++;
+  return true;
+}
+function checkCitacaoLimit(){
+  if(!CU)return false;
+  if(CU.email===OWNER_EMAIL)return true;
+  const lim=getLimite();
+  if(quotes.length>=lim.citacoes){toast(`Limite de ${lim.citacoes} citações atingido no Plano ${planLabel(UD?.plano||'leitor')}. Faça upgrade para continuar.`);return false;}
+  return true;
+}
+
+function updateStatus(){const d=document.getElementById('statusDot'),t=document.getElementById('statusText');if(navigator.onLine){d.className='status-dot';t.textContent='Conectado';}else{d.className='status-dot offline';t.textContent='Offline';}}
+window.addEventListener('online',updateStatus);window.addEventListener('offline',updateStatus);updateStatus();
+</script>
+</body>
+</html>
