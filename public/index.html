@@ -687,7 +687,7 @@ main{padding:8px}
       <button class="btn-sm" id="btnPlanos">Planos</button>
       <button class="btn-sm btn-accent" id="btnNovaCitacao">+ Nova citacao</button>
       <button class="btn-sm" id="btnAdminPanel" style="display:none;background:#1a1814;color:#f7c948;border-color:#f7c948;font-weight:700">⚙️ Admin</button>
-      <button id="btnInstalarApp" style="display:none;padding:6px 12px;border-radius:7px;font-size:.82rem;font-weight:600;border:1px solid #27ae60;background:#27ae60;color:#fff;cursor:pointer;transition:.15s;white-space:nowrap" title="Instalar Segundo Cérebro no seu dispositivo">📲 Instalar App</button>
+      <button id="btnInstalarApp" onclick="window._instalarApp&&window._instalarApp()" style="display:none;padding:6px 12px;border-radius:7px;font-size:.82rem;font-weight:600;border:1px solid #27ae60;background:#27ae60;color:#fff;cursor:pointer;transition:.15s;white-space:nowrap" title="Instalar Segundo Cérebro no seu dispositivo">📲 Instalar App</button>
       <span class="user-name" id="userName"></span>
       <img class="user-avatar" id="userAvatar" src="" alt="" style="display:none">
       <a href="/como-usar.html" target="_blank" class="btn-sm" style="text-decoration:none">Como usar</a>
@@ -969,43 +969,44 @@ let CU=null,UD=null,quotes=[],cols=[],activeCol='all',activeTag=null,sortOrder='
 
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 
+// ── KEEP-ALIVE: acorda o Render antes do usuário precisar de IA ─────────────
+(()=>{
+  const PROXY='https://proxy-anthropic.onrender.com/health';
+  const ping=()=>fetch(PROXY,{method:'GET',mode:'cors'}).catch(()=>{});
+  ping(); // pinga imediatamente ao abrir o site
+  setInterval(ping, 8*60*1000); // repinga a cada 8 minutos enquanto o site está aberto
+})();
+
 // ── PWA INSTALL BUTTON ──────────────────────────────────────────────────────
 let _deferredInstallPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();
   _deferredInstallPrompt=e;
   const btn=document.getElementById('btnInstalarApp');
-  if(btn){btn.style.display='';}
+  if(btn) btn.style.display='';
 });
 window.addEventListener('appinstalled',()=>{
   _deferredInstallPrompt=null;
   const btn=document.getElementById('btnInstalarApp');
-  if(btn){btn.style.display='none';}
-  showToast('App instalado com sucesso! 🎉');
+  if(btn) btn.style.display='none';
 });
-document.getElementById('btnInstalarApp').addEventListener('click',async()=>{
+window._instalarApp=async function(){
   if(_deferredInstallPrompt){
     _deferredInstallPrompt.prompt();
     const{outcome}=await _deferredInstallPrompt.userChoice;
-    if(outcome==='accepted'){_deferredInstallPrompt=null;document.getElementById('btnInstalarApp').style.display='none';}
+    if(outcome==='accepted'){_deferredInstallPrompt=null;const b=document.getElementById('btnInstalarApp');if(b)b.style.display='none';}
   } else {
-    // iOS: mostrar instruções manuais
     showToast('No iPhone: toque em Compartilhar → "Adicionar à Tela de Início"');
   }
-});
+};
 
 // ── PWA SHORTCUTS: abrir com ?action= ou ?tab= ─────────────────────────────
 (()=>{
   const params=new URLSearchParams(location.search);
   const action=params.get('action');
   const tab=params.get('tab');
-  if(action==='nova-citacao'){
-    // Abre modal de nova citação assim que o app carregar
-    document.addEventListener('appReady',()=>openM('quoteModal'));
-  }
-  if(tab==='ideias'){
-    document.addEventListener('appReady',()=>switchTab('ideias'));
-  }
+  if(action==='nova-citacao') document.addEventListener('appReady',()=>openM('quoteModal'));
+  if(tab==='ideias') document.addEventListener('appReady',()=>switchTab('ideias'));
 })();
 
 const OWNER_EMAIL='felipevigneron@gmail.com';

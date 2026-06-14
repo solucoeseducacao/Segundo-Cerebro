@@ -251,6 +251,23 @@ app.get('/mp/pubkey', async(_,res)=>{
   }
 });
 
-app.get('/health', (_,res)=>res.json({ok:true, mp: !!MP_ACCESS_TOKEN, ai: !!ANTHROPIC_API_KEY, v:'2.0'}));
+app.get('/health', (_,res)=>res.json({ok:true, mp: !!MP_ACCESS_TOKEN, ai: !!ANTHROPIC_API_KEY, v:'2.1'}));
 
-app.listen(process.env.PORT||3000, ()=>console.log('Proxy Segundo Cerebro rodando'));
+// ── KEEP-ALIVE: pinga a si mesmo a cada 9 min para não dormir no Render Free ──
+const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT||3000}`;
+setInterval(async()=>{
+  try{
+    await fetch(`${SELF_URL}/health`);
+    console.log('[keep-alive] ping ok',new Date().toISOString());
+  }catch(e){
+    console.warn('[keep-alive] erro:',e.message);
+  }
+}, 9 * 60 * 1000); // 9 minutos
+
+app.listen(process.env.PORT||3000, ()=>{
+  console.log('Proxy Segundo Cerebro rodando');
+  // Pinga imediatamente ao iniciar para "acordar" dependências
+  setTimeout(async()=>{
+    try{ await fetch(`${SELF_URL}/health`); }catch(e){}
+  }, 5000);
+});
