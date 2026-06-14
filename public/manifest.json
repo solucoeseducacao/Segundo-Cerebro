@@ -1,13 +1,50 @@
 {
   "name": "Segundo Cérebro — Citações",
   "short_name": "2º Cérebro",
-  "description": "Gestão inteligente de citações acadêmicas",
-  "start_url": "/",
+  "description": "Gerencie citações acadêmicas com IA, busca semântica e exportação ABNT em segundos.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#f7f5f0",
   "theme_color": "#3d2b1f",
+  "lang": "pt-BR",
+  "categories": ["education", "productivity"],
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tela principal — Citações e coleções"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Versão mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nova Citação",
+      "short_name": "Nova",
+      "description": "Adicionar uma nova citação",
+      "url": "/?action=nova-citacao&source=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Minhas Ideias",
+      "short_name": "Ideias",
+      "description": "Ver e gravar ideias",
+      "url": "/?tab=ideias&source=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
 }

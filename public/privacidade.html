@@ -5,78 +5,185 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Política de Privacidade — Segundo Cérebro</title>
 <style>
-:root{--bg:#f7f5f0;--surface:#ffffff;--border:#e0dbd0;--text:#1a1814;--text2:#6b6560;--accent:#3d2b1f}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:40px 16px}
-.container{max-width:720px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:40px 48px}
-h1{font-family:Georgia,serif;font-style:italic;color:var(--accent);font-size:1.8rem;margin-bottom:8px}
-.subtitle{color:var(--text2);font-size:.9rem;margin-bottom:32px;border-bottom:1px solid var(--border);padding-bottom:20px}
-h2{font-size:1.05rem;font-weight:700;color:var(--text);margin:28px 0 10px}
-p,li{font-size:.95rem;line-height:1.75;color:var(--text2);margin-bottom:10px}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f7f5f0;color:#1a1814;margin:0;padding:0}
+.container{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+h1{font-family:Georgia,serif;font-style:italic;color:#3d2b1f;font-size:1.8rem;margin-bottom:4px}
+.subtitle{color:#6b6560;font-size:.9rem;margin-bottom:40px}
+h2{color:#3d2b1f;font-size:1.05rem;margin-top:36px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e0dbd0}
+p,li{font-size:.92rem;line-height:1.8;color:#2a2520;margin-bottom:10px}
 ul{padding-left:20px}
-a{color:var(--accent)}
-.back{display:inline-block;margin-bottom:24px;color:var(--accent);text-decoration:none;font-size:.9rem}
-@media(max-width:600px){.container{padding:24px 20px}}
+.box{background:#fff;border:1px solid #e0dbd0;border-radius:10px;padding:20px 24px;margin-bottom:20px}
+.highlight{background:#e8f5e9;border:1px solid #c8e6c9;border-radius:8px;padding:14px 18px;font-size:.88rem;color:#1b5e20;margin:20px 0}
+a{color:#3d2b1f}
+.back{display:inline-block;margin-bottom:28px;color:#3d2b1f;text-decoration:none;font-size:.88rem}
+.back:hover{text-decoration:underline}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin:12px 0}
+th{background:#3d2b1f;color:#fff;padding:8px 12px;text-align:left}
+td{padding:8px 12px;border-bottom:1px solid #e0dbd0}
+tr:nth-child(even) td{background:#f7f5f0}
 </style>
 </head>
 <body>
 <div class="container">
-  <a class="back" href="/">← Voltar ao app</a>
-  <h1>Segundo Cérebro</h1>
-  <p class="subtitle">Política de Privacidade · Atualizada em junho de 2026</p>
+  <a class="back" href="/">← Voltar ao Segundo Cérebro</a>
+  <h1>Política de Privacidade</h1>
+  <p class="subtitle">Última atualização: 14 de junho de 2026</p>
 
-  <h2>1. Quem somos</h2>
-  <p>O <strong>Segundo Cérebro</strong> é um serviço de gestão de citações acadêmicas com inteligência artificial, desenvolvido e operado por Felipe Vigneron, pessoa física, CNPJ/CPF a ser informado na contratação. Contato: <a href="mailto:suporte@segundocerebro.app">suporte@segundocerebro.app</a>.</p>
+  <div class="highlight">
+    🔒 <strong>Resumo:</strong> não vendemos seus dados. Não compartilhamos com anunciantes. Você controla seus dados e pode solicitiar a exclusão a qualquer momento.
+  </div>
 
-  <h2>2. Quais dados coletamos</h2>
-  <ul>
-    <li><strong>Dados de conta:</strong> nome, endereço de e-mail e foto de perfil fornecidos pelo Google no momento do login via Google Sign-In.</li>
-    <li><strong>Conteúdo do usuário:</strong> citações, ideias, coleções e anotações que você salva voluntariamente no app.</li>
-    <li><strong>Dados de pagamento:</strong> ao adquirir um plano, seu e-mail é compartilhado com o Mercado Pago para processamento. Não armazenamos dados de cartão de crédito — eles são processados exclusivamente pelo Mercado Pago.</li>
-    <li><strong>Dados de uso:</strong> contadores de exportações, número de créditos e identificador do plano ativo, armazenados no Firebase Firestore.</li>
-  </ul>
+  <div class="box">
+    <h2>1. Quem somos</h2>
+    <p>O <strong>Segundo Cérebro</strong> é um serviço de gestão de citações acadêmicas disponível em <a href="https://segundo-cerebro-bfb66.web.app">segundo-cerebro-bfb66.web.app</a>. Esta Política descreve como coletamos, usamos, armazenamos e protegemos seus dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018).</p>
+  </div>
 
-  <h2>3. Como usamos os dados</h2>
-  <ul>
-    <li>Para autenticar e identificar sua conta.</li>
-    <li>Para armazenar e sincronizar seu conteúdo entre dispositivos.</li>
-    <li>Para processar pagamentos e controlar o acesso aos planos contratados.</li>
-    <li>Para operar as funções de IA (os textos enviados à IA não são armazenados permanentemente).</li>
-  </ul>
+  <div class="box">
+    <h2>2. Dados que coletamos</h2>
+    <table>
+      <tr>
+        <th>Dado</th>
+        <th>Como é coletado</th>
+        <th>Finalidade</th>
+      </tr>
+      <tr>
+        <td>Nome e e-mail</td>
+        <td>Cadastro ou login Google</td>
+        <td>Identificação, autenticação, comunicação</td>
+      </tr>
+      <tr>
+        <td>Foto de perfil</td>
+        <td>Google (opcional)</td>
+        <td>Exibição no app</td>
+      </tr>
+      <tr>
+        <td>Citações e ideias</td>
+        <td>Inserção pelo usuário</td>
+        <td>Prestação do serviço</td>
+      </tr>
+      <tr>
+        <td>Dados de pagamento</td>
+        <td>Mercado Pago (não armazenamos)</td>
+        <td>Processamento de assinaturas</td>
+      </tr>
+      <tr>
+        <td>Plano e créditos</td>
+        <td>Sistema interno</td>
+        <td>Controle de acesso e limites</td>
+      </tr>
+      <tr>
+        <td>Logs de uso</td>
+        <td>Firebase automaticamente</td>
+        <td>Segurança e melhoria do serviço</td>
+      </tr>
+    </table>
+    <p>Não coletamos dados sensíveis (origem racial, saúde, orientação sexual, etc.).</p>
+  </div>
 
-  <h2>4. Compartilhamento de dados</h2>
-  <p>Seus dados são compartilhados apenas com:</p>
-  <ul>
-    <li><strong>Google Firebase</strong> — autenticação e banco de dados (Google LLC, EUA).</li>
-    <li><strong>Mercado Pago</strong> — processamento de pagamentos (MercadoPago.com Representações Ltda., Brasil).</li>
-    <li><strong>Anthropic</strong> — processamento de IA (apenas o texto enviado a cada requisição; Anthropic PBC, EUA).</li>
-  </ul>
-  <p>Não vendemos, alugamos ou compartilhamos seus dados pessoais com terceiros para fins comerciais.</p>
+  <div class="box">
+    <h2>3. Base legal para tratamento (LGPD)</h2>
+    <ul>
+      <li><strong>Execução de contrato</strong> (art. 7º, V) — para fornecer o serviço contratado;</li>
+      <li><strong>Legítimo interesse</strong> (art. 7º, IX) — para melhoria do produto, segurança e prevenção de fraudes;</li>
+      <li><strong>Consentimento</strong> (art. 7º, I) — para comunicações de marketing (que você pode revogar a qualquer momento);</li>
+      <li><strong>Obrigação legal</strong> (art. 7º, II) — quando exigido por lei ou autoridade competente.</li>
+    </ul>
+  </div>
 
-  <h2>5. Armazenamento e segurança</h2>
-  <p>Os dados são armazenados na infraestrutura do Google Firebase com criptografia em trânsito (TLS) e em repouso. O acesso aos dados é restrito por regras de segurança do Firestore que impedem que outros usuários acessem seu conteúdo.</p>
+  <div class="box">
+    <h2>4. Como usamos seus dados</h2>
+    <ul>
+      <li>Autenticar seu acesso à Plataforma;</li>
+      <li>Armazenar e sincronizar suas citações e ideias em nuvem;</li>
+      <li>Processar pagamentos e controlar acesso aos planos;</li>
+      <li>Enviar comunicações sobre o serviço (atualizações, suporte);</li>
+      <li>Melhorar a Plataforma com base em padrões agregados de uso (sem identificação individual);</li>
+      <li>Cumprir obrigações legais.</li>
+    </ul>
+    <p><strong>Não usamos seus dados para:</strong> publicidade de terceiros, venda a parceiros comerciais, treinamento de modelos de IA da Plataforma.</p>
+  </div>
 
-  <h2>6. Seus direitos (LGPD)</h2>
-  <p>Nos termos da Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem direito a:</p>
-  <ul>
-    <li>Confirmar a existência e acessar seus dados.</li>
-    <li>Corrigir dados incompletos ou desatualizados.</li>
-    <li>Solicitar a exclusão de seus dados pessoais.</li>
-    <li>Revogar o consentimento a qualquer momento.</li>
-  </ul>
-  <p>Para exercer seus direitos, entre em contato: <a href="mailto:suporte@segundocerebro.app">suporte@segundocerebro.app</a>. Responderemos em até 15 dias úteis.</p>
+  <div class="box">
+    <h2>5. Compartilhamento de dados</h2>
+    <p>Compartilhamos dados apenas com os seguintes fornecedores essenciais:</p>
+    <table>
+      <tr><th>Fornecedor</th><th>Finalidade</th><th>País</th></tr>
+      <tr><td>Google Firebase</td><td>Autenticação e banco de dados</td><td>EUA (cláusulas LGPD)</td></tr>
+      <tr><td>Mercado Pago</td><td>Processamento de pagamentos</td><td>Brasil</td></tr>
+      <tr><td>Anthropic (Claude API)</td><td>Processamento de IA (via proxy próprio)</td><td>EUA (cláusulas LGPD)</td></tr>
+      <tr><td>Render</td><td>Hospedagem do servidor proxy</td><td>EUA (cláusulas LGPD)</td></tr>
+    </table>
+    <p>Todos os fornecedores são vinculados contratualmente a padrões de proteção de dados compatíveis com a LGPD.</p>
+    <p>Podemos compartilhar dados com autoridades quando exigido por lei, ordem judicial ou para proteção de direitos.</p>
+  </div>
 
-  <h2>7. Cookies e armazenamento local</h2>
-  <p>O app não utiliza cookies de rastreamento. Utiliza o armazenamento local do navegador (localStorage) apenas para funcionalidades técnicas do Progressive Web App (PWA), como cache offline.</p>
+  <div class="box">
+    <h2>6. Armazenamento e segurança</h2>
+    <p>Seus dados são armazenados no <strong>Google Firebase</strong> (Firestore) com as seguintes proteções:</p>
+    <ul>
+      <li>Criptografia em trânsito (TLS/HTTPS) e em repouso;</li>
+      <li>Regras de segurança (Firestore Security Rules) impedindo acesso não autorizado entre usuários;</li>
+      <li>Autenticação obrigatória para qualquer operação de leitura ou escrita;</li>
+      <li>Tokens de autenticação com expiração automática.</li>
+    </ul>
+    <p>Apesar das medidas acima, nenhum sistema é 100% inviolável. Em caso de incidente de segurança que afete seus dados, notificaremos a ANPD e os usuários afetados dentro do prazo legal.</p>
+  </div>
 
-  <h2>8. Retenção de dados</h2>
-  <p>Seus dados são mantidos enquanto sua conta estiver ativa. Após a exclusão da conta, os dados são removidos em até 30 dias, exceto quando a retenção for exigida por lei.</p>
+  <div class="box">
+    <h2>7. Seus direitos como titular (LGPD, art. 18)</h2>
+    <p>Você tem os seguintes direitos sobre seus dados pessoais:</p>
+    <ul>
+      <li><strong>Acesso:</strong> saber quais dados temos sobre você;</li>
+      <li><strong>Correção:</strong> corrigir dados incompletos ou incorretos;</li>
+      <li><strong>Eliminação:</strong> solicitar a exclusão de seus dados pessoais;</li>
+      <li><strong>Portabilidade:</strong> receber seus dados em formato estruturado;</li>
+      <li><strong>Revogação do consentimento:</strong> retirar consentimentos dados anteriormente;</li>
+      <li><strong>Oposição:</strong> opor-se a tratamentos baseados em legítimo interesse;</li>
+      <li><strong>Informação:</strong> saber com quem compartilhamos seus dados.</li>
+    </ul>
+    <p>Para exercer qualquer direito, envie e-mail para <a href="mailto:suporte@segundocerebro.app">suporte@segundocerebro.app</a> com o assunto "DIREITOS LGPD". Respondemos em até 15 dias úteis.</p>
+  </div>
 
-  <h2>9. Alterações nesta política</h2>
-  <p>Podemos atualizar esta política periodicamente. Notificaremos você por e-mail em caso de alterações significativas. O uso continuado do serviço após a notificação constitui aceite das novas condições.</p>
+  <div class="box">
+    <h2>8. Retenção de dados</h2>
+    <p>Mantemos seus dados enquanto sua conta estiver ativa. Após o encerramento da conta ou solicitação de exclusão, os dados pessoais são deletados ou anonimizados em até 30 (trinta) dias, exceto quando a retenção for exigida por obrigação legal (ex.: dados fiscais de transações podem ser mantidos por até 5 anos).</p>
+  </div>
 
-  <h2>10. Contato</h2>
-  <p>Dúvidas sobre privacidade: <a href="mailto:suporte@segundocerebro.app">suporte@segundocerebro.app</a></p>
+  <div class="box">
+    <h2>9. Cookies e tecnologias de rastreamento</h2>
+    <p>A Plataforma utiliza apenas os seguintes armazenamentos locais no navegador:</p>
+    <ul>
+      <li><strong>Firebase Auth token</strong> — para manter sua sessão ativa (necessário para o serviço funcionar);</li>
+      <li><strong>Cache do Service Worker</strong> — para funcionamento offline (armazenamento local no dispositivo).</li>
+    </ul>
+    <p>Não utilizamos cookies de rastreamento, publicidade comportamental ou pixels de terceiros.</p>
+  </div>
+
+  <div class="box">
+    <h2>10. Transferência internacional de dados</h2>
+    <p>Alguns de nossos fornecedores (Firebase, Anthropic, Render) armazenam dados nos Estados Unidos. Todas essas transferências são realizadas com base em salvaguardas adequadas, incluindo cláusulas contratuais padrão equivalentes às exigidas pela LGPD.</p>
+  </div>
+
+  <div class="box">
+    <h2>11. Dados de menores</h2>
+    <p>A Plataforma não é direcionada a menores de 18 anos sem consentimento dos responsáveis. Se identificarmos que coletamos dados de menor sem consentimento, os deletaremos imediatamente.</p>
+  </div>
+
+  <div class="box">
+    <h2>12. Encarregado de Dados (DPO)</h2>
+    <p>O responsável pelo tratamento de dados pessoais da Plataforma pode ser contactado em: <a href="mailto:suporte@segundocerebro.app">suporte@segundocerebro.app</a></p>
+  </div>
+
+  <div class="box">
+    <h2>13. Alterações nesta Política</h2>
+    <p>Podemos atualizar esta Política periodicamente. Alterações relevantes serão comunicadas por e-mail com antecedência mínima de 15 dias. A versão vigente estará sempre disponível em <a href="/privacidade.html">/privacidade.html</a>.</p>
+  </div>
+
+  <p style="text-align:center;font-size:.82rem;color:#9e9890;margin-top:40px">
+    Autoridade Nacional de Proteção de Dados: <a href="https://www.gov.br/anpd" target="_blank" rel="noopener">gov.br/anpd</a> &nbsp;·&nbsp;
+    <a href="/termos.html">Termos de Uso</a> &nbsp;·&nbsp;
+    <a href="/">Voltar ao App</a>
+  </p>
 </div>
 </body>
 </html>

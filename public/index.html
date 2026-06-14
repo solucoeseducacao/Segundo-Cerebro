@@ -3,9 +3,23 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Segundo Cérebro — Citações</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Segundo Cérebro — Citações Acadêmicas com IA</title>
+<meta name="description" content="Gerencie citações acadêmicas com IA, busca semântica e exportação ABNT. Para pesquisadores, mestrandos e doutores.">
+<meta name="theme-color" content="#3d2b1f">
 <link rel="manifest" href="/manifest.json">
+
+<!-- iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="2º Cérebro">
+<link rel="apple-touch-icon" href="/icon-192.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Segundo Cérebro — Citações Acadêmicas com IA">
+<meta property="og:description" content="Organize, cite e exporte referências em ABNT com IA. Usado por +1.200 pesquisadores brasileiros.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://segundo-cerebro-bfb66.web.app">
 <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
 <style>
 :root{--bg:#f7f5f0;--surface:#ffffff;--surface2:#f0ede6;--border:#e0dbd0;--border2:#c8c2b4;--text:#1a1814;--text2:#6b6560;--text3:#9e9890;--accent:#3d2b1f}
@@ -357,12 +371,17 @@ main{padding:8px}
   <div class="pw-wrap">
     <div class="pw-hero">
       <div class="pw-logo">Segundo Cérebro</div>
-      <h2 class="pw-title" id="paywallName">Bem-vindo! Escolha seu plano</h2>
-      <p class="pw-sub">Gerencie suas citações acadêmicas com IA, busca semântica e exportação ABNT.<br>Usado por pesquisadores, mestrandos e doutores em todo o Brasil.</p>
+      <h2 class="pw-title" id="paywallName">Olá, pesquisador! Escolha seu plano</h2>
+      <p class="pw-sub">O assistente acadêmico que pesquisadores sérios usam para organizar referências, citar com precisão e exportar em ABNT — tudo com IA.</p>
       <div class="pw-social">
         <span>📚 +1.200 pesquisadores</span>
         <span>⭐ 4,9/5 de avaliação</span>
-        <span>🔒 Dados protegidos</span>
+        <span>🔒 100% seguro</span>
+        <span>🇧🇱 Empresa brasileira</span>
+      </div>
+      <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:.82rem;color:#7c5c00;text-align:center;line-height:1.5">
+        ⏳ <strong>Oferta de lançamento:</strong> garanta o preço atual antes do próximo reajuste.<br>
+        <span id="pwOnline" style="font-weight:600">🟢 Vendo planos agora</span>
       </div>
     </div>
 
@@ -439,8 +458,9 @@ main{padding:8px}
 
     </div><!-- /pw-plans -->
 
-    <div class="pw-guarantee">
-      🔒 Pagamento 100% seguro via Mercado Pago &nbsp;·&nbsp; 🇧🇷 Empresa brasileira &nbsp;·&nbsp; Cancele quando quiser
+    <div class="pw-guarantee" style="border:1px solid #c8e6c9;background:#f1f8e9">
+      🛡️ <strong>Garantia de 7 dias</strong> — se não gostar, devolvemos 100% do valor.<br>
+      🔒 Pagamento seguro via Mercado Pago &nbsp;·&nbsp; 🇧🇷 Empresa brasileira &nbsp;·&nbsp; Cancele a qualquer momento sem multa.
     </div>
 
     <!-- DEPOIMENTOS -->
@@ -667,6 +687,7 @@ main{padding:8px}
       <button class="btn-sm" id="btnPlanos">Planos</button>
       <button class="btn-sm btn-accent" id="btnNovaCitacao">+ Nova citacao</button>
       <button class="btn-sm" id="btnAdminPanel" style="display:none;background:#1a1814;color:#f7c948;border-color:#f7c948;font-weight:700">⚙️ Admin</button>
+      <button id="btnInstalarApp" style="display:none;padding:6px 12px;border-radius:7px;font-size:.82rem;font-weight:600;border:1px solid #27ae60;background:#27ae60;color:#fff;cursor:pointer;transition:.15s;white-space:nowrap" title="Instalar Segundo Cérebro no seu dispositivo">📲 Instalar App</button>
       <span class="user-name" id="userName"></span>
       <img class="user-avatar" id="userAvatar" src="" alt="" style="display:none">
       <a href="/como-usar.html" target="_blank" class="btn-sm" style="text-decoration:none">Como usar</a>
@@ -948,6 +969,45 @@ let CU=null,UD=null,quotes=[],cols=[],activeCol='all',activeTag=null,sortOrder='
 
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 
+// ── PWA INSTALL BUTTON ──────────────────────────────────────────────────────
+let _deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  _deferredInstallPrompt=e;
+  const btn=document.getElementById('btnInstalarApp');
+  if(btn){btn.style.display='';}
+});
+window.addEventListener('appinstalled',()=>{
+  _deferredInstallPrompt=null;
+  const btn=document.getElementById('btnInstalarApp');
+  if(btn){btn.style.display='none';}
+  showToast('App instalado com sucesso! 🎉');
+});
+document.getElementById('btnInstalarApp').addEventListener('click',async()=>{
+  if(_deferredInstallPrompt){
+    _deferredInstallPrompt.prompt();
+    const{outcome}=await _deferredInstallPrompt.userChoice;
+    if(outcome==='accepted'){_deferredInstallPrompt=null;document.getElementById('btnInstalarApp').style.display='none';}
+  } else {
+    // iOS: mostrar instruções manuais
+    showToast('No iPhone: toque em Compartilhar → "Adicionar à Tela de Início"');
+  }
+});
+
+// ── PWA SHORTCUTS: abrir com ?action= ou ?tab= ─────────────────────────────
+(()=>{
+  const params=new URLSearchParams(location.search);
+  const action=params.get('action');
+  const tab=params.get('tab');
+  if(action==='nova-citacao'){
+    // Abre modal de nova citação assim que o app carregar
+    document.addEventListener('appReady',()=>openM('quoteModal'));
+  }
+  if(tab==='ideias'){
+    document.addEventListener('appReady',()=>switchTab('ideias'));
+  }
+})();
+
 const OWNER_EMAIL='felipevigneron@gmail.com';
 // Planos que têm acesso completo ao app (leitor também entra, mas com limites)
 function hasAppAccess(p){return['leitor','mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'].includes(p);}
@@ -1031,8 +1091,8 @@ function friendlyErr(c){const m={'auth/user-not-found':'Usuario nao encontrado.'
 function showLErr(m){document.getElementById('loginError').textContent=m;}
 // hideLoader definida acima com clearTimeout
 function showLogin(){hideLoader();document.getElementById('loginScreen').style.display='flex';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='none';showLoginHome();}
-function showApp(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('paywallScreen').style.display='none';document.getElementById('appRoot').style.display='flex';updateHeader();}
-function showPaywall(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='flex';const nm=CU?.displayName||CU?.email||'';document.getElementById('paywallName').textContent=nm?`Olá, ${nm}! Escolha seu plano`:'Bem-vindo! Escolha seu plano';}
+function showApp(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('paywallScreen').style.display='none';document.getElementById('appRoot').style.display='flex';updateHeader();setTimeout(()=>document.dispatchEvent(new Event('appReady')),500);}
+function showPaywall(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='flex';const nm=CU?.displayName||CU?.email?.split('@')[0]||'';document.getElementById('paywallName').textContent=nm?`Olá, ${nm.split(' ')[0]}! Escolha seu plano`:'Olá, pesquisador! Escolha seu plano';}
 
 async function loadUD(){const s=await getDoc(doc(db,'usuarios',CU.uid));UD=s.exists()?s.data():{plano:null,creditos:0};}
 
