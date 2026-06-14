@@ -1,4 +1,4 @@
-const CACHE = 'sc-v5';
+const CACHE = 'sc-v6';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
@@ -28,27 +28,4 @@ self.addEventListener('fetch', e => {
   if (isHTML) {
     e.respondWith(
       fetch(e.request).then(resp => {
-        if (resp.ok) {
-          const clone = resp.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return resp;
-      }).catch(() => caches.match(e.request).then(c => c || new Response('Offline', { status: 503 })))
-    );
-    return;
-  }
-
-  // Demais assets (sw.js, manifest, etc.): cache-first como antes
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      if (cached) return cached;
-      return fetch(e.request).then(resp => {
-        if (resp.ok) {
-          const clone = resp.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return resp;
-      }).catch(() => new Response('Offline', { status: 503 }));
-    })
-  );
-});
+        if (resp.o

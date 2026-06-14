@@ -167,51 +167,77 @@ main{flex:1;overflow-y:auto;padding:20px}
 .toast.show{transform:translateY(0);opacity:1}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:680px){
-/* Layout geral */
-body{overflow-x:hidden}
-#appRoot{height:auto;min-height:100vh;overflow-x:hidden}
-.app-body{flex-direction:column;overflow:visible}
-main{overflow-y:visible;padding:12px}
+@media(max-width:768px){
+/* ── BASE ── */
+html,body{overflow-x:hidden;width:100%;max-width:100vw}
+*{max-width:100%;box-sizing:border-box}
 
-/* Header responsivo */
-header{height:auto;min-height:56px;flex-wrap:wrap;padding:8px 12px;gap:8px}
-.header-search{max-width:100%;width:100%;order:3;flex-basis:100%}
+/* ── APP ROOT ── */
+#appRoot{width:100%;max-width:100vw;height:auto;min-height:100vh;overflow-x:hidden;overflow-y:auto;display:flex !important;flex-direction:column}
+
+/* ── HEADER ── */
+header{height:auto;min-height:52px;flex-wrap:wrap;padding:8px 10px;gap:6px;width:100%;overflow:hidden}
+.header-logo{font-size:1.1rem;flex-shrink:0}
+.header-search{order:10;flex-basis:100%;max-width:100%;width:100%;margin-top:2px}
 .header-search .search-hint{display:none}
-.header-right{gap:6px;flex-wrap:wrap}
+.header-right{gap:6px;flex-wrap:nowrap;margin-left:auto;overflow:hidden}
 .user-name{display:none}
-.badge-plan,.badge-credits{font-size:.7rem;padding:2px 8px}
-.btn-sm{padding:5px 10px;font-size:.8rem}
+.badge-plan{font-size:.68rem;padding:2px 6px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge-credits{font-size:.68rem;padding:2px 6px}
+.btn-sm{padding:5px 8px;font-size:.78rem;white-space:nowrap}
 
-/* Sidebar vira barra horizontal */
-aside{width:100%;border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;overflow-y:hidden;padding:10px 16px;display:flex;gap:8px;align-items:center}
+/* ── LAYOUT BODY ── */
+.app-body{flex-direction:column;overflow:visible;width:100%}
+main{flex:none;overflow-y:visible;padding:10px;width:100%}
+
+/* ── SIDEBAR → BARRA HORIZONTAL ── */
+aside{width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;overflow-y:hidden;padding:8px 12px;display:flex;gap:8px;align-items:center;flex-shrink:0}
 .sidebar-section,.sidebar-sort,.btn-new-col{display:none}
-.collection-item{white-space:nowrap;padding:6px 12px}
+.collection-item{white-space:nowrap;padding:5px 10px;flex-shrink:0}
 
-/* Grids */
-.quotes-grid{grid-template-columns:1fr}
-.ideias-grid{grid-template-columns:1fr}
+/* ── GRIDS ── */
+.quotes-grid{grid-template-columns:1fr;gap:10px}
+.ideias-grid{grid-template-columns:1fr;gap:10px;padding:10px}
 .form-row{grid-template-columns:1fr}
 .plans-grid{grid-template-columns:1fr}
 
-/* Login */
-.login-box{padding:32px 20px}
+/* ── TAB PANELS ── */
+.tab-panel.active{display:flex;flex-direction:column;overflow:visible}
 
-/* Modais */
-.modal{border-radius:8px}
+/* ── CARDS ── */
+.quote-card:hover{transform:none}
+.ideia-card:hover{transform:none}
+
+/* ── TOOLBAR ── */
+.main-toolbar{gap:6px}
+.semantic-bar{flex-wrap:wrap}
+.semantic-bar input{min-width:0;flex:1}
+
+/* ── MODAIS ── */
+.modal-overlay{padding:8px;align-items:flex-end}
+.modal-sm,.modal-md,.modal-lg{max-width:100%;width:100%;border-radius:12px 12px 0 0;max-height:92vh}
 .modal-body{padding:16px}
+.read-copy-row{flex-direction:column}
+.read-actions{flex-wrap:wrap}
+
+/* ── LOGIN ── */
+.login-box{padding:28px 16px;border-radius:8px;margin:16px}
+#loginScreen{align-items:flex-start;padding-top:40px}
+
+/* ── STATUS BAR ── */
+.statusbar{flex-wrap:wrap;gap:4px}
 }
 
-@media(max-width:480px){
-.login-box{padding:28px 16px;border-radius:8px}
-header{padding:8px 10px}
-.header-logo{font-size:1.05rem}
-.btn-sm{padding:4px 8px;font-size:.75rem}
+/* ── TELAS MUITO PEQUENAS (< 400px) ── */
+@media(max-width:400px){
+.header-logo{font-size:.95rem}
+.btn-sm{padding:4px 6px;font-size:.72rem}
 .badge-plan,.badge-credits{display:none}
 main{padding:8px}
-.quote-card{border-radius:8px}
-.modal-overlay{padding:8px}
-.modal-sm,.modal-md,.modal-lg{max-width:100%}
+.card-body{padding:12px}
+.card-actions{padding:6px 12px 10px}
+.modal-overlay{padding:4px}
+.modal-sm,.modal-md,.modal-lg{border-radius:8px 8px 0 0}
 }
 </style>
 </head>
@@ -273,9 +299,9 @@ main{padding:8px}
   </div>
 </div>
 
-<div id="paywallScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;overflow-y:auto">
+<div id="paywallScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;overflow-y:auto;overflow-x:hidden;width:100%">
   <style>
-  .pw-wrap{max-width:560px;margin:0 auto;padding:32px 16px 60px}
+  .pw-wrap{max-width:560px;width:100%;margin:0 auto;padding:32px 16px 60px;box-sizing:border-box;overflow-x:hidden}
   .pw-hero{text-align:center;margin-bottom:28px}
   .pw-logo{font-family:Georgia,serif;font-style:italic;font-size:1.6rem;color:var(--accent);margin-bottom:4px}
   .pw-title{font-size:1.35rem;font-weight:800;margin-bottom:6px;color:var(--text)}
@@ -420,73 +446,73 @@ main{padding:8px}
     <!-- DEPOIMENTOS -->
     <div style="margin-bottom:20px">
       <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);text-align:center;margin-bottom:14px">O que dizem nossos pesquisadores</div>
-      <div id="depSlider" style="overflow:hidden;position:relative">
-        <div id="depTrack" style="display:flex;gap:12px;transition:transform .4s ease;will-change:transform">
+      <div id="depSlider" style="overflow:hidden;position:relative;width:100%;max-width:100%">
+        <div id="depTrack" style="display:flex;gap:12px;transition:transform .4s ease;will-change:transform;width:max-content">
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"Finalmente consigo organizar minhas citações sem perder horas procurando onde deixei aquela referência."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Mariana S.</div>
             <div style="font-size:.72rem;color:var(--text3)">Mestranda em Sociologia · USP</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"O OCR salvou minha vida na qualificação. Fotografei 40 páginas e o texto saiu perfeito."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Carlos A.</div>
             <div style="font-size:.72rem;color:var(--text3)">Doutorando em Direito · UFMG</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"A busca semântica é impressionante. Digito a ideia e ele acha a citação que eu precisava."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Beatriz L.</div>
             <div style="font-size:.72rem;color:var(--text3)">Pesquisadora · FIOCRUZ</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"Uso no celular e no computador, sincroniza na hora. Melhor que qualquer pasta do Google Drive."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Rodrigo P.</div>
             <div style="font-size:.72rem;color:var(--text3)">Professor universitário · UFRJ</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"A IA conectou automaticamente minhas ideias com citações que eu nem lembrava que tinha salvo."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Fernanda O.</div>
             <div style="font-size:.72rem;color:var(--text3)">Mestranda em Educação · UNICAMP</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"Exportei minha dissertação inteira em ABNT com um clique. Horas de trabalho economizadas."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Thiago M.</div>
             <div style="font-size:.72rem;color:var(--text3)">Doutorando em História · UFF</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"Gravo ideias pelo microfone enquanto leio. O texto sai e já fica salvo. Muito prático."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Ana C.</div>
             <div style="font-size:.72rem;color:var(--text3)">Especialista em Saúde Pública · UFBA</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"Minha orientadora se surpreendeu com a organização das referências. Recomendei para toda a turma."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Juliana R.</div>
             <div style="font-size:.72rem;color:var(--text3)">Mestranda em Psicologia · PUC-RS</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"Melhor investimento da minha pós-graduação. Uso todo dia, já salvou meu TCC."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Lucas F.</div>
             <div style="font-size:.72rem;color:var(--text3)">Pós-graduando em Economia · FGV</div>
             <div style="color:#c9a84c;font-size:.78rem;margin-top:4px">★★★★★</div>
           </div>
 
-          <div style="min-width:240px;max-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
+          <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic">"A adaptação de artigo para ABNT que levaria horas ficou pronta em 2 minutos. Incrível."</div>
             <div style="font-size:.75rem;font-weight:600;color:var(--accent)">Camila N.</div>
             <div style="font-size:.72rem;color:var(--text3)">Professora e doutoranda · UFRGS</div>
@@ -503,9 +529,9 @@ main{padding:8px}
     <script>
     (function(){
       let depIdx=0;const cards=document.querySelectorAll('#depTrack>div');const total=cards.length;
-      function depMove(){const track=document.getElementById('depTrack');const w=240+12;track.style.transform=`translateX(-${depIdx*w}px)`;}
-      window.depProximo=function(){depIdx=(depIdx+2<total)?depIdx+1:0;depMove();}
-      window.depAnterior=function(){depIdx=depIdx>0?depIdx-1:0;depMove();}
+      function depMove(){const track=document.getElementById('depTrack');const card=cards[0];const w=card.offsetWidth+12;track.style.transform=`translateX(-${depIdx*w}px)`;}
+      window.depProximo=function(){depIdx=(depIdx+1<total)?depIdx+1:0;depMove();}
+      window.depAnterior=function(){depIdx=depIdx>0?depIdx-1:total-1;depMove();}
       setInterval(()=>window.depProximo(),5000);
     })();
     </script>
@@ -1113,717 +1139,4 @@ document.getElementById('btnEditFromRead').onclick=()=>{if(readQ){closeM('readMo
 document.getElementById('btnExport').onclick=async()=>{const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.exportMes??5;if((UD?.exportacoesMes||0)>=lim){toast(`Limite de ${lim} exportacoes/mes atingido.`);return;}const f=getFiltered();if(!f.length){toast('Nenhuma citacao para exportar.');return;}try{const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx,g={};f.forEach(q=>{const n=cols.find(c=>c.id===q.collectionId)?.name||'Sem colecao';(g[n]=g[n]||[]).push(q);});const ch=[];Object.entries(g).forEach(([n,qs])=>{ch.push(new Paragraph({text:n,heading:HeadingLevel.HEADING_2}));qs.forEach(q=>{ch.push(new Paragraph({children:[new TextRun({text:`"${q.text}"`,italics:true,font:'Georgia',size:24})]}));if(q.author||q.work)ch.push(new Paragraph({children:[new TextRun({text:buildAbnt(q),bold:true,font:'Arial',size:20})]}));if((q.tags||[]).length)ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+q.tags.join(', '),font:'Arial',size:18,color:'888888'})]}));if(q.comment)ch.push(new Paragraph({children:[new TextRun({text:q.comment,font:'Arial',size:18,italics:true})]}));ch.push(new Paragraph({text:''}));});});const blob=await Packer.toBlob(new Document({sections:[{children:ch}]})),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`citacoes-${new Date().toISOString().slice(0,10)}.docx`;a.click();await setDoc(doc(db,'usuarios',CU.uid),{exportacoesMes:increment(1)},{merge:true});UD.exportacoesMes=(UD.exportacoesMes||0)+1;toast('DOCX exportado!');}catch(e){toast('Erro ao exportar: '+e.message);}};
 
 document.getElementById('btnOcr').onclick=()=>{const pl=UD?.plano||'leitor';if(!LIMITES[pl]?.ocr){toast('OCR disponivel a partir do plano Doutor.');return;}document.getElementById('ocrFileInput').value='';document.getElementById('ocrPreview').style.display='none';document.getElementById('ocrResult').style.display='none';openM('ocrModal');};
-document.getElementById('ocrFileInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(f.size>4*1024*1024){toast('Imagem muito grande (max. 4 MB).');e.target.value='';return;}const r=new FileReader();r.onload=ev=>{document.getElementById('ocrImg').src=ev.target.result;document.getElementById('ocrPreview').style.display='';};r.readAsDataURL(f);});
-document.getElementById('btnRunOcr').onclick=async()=>{const f=document.getElementById('ocrFileInput').files[0];if(!f){toast('Selecione uma imagem.');return;}try{setBtnLoading('btnRunOcr',true,'Processando...');const b64=await file2b64(f),r=await fnGemini({operacao:'ocr',imagemBase64:b64});document.getElementById('ocrResultText').value=r.data.resultado;document.getElementById('ocrResult').style.display='';await loadUD();updateHeader();}catch(e){toast('Erro OCR: '+e.message);}finally{setBtnLoading('btnRunOcr',false,'Extrair texto');}};
-document.getElementById('btnOcrUseText').onclick=()=>{const t=document.getElementById('ocrResultText').value.trim();if(!t)return;closeM('ocrModal');editId=null;document.getElementById('quoteModalTitle').textContent='Nova citacao (via OCR)';['qAuthor','qWork','qYear','qPages','qComment'].forEach(i=>document.getElementById(i).value='');document.getElementById('qText').value=t;document.getElementById('qCollection').value='';curTags=[];renderTagsForm();openM('quoteModal');};
-
-document.getElementById('btnAdaptar').onclick=()=>{document.getElementById('adaptNormas').value='';document.getElementById('adaptArtigo').value='';document.getElementById('adaptCharCount').textContent='0 caracteres';document.getElementById('adaptResult').style.display='none';openM('adaptarModal');};
-document.getElementById('adaptArtigo').addEventListener('input',e=>{document.getElementById('adaptCharCount').textContent=`${e.target.value.length} caracteres`;});
-document.getElementById('btnAdaptPreview').onclick=()=>runAdapt(true);
-document.getElementById('btnAdaptFull').onclick=()=>runAdapt(false);
-async function runAdapt(preview){const pl=UD?.plano||'leitor';if(!preview&&!LIMITES[pl]?.adaptacao){toast('Adaptacao completa disponivel no plano Pesquisador Pro.');return;}const normas=document.getElementById('adaptNormas').value.trim(),art=document.getElementById('adaptArtigo').value.trim();if(!normas||!art){toast('Preencha as normas e o artigo.');return;}if(art.length>125000){toast('Artigo muito extenso (max. ~125 mil caracteres).');return;}const bid=preview?'btnAdaptPreview':'btnAdaptFull';try{setBtnLoading(bid,true,preview?'Gerando previa...':'Adaptando...');const r=await fnGemini({operacao:'adaptar_normas',textoArtigo:art,normas,preview});document.getElementById('adaptResultLabel').textContent=preview?'Previa (15% do artigo)':'Artigo adaptado';document.getElementById('adaptResultText').value=r.data.resultado;document.getElementById('adaptResult').style.display='';if(!preview){await loadUD();updateHeader();}}catch(e){toast('Erro: '+e.message);}finally{setBtnLoading(bid,false,preview?'Previa gratuita (15%)':'Adaptar completo (1 adaptacao)');}}
-document.getElementById('btnCopyAdapt').onclick=()=>{navigator.clipboard.writeText(document.getElementById('adaptResultText').value||'').then(()=>toast('Copiado!'));};
-
-document.getElementById('btnPlanos').onclick=()=>{renderPlans();openM('planosModal');};
-function renderPlans(){
-  const pl=UD?.plano||'leitor';
-  const planos=[
-    {id:'leitor',    nome:'Leitor',         avulso:'Gratuito', anual:null,           feat:'30 citacoes · 5 exportacoes/mes · Sem IA'},
-    {id:'mestre',    nome:'Mestre',         avulso:'R$ 29,90', anual:'R$ 19,90/mes', feat:'500 citacoes · 20 exportacoes/mes · IA basica'},
-    {id:'doutor',    nome:'Doutor',         avulso:'R$ 49,90', anual:'R$ 39,90/mes', feat:'Citacoes ilimitadas · IA completa · OCR'},
-    {id:'pesquisador_pro',nome:'Pesquisador Pro',avulso:'R$ 89,90',anual:'R$ 79,90/mes',feat:'Tudo ilimitado · IA sem restricoes · Busca semantica'}
-  ];
-  const pm={mestre:'plano_mestre',doutor:'plano_doutor',pesquisador_pro:'plano_pesquisador_pro'};
-  const g=document.getElementById('plansGrid');
-  g.innerHTML='';
-  planos.forEach(p=>{
-    const c=document.createElement('div');
-    c.className='plan-card'+(p.id===pl?' current':'');
-    const btnHtml=p.id==='leitor'||p.id===pl
-      ? (p.id===pl?'<span style="font-size:.78rem;color:var(--accent);font-weight:600">Plano atual</span>':'')
-      : `<div style="display:flex;gap:6px;margin-top:8px">
-           <button class="btn-sm" style="flex:1;font-size:.75rem;border-color:var(--accent);color:var(--accent)" onclick="iniciarPagamentoPix('${p.id}',${p.id==='mestre'?29.90:p.id==='doutor'?49.90:89.90})">${p.avulso}<br><small>PIX avulso</small></button>
-           <button class="btn-sm btn-accent" style="flex:1;font-size:.75rem" onclick="iniciarAssinatura('${p.id}')">${p.anual}<br><small>recorrente</small></button>
-         </div>`;
-    c.innerHTML=`<div class="plan-name">${p.nome}</div><div class="plan-price">${p.avulso}${p.anual?` / ${p.anual}`:''}</div><div class="plan-features">${p.feat}</div>${btnHtml}`;
-    g.appendChild(c);
-  });
-}
-window.comprar=async function(prod){try{toast('Gerando cobranca PIX...');const r=await fnCobranca({produto:prod});closeM('planosModal');openPix(r.data.pixQrCodeUrl,r.data.pixCode||r.data.invoiceUrl||'');}catch(e){toast('Erro: '+e.message);}};
-function openPix(qr,code){const i=document.getElementById('pixQrImg');if(qr){i.src=qr;i.style.display='';}else i.style.display='none';document.getElementById('pixCodeBox').textContent=code||'Codigo nao disponivel';openM('pixModal');}
-window.copyPixCode=function(){navigator.clipboard.writeText(document.getElementById('pixCodeBox').textContent).then(()=>toast('Copiado!'));};
-document.getElementById('btnPromo').onclick=async()=>{
-  const code=document.getElementById('promoInput').value.trim().toUpperCase();
-  const m=document.getElementById('promoMsg');
-  if(!code)return;
-  m.textContent='Verificando...';m.style.color=getComputedStyle(document.documentElement).getPropertyValue('--text2');
-  try{
-    // Busca o código no Firestore (coleção 'codigos_promo')
-    const cSnap=await getDoc(doc(db,'codigos_promo',code));
-    if(!cSnap.exists()){m.style.color='#c0392b';m.textContent='Código inválido.';return;}
-    const cd=cSnap.data();
-    if(cd.usado&&!cd.multiuso){m.style.color='#c0392b';m.textContent='Este código já foi utilizado.';return;}
-    if(cd.expira&&cd.expira.toDate()<new Date()){m.style.color='#c0392b';m.textContent='Código expirado.';return;}
-    if(cd.usosMax&&(cd.usosAtual||0)>=cd.usosMax){m.style.color='#c0392b';m.textContent='Limite de usos atingido.';return;}
-    // Aplica o benefício
-    const upd={plano:cd.plano||'pesquisador_pro',creditosPromo:cd.creditos||50,promoCode:code};
-    await setDoc(doc(db,'usuarios',CU.uid),upd,{merge:true});
-    // Registra uso
-    await setDoc(doc(db,'codigos_promo',code),{usosAtual:(cd.usosAtual||0)+1,usado:true},{merge:true});
-    await loadUD();updateHeader();
-    m.style.color='#27ae60';
-    m.textContent=`✓ Código resgatado! Plano ${planLabel(cd.plano||'pesquisador_pro')} ativado com ${cd.creditos||50} créditos.`;
-    // Se estava na paywall, abrir o app agora
-    if(document.getElementById('paywallScreen')?.style.display!=='none'){
-      await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
-    }
-  }catch(e){m.style.color='#c0392b';m.textContent='Erro: '+e.message;}
-};
-
-window.copyElem=function(id){const e=document.getElementById(id);navigator.clipboard.writeText(e.textContent||e.value||'').then(()=>toast('Copiado!'));};
-function openM(id){document.getElementById(id).classList.add('open');}
-function closeM(id){document.getElementById(id).classList.remove('open');}
-function closeAllM(){document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));}
-document.querySelectorAll('[data-close]').forEach(b=>{b.onclick=()=>closeM(b.dataset.close);});
-document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
-
-let tTimer;
-function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(()=>e.classList.remove('show'),3000);}
-function setBtnLoading(id,on,label){const b=document.getElementById(id);if(!b)return;b.disabled=on;b.innerHTML=on?`<span class="spinner"></span>${label}`:label;}
-function file2b64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-// ===== MODULO IDEIAS =====
-let ideias=[],editIdeiaId=null,ideiaTagsCur=[],conexoesSelecionadas=[],micRecognition=null,isRecording=false;
-
-window.switchTab=function(tab){
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
-  document.getElementById('panel'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
-  if(tab==='ideias')renderIdeias();
-};
-
-async function loadIdeias(){
-  const snap=await getDocs(collection(db,'usuarios',CU.uid,'ideias'));
-  ideias=[];snap.forEach(d=>ideias.push({id:d.id,...d.data()}));
-  ideias.sort((a,b)=>(b.num||0)-(a.num||0));
-}
-
-function renderIdeias(){
-  const q=(document.getElementById('ideiaSearch')?.value||'').toLowerCase();
-  const grid=document.getElementById('ideiasGrid');
-  const filtradas=ideias.filter(i=>!q||i.text?.toLowerCase().includes(q)||i.tema?.toLowerCase().includes(q)||(i.tags||[]).some(t=>t.toLowerCase().includes(q)));
-  if(!filtradas.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">&#128161;</div><p>Nenhuma ideia ainda. Grave pelo microfone ou escreva!</p></div>';return;}
-  grid.innerHTML=filtradas.map(i=>{
-    const conexoesHtml=(i.conexoes||[]).map(cid=>{const q=quotes.find(x=>x.id===cid);return q?`<span class="conexao-pill" title="${esc((q.text||'').slice(0,60))}" onclick="openRead('${cid}')">&#128206; ${esc((q.author||'Citacao').slice(0,20))}</span>`:''}).join('');
-    return `<div class="ideia-card">
-      <span class="ideia-num">#${i.num||'?'}</span>
-      <div class="ideia-body">
-        ${i.tema?`<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:6px">${esc(i.tema)}</div>`:''}
-        <div class="ideia-text">${esc(i.text||'')}</div>
-        ${(i.tags||[]).length?`<div class="card-tags">${i.tags.map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('')}</div>`:''}
-        ${conexoesHtml?`<div class="conexoes-tags" style="margin-top:8px">${conexoesHtml}</div>`:''}
-      </div>
-      <div class="ideia-actions">
-        <button class="card-btn" onclick="openEditIdeia('${i.id}')">Editar</button>
-        <button class="card-btn" onclick="copyIdeia('${i.id}')">Copiar</button>
-        <button class="btn-ai" id="btnResumir_${i.id}" onclick="aiResumir('${i.id}')">&#129302; Resumir</button>
-        <button class="btn-ai" id="btnExpandir_${i.id}" onclick="aiExpandir('${i.id}')">&#10024; Expandir</button>
-        <button class="card-btn danger" onclick="deleteIdeia('${i.id}')">Excluir</button>
-      </div>
-      <div id="aiResult_${i.id}" style="display:none;padding:10px 14px;background:#f0f4ff;border-top:1px solid #c5d3f7;font-size:.85rem;line-height:1.6;color:#1a237e"></div>
-    </div>`;
-  }).join('');
-}
-
-document.getElementById('ideiaSearch').addEventListener('input',renderIdeias);
-
-function openNovaIdeia(textoInicial){
-  textoInicial=textoInicial||'';
-  editIdeiaId=null;ideiaTagsCur=[];conexoesSelecionadas=[];
-  document.getElementById('ideiaModalTitle').textContent='Nova Ideia';
-  document.getElementById('ideiaText').value=textoInicial;
-  document.getElementById('ideiaTema').value='';
-  document.getElementById('conexaoBusca').value='';
-  document.getElementById('conexoesPreview').innerHTML='';
-  document.getElementById('aiConexoesSection').style.display='none';
-  document.getElementById('aiConexoesResult').innerHTML='';
-  document.getElementById('aiConexoesStatus').textContent='';
-  renderIdeiaTagsForm();openM('ideiaModal');
-  if(textoInicial&&textoInicial.length>=20){clearTimeout(_aiConexoesTimer);_aiConexoesTimer=setTimeout(autoSugerirConexoes,800);}
-}
-
-function openEditIdeia(id){
-  const i=ideias.find(x=>x.id===id);if(!i)return;
-  editIdeiaId=id;ideiaTagsCur=[...(i.tags||[])];conexoesSelecionadas=[...(i.conexoes||[])];
-  document.getElementById('ideiaModalTitle').textContent='Editar Ideia #'+(i.num||'');
-  document.getElementById('ideiaText').value=i.text||'';
-  document.getElementById('ideiaTema').value=i.tema||'';
-  document.getElementById('conexaoBusca').value='';
-  document.getElementById('aiConexoesSection').style.display='none';
-  document.getElementById('aiConexoesResult').innerHTML='';
-  renderIdeiaTagsForm();renderConexoesPreview();openM('ideiaModal');
-}
-window.openEditIdeia=openEditIdeia;
-
-function renderIdeiaTagsForm(){
-  const wrap=document.getElementById('ideiaTagsWrap');wrap.innerHTML='';
-  ideiaTagsCur.forEach(t=>{
-    const pill=document.createElement('span');pill.className='tag-pill';
-    pill.innerHTML=`${esc(t)} <span class="tag-remove" style="cursor:pointer">x</span>`;
-    pill.querySelector('.tag-remove').onclick=()=>{ideiaTagsCur=ideiaTagsCur.filter(x=>x!==t);renderIdeiaTagsForm();};
-    wrap.appendChild(pill);
-  });
-  const inp=document.createElement('input');inp.type='text';inp.id='ideiaTagInput';inp.placeholder='Tag + Enter...';
-  inp.onkeydown=function(e){if(e.key==='Enter'&&inp.value.trim()){e.preventDefault();const t=inp.value.trim();if(!ideiaTagsCur.includes(t)){ideiaTagsCur.push(t);renderIdeiaTagsForm();}}};
-  wrap.appendChild(inp);
-}
-
-function renderConexoesPreview(){
-  const prev=document.getElementById('conexoesPreview');
-  prev.innerHTML=conexoesSelecionadas.map(id=>{
-    const q=quotes.find(x=>x.id===id);
-    const label=q?`&#128206; ${esc((q.author||'?').slice(0,25))}${q.work?' — '+esc(q.work.slice(0,25)):''}`:id;
-    return `<span class="conexao-pill" style="cursor:default">${label} <span style="cursor:pointer;font-weight:700" onclick="removerConexao('${id}')">x</span></span>`;
-  }).join('');
-  document.getElementById('ideiaConexoes').value=conexoesSelecionadas.join(',');
-}
-window.removerConexao=function(id){conexoesSelecionadas=conexoesSelecionadas.filter(x=>x!==id);renderConexoesPreview();};
-
-document.getElementById('conexaoBusca').addEventListener('input',function(){
-  const q=this.value.trim().toLowerCase(),sug=document.getElementById('conexoesSugestoes');
-  if(!q){sug.style.display='none';return;}
-  const matches=quotes.filter(x=>!conexoesSelecionadas.includes(x.id)&&((x.author||'').toLowerCase().includes(q)||(x.work||'').toLowerCase().includes(q)||(x.text||'').toLowerCase().includes(q))).slice(0,8);
-  if(!matches.length){sug.style.display='none';return;}
-  sug.style.display='block';
-  sug.innerHTML=matches.map(x=>`<div style="padding:8px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid var(--border)" onmousedown="event.preventDefault();adicionarConexao('${x.id}')"><strong>${esc((x.author||'').slice(0,30))}</strong>${x.work?' — '+esc(x.work.slice(0,30)):''}<br><span style="color:var(--text3);font-size:.78rem">${esc((x.text||'').slice(0,60))}...</span></div>`).join('');
-});
-document.getElementById('conexaoBusca').addEventListener('blur',()=>setTimeout(()=>{document.getElementById('conexoesSugestoes').style.display='none';},150));
-window.adicionarConexao=function(id){if(!conexoesSelecionadas.includes(id))conexoesSelecionadas.push(id);document.getElementById('conexaoBusca').value='';document.getElementById('conexoesSugestoes').style.display='none';renderConexoesPreview();};
-
-document.getElementById('btnSaveIdeia').onclick=async function(){
-  const text=document.getElementById('ideiaText').value.trim();
-  if(!text){toast('Escreva a ideia antes de salvar.');return;}
-  const tema=document.getElementById('ideiaTema').value.trim();
-  const id=editIdeiaId||'ideia_'+Date.now();
-  const num=editIdeiaId?(ideias.find(x=>x.id===editIdeiaId)?.num||ideias.length+1):ideias.length+1;
-  const data={text,tema,tags:[...ideiaTagsCur],conexoes:[...conexoesSelecionadas],num,updatedAt:serverTimestamp()};
-  if(!editIdeiaId)data.createdAt=serverTimestamp();
-  await setDoc(doc(db,'usuarios',CU.uid,'ideias',id),data,{merge:true});
-  if(editIdeiaId){const idx=ideias.findIndex(x=>x.id===editIdeiaId);if(idx>=0)ideias[idx]={id,...ideias[idx],...data};}
-  else ideias.unshift({id,...data});
-  closeM('ideiaModal');renderIdeias();toast(editIdeiaId?'Ideia atualizada!':'Ideia salva!');
-};
-
-window.deleteIdeia=async function(id){if(!confirm('Excluir esta ideia?'))return;await deleteDoc(doc(db,'usuarios',CU.uid,'ideias',id));ideias=ideias.filter(x=>x.id!==id);renderIdeias();toast('Ideia excluida.');};
-window.copyIdeia=function(id){const i=ideias.find(x=>x.id===id);if(!i)return;const txt=`[#${i.num}${i.tema?' — '+i.tema:''}]\n${i.text}${i.tags&&i.tags.length?'\nTags: '+i.tags.join(', '):''}`;navigator.clipboard.writeText(txt).then(()=>toast('Copiado!'));};
-
-document.getElementById('btnMic').onclick=function(){
-  if(isRecording){stopRecording();return;}
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){toast('Seu navegador nao suporta reconhecimento de voz. Use Chrome.');return;}
-  micRecognition=new SR();micRecognition.lang='pt-BR';micRecognition.continuous=true;micRecognition.interimResults=true;
-  let finalText='';
-  micRecognition.onresult=function(e){let interim='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)finalText+=e.results[i][0].transcript+' ';else interim+=e.results[i][0].transcript;}document.getElementById('micStatus').textContent=finalText+interim;};
-  micRecognition.onerror=function(e){toast('Erro no microfone: '+e.error);stopRecording();};
-  micRecognition.onend=function(){if(isRecording)micRecognition.start();};
-  micRecognition.start();isRecording=true;
-  document.getElementById('btnMic').classList.add('recording');document.getElementById('btnMic').textContent='Parar gravacao';
-  document.getElementById('micStatus').textContent='Gravando... fale sua ideia';
-};
-
-function stopRecording(){
-  if(micRecognition)micRecognition.stop();isRecording=false;
-  document.getElementById('btnMic').classList.remove('recording');document.getElementById('btnMic').textContent='Gravar ideia (voz)';
-  const txt=document.getElementById('micStatus').textContent.trim();document.getElementById('micStatus').textContent='';
-  if(txt&&txt!=='Gravando... fale sua ideia')openNovaIdeia(txt);
-}
-
-document.getElementById('btnExportIdeias').onclick=async function(){
-  if(!ideias.length){toast('Nenhuma ideia para exportar.');return;}
-  try{
-    const{Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx,grupos={};
-    ideias.forEach(i=>{const t=i.tema||'Sem tema';(grupos[t]=grupos[t]||[]).push(i);});
-    const ch=[new Paragraph({children:[new TextRun({text:'Minhas Ideias de Pesquisa',bold:true,size:36,font:'Georgia'})],heading:HeadingLevel.HEADING_1}),new Paragraph({text:''})];
-    Object.entries(grupos).forEach(([tema,ids])=>{
-      ch.push(new Paragraph({children:[new TextRun({text:tema,bold:true,size:28,font:'Arial'})],heading:HeadingLevel.HEADING_2}));
-      ids.forEach(i=>{
-        ch.push(new Paragraph({children:[new TextRun({text:`${i.num}. ${i.text}`,font:'Georgia',size:24})]}));
-        if(i.tags&&i.tags.length)ch.push(new Paragraph({children:[new TextRun({text:'Tags: '+i.tags.join(', '),font:'Arial',size:18,color:'888888',italics:true})]}));
-        if(i.conexoes&&i.conexoes.length){const refs=i.conexoes.map(cid=>{const q=quotes.find(x=>x.id===cid);return q?buildAbnt(q):cid;});ch.push(new Paragraph({children:[new TextRun({text:'Conexoes: '+refs.join(' | '),font:'Arial',size:18,color:'1565c0'})]}));}
-        ch.push(new Paragraph({text:''}));
-      });
-    });
-    const blob=await Packer.toBlob(new Document({sections:[{children:ch}]})),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ideias-${new Date().toISOString().slice(0,10)}.docx`;a.click();toast('DOCX de ideias exportado!');
-  }catch(e){toast('Erro: '+e.message);}
-};
-
-document.getElementById('btnNovaIdeia').onclick=function(){openNovaIdeia();};
-
-// ===== IA ANTHROPIC (via proxy Render) =====
-const PROXY_URL='https://proxy-anthropic.onrender.com/claude';
-
-async function callAI(messages,system,max_tokens){
-  if(!checkAILimit())throw new Error('Limite de IA atingido');
-  system=system||'Voce e um assistente academico brasileiro. Responda sempre em portugues.';
-  max_tokens=max_tokens||300;
-  try{
-    // Obtém o ID Token do Firebase para autenticar no proxy
-    const idToken = CU ? await getIdToken(CU, false) : null;
-    const headers = {'Content-Type':'application/json'};
-    if(idToken) headers['Authorization'] = 'Bearer '+idToken;
-    const r=await fetch(PROXY_URL,{method:'POST',headers,body:JSON.stringify({messages,system,max_tokens})});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||'Erro no proxy');
-    return d.text;
-  }catch(e){
-    if(e.message&&e.message.includes('Failed to fetch'))throw new Error('Proxy offline. Verifique se o servico Render esta ativo.');
-    throw e;
-  }
-}
-
-// Auto-sugestao de conexoes por IA com debounce
-let _aiConexoesTimer=null;
-async function autoSugerirConexoes(){
-  const text=document.getElementById('ideiaText').value.trim();
-  const status=document.getElementById('aiConexoesStatus');
-  if(!text||text.length<20||!quotes.length){status.textContent='';return;}
-  status.textContent='&#129302; analisando...';
-  try{
-    const listaCtx=quotes.slice(0,40).map((q,i)=>`[${i}] ${(q.author||'').slice(0,30)} "${(q.text||'').slice(0,80)}"`).join('\n');
-    const resp=await callAI([{role:'user',content:`Ideia do pesquisador:\n"${text}"\n\nCitacoes disponiveis (formato [indice] Autor "trecho"):\n${listaCtx}\n\nIndique os indices (ex: 0,3,7) das citacoes mais relevantes para conectar a essa ideia. Responda APENAS com os indices separados por virgula, sem explicacao.`}],'Voce e um assistente academico. Analise a relacao entre ideias e citacoes. Responda APENAS com numeros separados por virgula.',80);
-    const indices=(resp.match(/\d+/g)||[]).map(Number).filter(n=>n<quotes.length&&n>=0);
-    conexoesSelecionadas=[];
-    if(indices.length){
-      const sugeridas=indices.map(i=>quotes[i]).filter(Boolean);
-      sugeridas.forEach(q=>{if(!conexoesSelecionadas.includes(q.id))conexoesSelecionadas.push(q.id);});
-      status.textContent='&#10003; '+sugeridas.length+' conexao(oes) sugerida(s)';
-    }else{status.textContent='nenhuma conexao encontrada';}
-    renderConexoesPreview();
-  }catch(e){status.textContent='';}
-}
-document.getElementById('ideiaText').addEventListener('input',function(){
-  clearTimeout(_aiConexoesTimer);
-  _aiConexoesTimer=setTimeout(autoSugerirConexoes,1500);
-});
-
-document.getElementById('btnAiSugerir').onclick=async function(){
-  clearTimeout(_aiConexoesTimer);
-  await autoSugerirConexoes();
-};
-
-window.aiResumir=async function(id){
-  const i=ideias.find(x=>x.id===id);if(!i)return;
-  const btn=document.getElementById('btnResumir_'+id),res=document.getElementById('aiResult_'+id);
-  if(!btn||!res)return;btn.disabled=true;btn.textContent='...';res.style.display='none';
-  try{
-    const txt=await callAI([{role:'user',content:`Resuma em 1-2 frases objetivas esta ideia academica:\n"${i.text}"`}],'Voce e um assistente academico. Seja conciso e preciso.',150);
-    res.style.display='block';res.innerHTML='<strong>Resumo:</strong> '+esc(txt);
-    // Sincroniza créditos após uso (para planos com créditos)
-    if(UD?.plano==='mestre'||UD?.plano==='mestre_offline'){await loadUD();updateHeader();}
-  }catch(e){toast('Erro IA: '+e.message);}
-  finally{btn.disabled=false;btn.textContent='Resumir';}
-};
-
-window.aiExpandir=async function(id){
-  const i=ideias.find(x=>x.id===id);if(!i)return;
-  const btn=document.getElementById('btnExpandir_'+id),res=document.getElementById('aiResult_'+id);
-  if(!btn||!res)return;btn.disabled=true;btn.textContent='...';res.style.display='none';
-  try{
-    let ctx='';
-    if(i.conexoes&&i.conexoes.length){const refs=i.conexoes.map(cid=>{const q=quotes.find(x=>x.id===cid);return q?'"'+(q.text||'').slice(0,100)+'" ('+(q.author||'')+')':'';}).filter(Boolean);if(refs.length)ctx='\n\nCitacoes relacionadas:\n'+refs.join('\n');}
-    const txt=await callAI([{role:'user',content:`Expanda e aprofunde esta ideia academica em 3-4 frases, mantendo rigor cientifico:${ctx}\n\nIdeia: "${i.text}"`}],'Voce e um assistente academico brasileiro especializado em pesquisa. Escreva em portugues formal.',400);
-    res.style.display='block';
-    res.innerHTML='<strong>Expansao:</strong> '+esc(txt)+'<br><button class="btn-ai" style="margin-top:8px;font-size:.75rem" onclick="usarExpansao(\''+id+'\')">Usar como nova ideia</button>';
-    // Sincroniza créditos após uso
-    if(UD?.plano==='mestre'||UD?.plano==='mestre_offline'){await loadUD();updateHeader();}
-  }catch(e){toast('Erro IA: '+e.message);}
-  finally{btn.disabled=false;btn.textContent='Expandir';}
-};
-
-window.usarExpansao=function(id){
-  const res=document.getElementById('aiResult_'+id);if(!res)return;
-  const match=res.innerHTML.match(/Expansao:<\/strong>\s*([^<]+)/);
-  if(match)openNovaIdeia(match[1].trim());
-};
-// ===== FIM MODULO IDEIAS =====
-
-window.sairPaywall=()=>signOut(auth);
-
-window.resgatarCodigoPaywall=async function(){
-  const code=document.getElementById('paywallPromoInput').value.trim().toUpperCase();
-  const m=document.getElementById('paywallPromoMsg');
-  if(!code)return;
-  m.textContent='Verificando...';m.style.color='var(--text2)';
-  try{
-    const cSnap=await getDoc(doc(db,'codigos_promo',code));
-    if(!cSnap.exists()){m.style.color='#c0392b';m.textContent='Código inválido.';return;}
-    const cd=cSnap.data();
-    if(cd.usado&&!cd.multiuso){m.style.color='#c0392b';m.textContent='Código já utilizado.';return;}
-    if(cd.expira&&cd.expira.toDate()<new Date()){m.style.color='#c0392b';m.textContent='Código expirado.';return;}
-    if(cd.usosMax&&(cd.usosAtual||0)>=cd.usosMax){m.style.color='#c0392b';m.textContent='Limite de usos atingido.';return;}
-    await setDoc(doc(db,'usuarios',CU.uid),{plano:cd.plano||'pesquisador_pro',creditosPromo:cd.creditos||50,promoCode:code},{merge:true});
-    await setDoc(doc(db,'codigos_promo',code),{usosAtual:(cd.usosAtual||0)+1,usado:true},{merge:true});
-    await loadUD();
-    m.style.color='#27ae60';m.textContent='✓ Acesso liberado!';
-    setTimeout(async()=>{await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();},800);
-  }catch(e){m.style.color='#c0392b';m.textContent='Erro: '+e.message;}
-};
-
-// Ativar plano Leitor (gratuito) — salva no Firestore e abre o app
-window.ativarLeitor=async function(){
-  if(!CU)return;
-  try{
-    await setDoc(doc(db,'usuarios',CU.uid),{plano:'leitor',creditos:0},{merge:true});
-    UD={plano:'leitor',creditos:0};
-    await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
-  }catch(e){toast('Erro ao ativar plano: '+e.message);}
-};
-
-window.solicitarAcesso=function(plano){
-  // fallback legado — redireciona para paywall
-  showPaywall();
-};
-
-// ===== PAGAMENTOS MERCADO PAGO =====
-const PROXY='https://proxy-anthropic.onrender.com';
-const PLANO_LABELS={mestre:'Plano Mestre',doutor:'Plano Doutor',pesquisador_pro:'Pesquisador Pro'};
-const PLANO_DURACAO={mestre:365,doutor:365,pesquisador_pro:365}; // dias para PIX avulso
-
-let _pixPaymentId=null,_pixPlano=null,_pixPollTimer=null;
-let _cartaoPlano=null,_mpPublicKey=null;
-
-// Formata número do cartão com espaços
-document.addEventListener('input',e=>{
-  if(e.target.id==='cartaoNumero'){
-    e.target.value=e.target.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim().slice(0,19);
-  }
-  if(e.target.id==='cartaoValidade'){
-    e.target.value=e.target.value.replace(/\D/g,'').replace(/(\d{2})(\d)/,'$1/$2').slice(0,5);
-  }
-});
-
-window.iniciarPagamentoPix=async function(plano,valor){
-  if(!CU){toast('Faça login primeiro.');return;}
-  _pixPlano=plano;_pixPaymentId=null;
-  clearInterval(_pixPollTimer);
-  document.getElementById('pixModalDesc').textContent=`${PLANO_LABELS[plano]||plano} — R$ ${valor.toFixed(2).replace('.',',')} (acesso por 1 ano)`;
-  document.getElementById('pixLoadingMsg').style.display='';
-  document.getElementById('pixQrArea').style.display='none';
-  document.getElementById('pixErroMsg').style.display='none';
-  document.getElementById('pixStatusMsg').textContent='';
-  document.getElementById('pixModal').style.display='flex';
-  try{
-    const resp=await fetch(`${PROXY}/mp/pix`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({valor,descricao:`Segundo Cerebro - ${plano}`,email_pagador:CU.email,plano,uid:CU.uid})
-    });
-    const data=await resp.json();
-    if(!resp.ok||data.error)throw new Error(data.error||data.message||'Erro ao gerar PIX');
-    _pixPaymentId=data.id;
-    document.getElementById('pixLoadingMsg').style.display='none';
-    if(data.qr_code_base64){
-      document.getElementById('pixQrImg').src=`data:image/png;base64,${data.qr_code_base64}`;
-    }
-    document.getElementById('pixCodigoCopia').textContent=data.qr_code||'';
-    document.getElementById('pixQrArea').style.display='';
-    // Inicia polling para verificar pagamento
-    iniciarPixPolling();
-  }catch(e){
-    document.getElementById('pixLoadingMsg').style.display='none';
-    document.getElementById('pixErroMsg').textContent='Erro: '+e.message;
-    document.getElementById('pixErroMsg').style.display='';
-  }
-};
-
-function iniciarPixPolling(){
-  if(!_pixPaymentId)return;
-  let tentativas=0;
-  _pixPollTimer=setInterval(async()=>{
-    tentativas++;
-    if(tentativas>60){clearInterval(_pixPollTimer);return;}
-    try{
-      const resp=await fetch(`${PROXY}/mp/status/${_pixPaymentId}`);
-      const data=await resp.json();
-      if(data.status==='approved'){
-        clearInterval(_pixPollTimer);
-        document.getElementById('pixStatusMsg').textContent='✅ Pagamento confirmado! Liberando acesso...';
-        document.getElementById('pixStatusMsg').style.color='#27ae60';
-        // Atualiza plano no Firestore
-        const expira=new Date();expira.setDate(expira.getDate()+(PLANO_DURACAO[_pixPlano]||365));
-        await setDoc(doc(db,'usuarios',CU.uid),{plano:_pixPlano,pagamentoId:String(_pixPaymentId),planoExpira:expira.toISOString()},{merge:true});
-        await loadUD();updateHeader();
-        setTimeout(async()=>{
-          fecharPixModal();
-          if(!hasAppAccess(UD?.plano)){return;}
-          await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
-        },1500);
-      }
-    }catch(e){}
-  },5000);
-}
-
-window.copiarPixCodigo=function(){
-  const txt=document.getElementById('pixCodigoCopia').textContent;
-  navigator.clipboard.writeText(txt).then(()=>toast('Código PIX copiado!'));
-};
-
-window.fecharPixModal=function(){
-  clearInterval(_pixPollTimer);
-  document.getElementById('pixModal').style.display='none';
-};
-
-// --- CARTÃO RECORRENTE ---
-window.iniciarAssinatura=async function(plano){
-  if(!CU){toast('Faça login primeiro.');return;}
-  _cartaoPlano=plano;
-  const precos={mestre:'R$ 19,90/mês',doutor:'R$ 39,90/mês',pesquisador_pro:'R$ 79,90/mês'};
-  document.getElementById('cartaoModalDesc').textContent=`${PLANO_LABELS[plano]||plano} — ${precos[plano]||''} (renovação automática)`;
-  document.getElementById('cartaoErroMsg').textContent='';
-  document.getElementById('cartaoNumero').value='';
-  document.getElementById('cartaoValidade').value='';
-  document.getElementById('cartaoCvv').value='';
-  document.getElementById('cartaoNome').value='';
-  document.getElementById('cartaoModal').style.display='flex';
-};
-
-window.confirmarAssinatura=async function(){
-  const numero=document.getElementById('cartaoNumero').value.replace(/\s/g,'');
-  const validade=document.getElementById('cartaoValidade').value;
-  const cvv=document.getElementById('cartaoCvv').value;
-  const nome=document.getElementById('cartaoNome').value.trim();
-  const errEl=document.getElementById('cartaoErroMsg');
-  errEl.textContent='';
-  if(numero.length<15||!validade.includes('/')||cvv.length<3||!nome){
-    errEl.textContent='Preencha todos os dados corretamente.';return;
-  }
-  const [mes,ano]=validade.split('/');
-  const btn=document.getElementById('btnConfirmarCartao');
-  btn.disabled=true;btn.textContent='Processando...';
-  try{
-    // Tokeniza o cartão via MP SDK (carrega dinamicamente)
-    if(!window.MercadoPago){
-      await new Promise((res,rej)=>{
-        const s=document.createElement('script');
-        s.src='https://sdk.mercadopago.com/js/v2';
-        s.onload=res;s.onerror=rej;
-        document.head.appendChild(s);
-      });
-    }
-    // Public Key — busca do proxy
-    if(!_mpPublicKey){
-      const r=await fetch(`${PROXY}/mp/pubkey`);
-      const d=await r.json();
-      _mpPublicKey=d.public_key;
-    }
-    const mp=new window.MercadoPago(_mpPublicKey);
-    const tokenResp=await mp.createCardToken({
-      cardNumber:numero,cardExpirationMonth:mes,cardExpirationYear:'20'+ano,
-      securityCode:cvv,cardholderName:nome
-    });
-    if(tokenResp.error)throw new Error(tokenResp.error);
-    // Envia para o proxy criar a assinatura
-    const resp=await fetch(`${PROXY}/mp/assinatura`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({plano:_cartaoPlano,email_pagador:CU.email,token_cartao:tokenResp.id,uid:CU.uid})
-    });
-    const data=await resp.json();
-    if(!resp.ok||data.error)throw new Error(data.error||data.message||'Erro ao processar');
-    // Atualiza plano localmente
-    await setDoc(doc(db,'usuarios',CU.uid),{plano:_cartaoPlano,assinaturaId:data.id},{merge:true});
-    await loadUD();updateHeader();
-    fecharCartaoModal();
-    await loadCols();await loadQuotes();await loadIdeias().catch(()=>{});showApp();
-    toast('✅ Assinatura ativada com sucesso!');
-  }catch(e){
-    errEl.textContent='Erro: '+e.message;
-  }finally{
-    btn.disabled=false;btn.textContent='Assinar agora';
-  }
-};
-
-window.fecharCartaoModal=function(){
-  document.getElementById('cartaoModal').style.display='none';
-};
-window.copyPixKey=function(){
-  navigator.clipboard.writeText('segundocerebro.app@gmail.com').then(()=>{toast('Copiado!');}).catch(()=>{});
-};
-// ===== FIM PAGAMENTOS =====
-
-// ===== PAINEL ADMIN =====
-document.getElementById('btnAdminPanel').onclick=()=>{
-  if(CU?.email!==OWNER_EMAIL)return;
-  // Preenche data padrão: 30 dias a partir de hoje
-  const d=new Date();d.setDate(d.getDate()+30);
-  document.getElementById('adminPromoExpira').value=d.toISOString().split('T')[0];
-  document.getElementById('adminPromoCode').value='';
-  document.getElementById('adminPromoMsg').textContent='';
-  openM('adminModal');
-  carregarCodigosAdmin();
-};
-
-async function carregarCodigosAdmin(){
-  if(CU?.email!==OWNER_EMAIL)return;
-  const lista=document.getElementById('adminCodigosList');
-  try{
-    const {getDocs,collection:col,orderBy,query,limit:lim}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const q=query(col(db,'codigos_promo'),lim(10));
-    const snap=await getDocs(q);
-    if(snap.empty){lista.textContent='Nenhum código emitido ainda.';return;}
-    let html='<table style="width:100%;border-collapse:collapse">';
-    html+='<tr style="font-weight:700;border-bottom:1px solid var(--border)"><td style="padding:4px 6px">Código</td><td>Plano</td><td>Usos</td><td>Validade</td></tr>';
-    snap.forEach(d=>{
-      const c=d.data();
-      const exp=c.expira?c.expira.toDate().toLocaleDateString('pt-BR'):'∞';
-      const expirado=c.expira&&c.expira.toDate()<new Date();
-      html+=`<tr style="border-bottom:1px solid var(--border);opacity:${expirado?.5:1}">
-        <td style="padding:4px 6px;font-weight:700;font-family:monospace">${d.id}</td>
-        <td>${planLabel(c.plano||'pesquisador_pro')}</td>
-        <td>${c.usosAtual||0}/${c.usosMax||1}</td>
-        <td style="color:${expirado?'#c0392b':'var(--text2)'}">${exp}${expirado?' ✗':''}</td>
-      </tr>`;
-    });
-    html+='</table>';
-    lista.innerHTML=html;
-  }catch(e){lista.textContent='Erro ao carregar: '+e.message;}
-}
-
-document.getElementById('btnEmitirCodigo').onclick=async function(){
-  if(CU?.email!==OWNER_EMAIL)return;
-  const code=document.getElementById('adminPromoCode').value.trim().toUpperCase().replace(/\s/g,'');
-  const plano=document.getElementById('adminPromoPlano').value;
-  const creditos=parseInt(document.getElementById('adminPromoCreditos').value)||50;
-  const usosMax=parseInt(document.getElementById('adminPromoUsosMax').value)||1;
-  const multiuso=document.getElementById('adminPromoMultiuso').checked;
-  const expiraStr=document.getElementById('adminPromoExpira').value;
-  const m=document.getElementById('adminPromoMsg');
-  if(!code||code.length<4){m.style.color='#c0392b';m.textContent='Código deve ter ao menos 4 caracteres.';return;}
-  m.textContent='Salvando...';m.style.color='var(--text2)';
-  try{
-    const dados={plano,creditos,usosMax,multiuso,usosAtual:0,usado:false,criadoEm:serverTimestamp()};
-    if(expiraStr){
-      const {Timestamp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      dados.expira=Timestamp.fromDate(new Date(expiraStr+'T23:59:59'));
-    }
-    await setDoc(doc(db,'codigos_promo',code),dados);
-    m.style.color='#27ae60';
-    m.textContent=`✓ Código "${code}" emitido com sucesso!`;
-    document.getElementById('adminPromoCode').value='';
-    carregarCodigosAdmin();
-  }catch(e){m.style.color='#c0392b';m.textContent='Erro: '+e.message;}
-};
-// ===== FIM PAINEL ADMIN =====
-
-// ===== COMPRA DE CRÉDITOS AVULSOS VIA PIX =====
-// Como funciona:
-// 1. Usuário clica "Comprar PIX" no modal de planos
-// 2. O frontend chama o proxy Render que cria um pagamento PIX no Mercado Pago
-// 3. O webhook do MP recebe a confirmação e atualiza os créditos no Firestore
-// 4. O polling verifica o status a cada 5s e atualiza a UI quando confirmado
-const AVULSOS={
-  creditos_100:  {valor:19.90, descricao:'100 Créditos IA — Segundo Cérebro', label:'100 Créditos IA'},
-  adaptacao_artigo:{valor:19.90, descricao:'1 Adaptação de Artigo — Segundo Cérebro', label:'1 Adaptação de Artigo'}
-};
-
-let _avulsoPaymentId=null,_avulsoProd=null,_avulsoPollTimer=null;
-
-window.comprar=async function(prod){
-  if(!CU){toast('Faça login primeiro.');return;}
-  const info=AVULSOS[prod];
-  if(!info){toast('Produto inválido.');return;}
-  _avulsoProd=prod;_avulsoPaymentId=null;
-  clearInterval(_avulsoPollTimer);
-  // Reutiliza o modal PIX com descrição do avulso
-  document.getElementById('pixModalDesc').textContent=`${info.label} — R$ ${info.valor.toFixed(2).replace('.',',')}`;
-  document.getElementById('pixLoadingMsg').style.display='';
-  document.getElementById('pixQrArea').style.display='none';
-  document.getElementById('pixErroMsg').style.display='none';
-  document.getElementById('pixStatusMsg').textContent='';
-  document.getElementById('pixModal').style.display='flex';
-  closeM('planosModal');
-  try{
-    const resp=await fetch(`${PROXY}/mp/pix`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({valor:info.valor,descricao:info.descricao,email_pagador:CU.email,plano:prod,uid:CU.uid})
-    });
-    const data=await resp.json();
-    if(!resp.ok||data.error)throw new Error(data.error||data.message||'Erro ao gerar PIX');
-    _avulsoPaymentId=data.id;
-    document.getElementById('pixLoadingMsg').style.display='none';
-    if(data.qr_code_base64){
-      document.getElementById('pixQrImg').src=`data:image/png;base64,${data.qr_code_base64}`;
-    }
-    document.getElementById('pixCodigoCopia').textContent=data.qr_code||'';
-    document.getElementById('pixQrArea').style.display='';
-    // Polling para créditos avulsos
-    iniciarAvulsoPolling();
-  }catch(e){
-    document.getElementById('pixLoadingMsg').style.display='none';
-    document.getElementById('pixErroMsg').textContent='Erro: '+e.message;
-    document.getElementById('pixErroMsg').style.display='';
-  }
-};
-
-function iniciarAvulsoPolling(){
-  if(!_avulsoPaymentId)return;
-  let tentativas=0;
-  _avulsoPollTimer=setInterval(async()=>{
-    tentativas++;
-    if(tentativas>60){clearInterval(_avulsoPollTimer);return;}
-    try{
-      const resp=await fetch(`${PROXY}/mp/status/${_avulsoPaymentId}`);
-      const data=await resp.json();
-      if(data.status==='approved'){
-        clearInterval(_avulsoPollTimer);
-        document.getElementById('pixStatusMsg').textContent='✅ Pagamento confirmado! Atualizando créditos...';
-        document.getElementById('pixStatusMsg').style.color='#27ae60';
-        // Aguarda webhook processar (1-2s) e recarrega dados do usuário
-        await new Promise(r=>setTimeout(r,2000));
-        await loadUD();updateHeader();
-        fecharPixModal();
-        toast(_avulsoProd==='creditos_100'?'✅ 100 créditos adicionados!':'✅ 1 adaptação de artigo adicionada!');
-      }
-    }catch(e){}
-  },5000);
-}
-
-// ===== CONTROLE DE ACESSO À IA =====
-// Leitor: sem IA. Mestre: IA básica limitada a créditos. Doutor/Pro/Ilimitado: IA sem restrições.
-function getLimite(){return LIMITES[UD?.plano||'leitor']||LIMITES.leitor;}
-function checkAILimit(){
-  if(!CU)return false;
-  if(CU.email===OWNER_EMAIL)return true;
-  const plano=UD?.plano||'leitor';
-  const lim=getLimite();
-  // Sem acesso à IA
-  if(!lim.ia){toast('IA disponível a partir do Plano Mestre. Faça upgrade para usar esta função.');return false;}
-  // Planos com IA ilimitada: Doutor, Pro, Ilimitado
-  if(plano==='doutor'||plano==='pesquisador_pro'||plano==='ilimitado') return true;
-  // Mestre: usa créditos do Firestore
-  const creditos=UD?.creditos||0;
-  if(creditos<=0){
-    toast('Seus créditos IA acabaram. Compre mais no menu Planos ou faça upgrade.');
-    // Mostra alerta imediato
-    const alertBadge=document.getElementById('creditAlertBadge');
-    if(alertBadge){alertBadge.style.display='';alertBadge.textContent='⚠️ Sem créditos IA';alertBadge.style.background='#f8d7da';alertBadge.style.color='#721c24';alertBadge.style.borderColor='#f5c6cb';}
-    return false;
-  }
-  return true;
-}
-function checkCitacaoLimit(){
-  if(!CU)return false;
-  if(CU.email===OWNER_EMAIL)return true;
-  const lim=getLimite();
-  if(quotes.length>=lim.citacoes){toast(`Limite de ${lim.citacoes} citações atingido no Plano ${planLabel(UD?.plano||'leitor')}. Faça upgrade para continuar.`);return false;}
-  return true;
-}
-
-function updateStatus(){const d=document.getElementById('statusDot'),t=document.getElementById('statusText');if(navigator.onLine){d.className='status-dot';t.textContent='Conectado';}else{d.className='status-dot offline';t.textContent='Offline';}}
-window.addEventListener('online',updateStatus);window.addEventListener('offline',updateStatus);updateStatus();
-</script>
-</body>
-</html>
+document.getElementById('ocrFileInput').addEventListener('change',e=>{const f=e.target.files[0];if
