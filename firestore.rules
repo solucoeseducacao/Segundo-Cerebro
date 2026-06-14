@@ -1,36 +1,71 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ===== USUÁRIOS =====
     match /usuarios/{userId} {
-      allow read, update: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Criação: usuário pode criar seu próprio documento
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // Update: usuário pode atualizar apenas campos seguros
+      // Campos sensíveis de plano pagos (creditos, planoExpira, assinaturaId, pagamentoId)
+      // NÃO podem ser escritos diretamente pelo cliente — só via backend/webhook
+      // promoCode e plano podem ser escritos pelo cliente (fluxo de resgate de cupom)
+      // FUTURO: mover resgate de cupom para Cloud Function e remover 'plano' e 'promoCode' daqui
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['creditos', 'planoExpira', 'assinaturaId', 'pagamentoId', 'creditosPromo']);
     }
+
+    // Subcoleções do usuário: citações, coleções, ideias, embeddings
     match /usuarios/{userId}/citacoes/{docId} {
       allow read, write, delete: if request.auth != null && request.auth.uid == userId;
     }
     match /usuarios/{userId}/colecoes/{docId} {
       allow read, write, delete: if request.auth != null && request.auth.uid == userId;
     }
+    match /usuarios/{userId}/ideias/{docId} {
+      allow read, write, delete: if request.auth != null && request.auth.uid == userId;
+    }
     match /usuarios/{userId}/embeddings/{docId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    // ===== CÓDIGOS PROMOCIONAIS =====
+    // Leitura: qualquer usuário autenticado pode verificar se um código existe
+    // Escrita: NUNCA pelo cliente (apenas pelo backend via Service Account)
+    match /codigos_promo/{code} {
+      allow read: if request.auth != null;
+      allow write: if false; // somente backend/admin via Service Account
+    }
+
+    // ===== CACHE / LOGS DE IA =====
     match /ia_cache/{hash} {
-      allow read, write: if request.auth != null;
+      allow read: if request.auth != null;
+      allow write: if false; // somente backend
     }
     match /ia_logs/{logId} {
-      allow read, write: if request.auth != null;
+      allow read: if false; // somente admin
+      allow write: if false;
     }
+
+    // ===== RATE LIMITS =====
     match /rate_limits/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false; // somente backend
     }
-    match /promo_codes/{code} {
-      allow read: if request.auth != null;
-      allow create, update, delete: if request.auth != null
-        && request.auth.token.admin == true;
-    }
+
+    // ===== ADMIN CONFIG =====
     match /admin_config/{docId} {
-      allow read, write: if request.auth != null
-        && request.auth.token.admin == true;
+      allow read, write: if false; // somente backend com Service Account
+    }
+
+    // ===== BLOQUEIA TUDO QUE NÃO FOI DECLARADO =====
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

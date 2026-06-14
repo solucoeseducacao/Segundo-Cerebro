@@ -8,6 +8,9 @@ app.use(express.json({limit:'2mb'}));
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://segundo-cerebro-bfb66.web.app';
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || '';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
+const FIREBASE_PROJECT_ID = 'segundo-cerebro-bfb66';
+// FIREBASE_WEB_API_KEY deve ser configurada no Render como variável de ambiente
+// Valor: AIzaSyAfaddZQi_QILdYZZQv5zb3R3nHRvp7z4s (mesma que está no frontend)
 
 app.use((req,res,next)=>{
   const origin = req.headers.origin;
@@ -17,9 +20,30 @@ app.use((req,res,next)=>{
   next();
 });
 
+// Valida Firebase ID Token via API pública do Google (sem SDK)
+async function verificarFirebaseToken(authHeader){
+  if(!authHeader||!authHeader.startsWith('Bearer ')) return null;
+  const idToken = authHeader.slice(7);
+  try{
+    const resp = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.FIREBASE_WEB_API_KEY}`,
+      {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({idToken})}
+    );
+    const data = await resp.json();
+    if(!resp.ok || !data.users || !data.users[0]) return null;
+    return data.users[0]; // {localId, email, ...}
+  }catch(e){
+    return null;
+  }
+}
+
 // ===== ANTHROPIC / CLAUDE =====
 app.post('/claude', async(req,res)=>{
   try{
+    // Valida autenticação Firebase
+    const user = await verificarFirebaseToken(req.headers.authorization);
+    if(!user) return res.status(401).json({error:'Nao autenticado. Faca login novamente.'});
+
     const {messages, system, max_tokens=1024} = req.body;
     if(!messages) return res.status(400).json({error:'messages obrigatorio'});
 
@@ -160,6 +184,7 @@ app.post('/mp/assinatura', async(req,res)=>{
 });
 
 // ===== MERCADO PAGO — WEBHOOK (confirmação automática) =====
+// Trata planos (mestre/doutor/pesquisador_pro) e avulsos (creditos_100/adaptacao_artigo)
 app.post('/mp/webhook', async(req,res)=>{
   try{
     const {type, data} = req.body;
@@ -170,17 +195,37 @@ app.post('/mp/webhook', async(req,res)=>{
       const payment = await resp.json();
       if(payment.status==='approved'){
         const {plano, uid} = payment.metadata||{};
-        if(plano && uid){
-          // Atualiza Firestore via REST (sem SDK no proxy)
-          const fsUrl=`https://firestore.googleapis.com/v1/projects/segundo-cerebro-bfb66/databases/(default)/documents/usuarios/${uid}`;
-          await fetch(fsUrl+'?updateMask.fieldPaths=plano&updateMask.fieldPaths=pagamentoId',{
-            method:'PATCH',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({fields:{
-              plano:{stringValue:plano},
-              pagamentoId:{stringValue:String(data.id)}
-            }})
-          });
+        if(uid){
+          const fsBase=`https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/usuarios/${uid}`;
+
+          // Produtos avulsos: creditos_100 e adaptacao_artigo
+          if(plano==='creditos_100'){
+            // Incremento de créditos via Firestore REST (fieldTransform)
+            await fetch(fsBase+':commit',{
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({writes:[{transform:{document:fsBase,fieldTransforms:[{fieldPath:'creditos',increment:{integerValue:100}}]}}]})
+            });
+          } else if(plano==='adaptacao_artigo'){
+            await fetch(fsBase+':commit',{
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({writes:[{transform:{document:fsBase,fieldTransforms:[{fieldPath:'adaptacoesAvulsas',increment:{integerValue:1}}]}}]})
+            });
+          } else if(plano){
+            // Plano de acesso (mestre, doutor, pesquisador_pro)
+            const expira=new Date();expira.setDate(expira.getDate()+365);
+            const fsUrl=fsBase+'?updateMask.fieldPaths=plano&updateMask.fieldPaths=pagamentoId&updateMask.fieldPaths=planoExpira';
+            await fetch(fsUrl,{
+              method:'PATCH',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({fields:{
+                plano:{stringValue:plano},
+                pagamentoId:{stringValue:String(data.id)},
+                planoExpira:{stringValue:expira.toISOString()}
+              }})
+            });
+          }
         }
       }
     }
