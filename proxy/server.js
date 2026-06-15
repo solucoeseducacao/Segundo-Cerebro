@@ -380,6 +380,41 @@ app.get('/mp/pubkey', async(_,res)=>{
   res.json({public_key: process.env.MP_PUBLIC_KEY||''});
 });
 
+
+// ── Criar código promocional (somente owner via token) ───────────────────────
+app.post('/promo/criar', async(req,res)=>{
+    try{
+          const user = await verificarFirebaseToken(req.headers.authorization);
+          if(!user) return res.status(401).json({error:'Não autenticado.'});
+          const OWNER = process.env.OWNER_EMAIL || 'felipevigneron@gmail.com';
+          if(user.email !== OWNER) return res.status(403).json({error:'Acesso negado.'});
+
+          const {codigo, plano, creditos, expira, usosMax, multiuso} = req.body;
+          if(!codigo || !plano) return res.status(400).json({error:'Código e plano obrigatórios.'});
+          if(!db) return res.status(503).json({error:'Serviço indisponível.'});
+
+          const codigoNorm = String(codigo).toUpperCase().trim();
+          const promoRef = db.collection('promo_codes').doc(codigoNorm);
+
+          const data = {
+                  type: creditos > 0 ? 'creditos' : 'plano',
+                  value: creditos > 0 ? creditos : plano,
+                  plano: plano,
+                  redeemedBy: [],
+                  usesLeft: multiuso ? (usosMax || 999) : 1,
+                  createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                  cancelled: false
+          };
+          if(expira) data.expiresAt = admin.firestore.Timestamp.fromDate(new Date(expira));
+
+          await promoRef.set(data);
+          res.json({ok:true, codigo:codigoNorm});
+    }catch(e){
+          console.error('[promo/criar]', e.message);
+          res.status(500).json({error:'Erro interno.'});
+    }
+});
+
 // ── Keep-alive ────────────────────────────────────────────────────────────────
 const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT||3000}`;
 setInterval(async()=>{
