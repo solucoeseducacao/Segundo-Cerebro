@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<!-- v4 -->
+<!-- v4-nocache-20260615 -->
+<!-- v5 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -254,6 +255,7 @@ main{padding:8px}
 .modal-sm,.modal-md,.modal-lg{border-radius:8px 8px 0 0}
 }
 </style>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body>
 
@@ -409,8 +411,8 @@ main{padding:8px}
           <span>Suporte prioritário (até 24h)</span>
         </div>
         <div class="pw-plan-btns">
-          <button class="pw-btn-pix gold" onclick="iniciarPagamentoPix('pro',958.80)">💳 Anual — 12x de R$79,90<br><small>somente cartão, sem juros</small></button>
-          <button class="pw-btn-rec gold" onclick="iniciarPagamentoPix('pro_mensal',89.90)">🔄 Mensal — R$89,90<br><small>PIX ou cartão</small></button>
+          <button class="pw-btn-pix gold" onclick="abrirCartao('pro',958.80,'Pro — Anual 12x R$79,90')">💳 Anual — 12x de R$79,90<br><small>somente cartão, sem juros</small></button>
+          <button class="pw-btn-rec gold" onclick="abrirEscolhaPagamento('pro_mensal',89.90,'Pro — Mensal R$89,90')">🔄 Mensal — R$89,90<br><small>PIX ou cartão</small></button>
         </div>
       </div>
 
@@ -436,8 +438,8 @@ main{padding:8px}
           <span class="no">Links semânticos automáticos (só Pro)</span>
         </div>
         <div class="pw-plan-btns">
-          <button class="pw-btn-pix" onclick="iniciarPagamentoPix('orientador',478.80)">💳 Anual — 12x de R$39,90<br><small>somente cartão, sem juros</small></button>
-          <button class="pw-btn-rec" onclick="iniciarPagamentoPix('orientador_mensal',49.90)">🔄 Mensal — R$49,90<br><small>PIX ou cartão</small></button>
+          <button class="pw-btn-pix" onclick="abrirCartao('orientador',478.80,'Orientador — Anual 12x R$39,90')">💳 Anual — 12x de R$39,90<br><small>somente cartão, sem juros</small></button>
+          <button class="pw-btn-rec" onclick="abrirEscolhaPagamento('orientador_mensal',49.90,'Orientador — Mensal R$49,90')">🔄 Mensal — R$49,90<br><small>PIX ou cartão</small></button>
         </div>
       </div>
 
@@ -463,8 +465,8 @@ main{padding:8px}
           <span class="no">Painel do orientador (só Orientador+)</span>
         </div>
         <div class="pw-plan-btns">
-          <button class="pw-btn-pix" onclick="iniciarPagamentoPix('pesquisador',238.80)">💳 Anual — 12x de R$19,90<br><small>somente cartão, sem juros</small></button>
-          <button class="pw-btn-rec" onclick="iniciarPagamentoPix('pesquisador_mensal',29.90)">🔄 Mensal — R$29,90<br><small>PIX ou cartão</small></button>
+          <button class="pw-btn-pix" onclick="abrirCartao('pesquisador',238.80,'Pesquisador — Anual 12x R$19,90')">💳 Anual — 12x de R$19,90<br><small>somente cartão, sem juros</small></button>
+          <button class="pw-btn-rec" onclick="abrirEscolhaPagamento('pesquisador_mensal',29.90,'Pesquisador — Mensal R$29,90')">🔄 Mensal — R$29,90<br><small>PIX ou cartão</small></button>
         </div>
       </div>
 
@@ -699,7 +701,7 @@ main{padding:8px}
     <div class="header-right">
       <span class="badge-plan" id="badgePlan">Leitor</span>
       <span class="badge-credits" id="badgeCredits">0 creditos</span>
-      <span id="creditAlertBadge" style="display:none;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;background:#fff3cd;color:#856404;border:1px solid #ffc107;cursor:pointer" onclick="openM('plansModal')">⚠️ Créditos baixos</span>
+      <span id="creditAlertBadge" style="display:none;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;background:#fff3cd;color:#856404;border:1px solid #ffc107;cursor:pointer" onclick="openM('planosModal')">⚠️ Créditos baixos</span>
       <button class="btn-sm" id="btnPlanos">Planos</button>
       <button class="btn-sm btn-accent" id="btnNovaCitacao">+ Nova citacao</button>
       <button class="btn-sm" id="btnAdminPanel" style="display:none;background:#1a1814;color:#f7c948;border-color:#f7c948;font-weight:700">⚙️ Admin</button>
@@ -707,7 +709,7 @@ main{padding:8px}
       <span class="user-name" id="userName"></span>
       <img class="user-avatar" id="userAvatar" src="" alt="" style="display:none">
       <a href="/como-usar.html" target="_blank" class="btn-sm" style="text-decoration:none">Como usar</a>
-      <a href="mailto:suporte@segundocerebro.app" class="btn-sm" style="text-decoration:none" title="Suporte / Cancelar assinatura">Suporte</a>
+      <button class="btn-sm" title="Suporte / Cancelar assinatura" onclick="window.open('https://mail.google.com/mail/?view=cm&to=segundocerebroapp@gmail.com','_blank')">Suporte</button>
       <button class="btn-sm" id="btnLogout">Sair</button>
     </div>
   </header>
@@ -742,7 +744,7 @@ main{padding:8px}
         <div class="quotes-grid" id="quotesGrid"></div>
       </main>
     </div>
-    <div class="tab-panel" id="panelIdeias" style="flex:1;flex-direction:column;overflow:hidden">
+    <div class="tab-panel" id="panelIdeias" style="flex:1;flex-direction:column;overflow:hidden;display:none">
       <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--surface)">
         <button class="mic-btn" id="btnMic">&#127897;&#65039; Gravar ideia (voz)</button>
         <button class="btn-sm btn-accent" id="btnNovaIdeia">+ Nova ideia (texto)</button>
@@ -953,11 +955,39 @@ main{padding:8px}
 
 <div class="toast" id="toast"></div>
 
+<script>
+// Auto-fix v3: se o módulo não carregar em 8s, força reload sem cache pelo SW
+(function(){
+  var v = '20260615g';
+  if(location.search.indexOf('_v=')!==-1) return; // já está em modo forçado
+  setTimeout(function(){
+    if(typeof window.__appLoaded === 'undefined'){
+      // Limpa caches do SW antes de redirecionar
+      if('caches' in window){
+        caches.keys().then(function(keys){
+          keys.forEach(function(k){ caches.delete(k); });
+        });
+      }
+      // Desregistra SW para forçar fetch limpo
+      if('serviceWorker' in navigator){
+        navigator.serviceWorker.getRegistrations().then(function(regs){
+          regs.forEach(function(r){ r.unregister(); });
+          location.replace(location.pathname + '?_v=' + v);
+        });
+      } else {
+        location.replace(location.pathname + '?_v=' + v);
+      }
+    }
+  }, 8000);
+})();
+</script>
+
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,GoogleAuthProvider,signInWithPopup,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,signOut,onAuthStateChanged,getIdToken}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import{getFirestore,doc,getDoc,setDoc,deleteDoc,collection,getDocs,serverTimestamp,increment}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 // firebase-functions removido: Spark plan não suporta Cloud Functions
+window.__appLoaded = true; // sinaliza que o módulo carregou
 
 const FC={apiKey:"AIzaSyAfaddZQi_QILdYZZQv5zb3R3nHRvp7z4s",authDomain:"segundo-cerebro-bfb66.firebaseapp.com",projectId:"segundo-cerebro-bfb66",storageBucket:"segundo-cerebro-bfb66.firebasestorage.app",messagingSenderId:"850519671097",appId:"1:850519671097:web:d0c2125bd42e5d5a1668e8"};
 const LIMITES={
@@ -995,6 +1025,15 @@ if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(
   setInterval(ping, 8*60*1000); // repinga a cada 8 minutos enquanto o site está aberto
 })();
 
+// ── FUNÇÕES UTILITÁRIAS DE UI ────────────────────────────────────────────────
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function toast(msg,dur=3000){let t=document.getElementById('_toast');if(!t){t=document.createElement('div');t.id='_toast';t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:8px;z-index:99999;font-size:14px;pointer-events:none;transition:opacity .3s';document.body.appendChild(t);}t.textContent=msg;t.style.opacity='1';clearTimeout(t._timer);t._timer=setTimeout(()=>{t.style.opacity='0';},dur);}
+function showToast(msg){toast(msg,5000);}
+function openM(id){const el=document.getElementById(id);if(el){el.classList.add('open');el.style.display='flex';}}
+function closeM(id){const el=document.getElementById(id);if(el){el.classList.remove('open');el.style.display='none';}}
+function closeAllM(){document.querySelectorAll('.modal-overlay').forEach(el=>{el.classList.remove('open');el.style.display='none';});['pixModal','cartaoModal','comparePlansModal'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});}
+function switchTab(tab){const citTab=document.getElementById('tabCitacoes'),idTab=document.getElementById('tabIdeias'),citPane=document.getElementById('panelCitacoes'),idPane=document.getElementById('panelIdeias');if(!citTab||!idTab)return;if(tab==='ideias'){citTab.classList.remove('active');idTab.classList.add('active');if(citPane){citPane.classList.remove('active');citPane.style.display='none';}if(idPane){idPane.classList.add('active');idPane.style.display='flex';}}else{idTab.classList.remove('active');citTab.classList.add('active');if(idPane){idPane.classList.remove('active');idPane.style.display='none';}if(citPane){citPane.classList.add('active');citPane.style.display='flex';}}}
+
 // ── PWA INSTALL BUTTON ──────────────────────────────────────────────────────
 let _deferredInstallPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
@@ -1028,6 +1067,182 @@ window._instalarApp=async function(){
 })();
 
 const OWNER_EMAIL='felipevigneron@gmail.com';
+
+// ── LISTENER GLOBAL PARA BOTÕES data-close ──────────────────────────────────
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[data-close]');
+  if(btn){ closeM(btn.dataset.close); }
+});
+
+// ── BOTÕES DO HEADER ─────────────────────────────────────────────────────────
+document.getElementById('btnPlanos').onclick=()=>openM('planosModal');
+document.getElementById('btnAdminPanel').onclick=()=>openM('adminModal');
+document.getElementById('btnOcr').onclick=()=>openM('ocrModal');
+document.getElementById('btnAdaptar').onclick=()=>openM('adaptarModal');
+
+// ── PAGAMENTOS via proxy ──────────────────────────────────────────────────────
+window.comprar=async function(produto){
+  const CU=window.CU;
+  if(!CU){ toast('Faça login primeiro.'); return; }
+  const PRECOS={'creditos_100':19.90,'adaptacao_artigo':19.90};
+  const DESCRICOES={'creditos_100':'100 Créditos IA','adaptacao_artigo':'1 Adaptação de Artigo'};
+  const valor=PRECOS[produto]||19.90;
+  const descricao=DESCRICOES[produto]||produto;
+  try{
+    toast('Gerando PIX...', 5000);
+    const resp=await fetch('https://proxy-anthropic.onrender.com/mp/pix',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({plano:produto, valor, email_pagador:CU.email, uid:CU.uid, descricao})
+    });
+    const data=await resp.json();
+    if(data.error){ toast('Erro: '+data.error); return; }
+    window._pixCodigo=data.qr_code||'';
+    window._planoSelecionado=produto;
+    const desc=document.getElementById('pixModalDesc');
+    if(desc) desc.textContent=descricao;
+    const qr=document.getElementById('pixQrImg');
+    if(qr&&data.qr_code_base64) qr.src='data:image/png;base64,'+data.qr_code_base64;
+    const cod=document.getElementById('pixCodigoCopia');
+    if(cod) cod.textContent=data.qr_code||'';
+    openM('pixModal');
+  }catch(err){ toast('Erro ao gerar pagamento.'); console.error(err); }
+};
+
+window.copiarPixCodigo=function(){
+  const cod=window._pixCodigo||document.getElementById('pixCodigoCopia')?.textContent||document.getElementById('pixCodigoCopia')?.value||'';
+  if(!cod){ toast('Código PIX não disponível.'); return; }
+  navigator.clipboard.writeText(cod).then(()=>toast('Código PIX copiado!')).catch(()=>toast('Erro ao copiar.'));
+};
+
+// ── OCR ───────────────────────────────────────────────────────────────────────
+const _btnRunOcr=document.getElementById('btnRunOcr');
+if(_btnRunOcr) _btnRunOcr.onclick=async function(){
+  const inp=document.getElementById('ocrFileInput');
+  if(!inp||!inp.files||!inp.files[0]){ toast('Selecione uma imagem.'); return; }
+  if(!CU){ toast('Faça login primeiro.'); return; }
+  try{
+    toast('Extraindo texto...');
+    const token=await getIdToken(CU,true);
+    const fd=new FormData(); fd.append('image',inp.files[0]);
+    const resp=await fetch('https://proxy-anthropic.onrender.com/claude',{
+      method:'POST', headers:{'Authorization':'Bearer '+token}, body:fd
+    });
+    const data=await resp.json();
+    const out=document.getElementById('ocrResultText');
+    const res=document.getElementById('ocrResult');
+    if(out) out.value=data.text||data.content||JSON.stringify(data);
+    if(res) res.style.display='';
+  }catch(err){ toast('Erro no OCR.'); console.error(err); }
+};
+
+const _btnOcrUse=document.getElementById('btnOcrUseText');
+if(_btnOcrUse) _btnOcrUse.onclick=function(){
+  const out=document.getElementById('ocrResultText');
+  if(out&&out.value){ document.getElementById('qText').value=out.value; closeM('ocrModal'); openM('quoteModal'); }
+};
+// ── ADAPTAR ARTIGO ───────────────────────────────────────────────────────────
+const _adaptArtigo = document.getElementById('adaptArtigo');
+const _adaptCharCount = document.getElementById('adaptCharCount');
+if(_adaptArtigo && _adaptCharCount){
+  _adaptArtigo.addEventListener('input', ()=>{
+    _adaptCharCount.textContent = _adaptArtigo.value.length + ' caracteres';
+  });
+}
+
+async function _runAdaptar(preview){
+  const normas=(document.getElementById('adaptNormas')?.value||'').trim();
+  const artigo=(document.getElementById('adaptArtigo')?.value||'').trim();
+  if(!normas||!artigo){ toast('Preencha as normas e o artigo.'); return; }
+  const CU=window.CU;
+  if(!CU){ toast('Faça login primeiro.'); return; }
+  const ud=window.UD;
+  if(!preview){
+    const adaptDisp=(ud?.adaptacoesDisponiveis||0);
+    if(adaptDisp<1){ toast('Sem adaptações disponíveis. Adquira mais no menu lateral.'); return; }
+  }
+  const texto = preview ? artigo.slice(0,Math.floor(artigo.length*0.15)) : artigo;
+  const btnPrev=document.getElementById('btnAdaptPreview');
+  const btnFull=document.getElementById('btnAdaptFull');
+  if(btnPrev) btnPrev.disabled=true;
+  if(btnFull) btnFull.disabled=true;
+  toast(preview?'Gerando prévia (15%)...':'Adaptando artigo completo...', 10000);
+  try{
+    const token=await getIdToken(CU,true);
+    const resp=await fetch('https://proxy-anthropic.onrender.com/claude',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({
+        system:'Você é um especialista em normas acadêmicas brasileiras. Adapte o texto fornecido rigorosamente às normas indicadas, mantendo o conteúdo original. Responda apenas com o texto adaptado.',
+        messages:[{role:'user',content:'NORMAS:\n'+normas+'\n\nTEXTO:\n'+texto}],
+        max_tokens:4096
+      })
+    });
+    const data=await resp.json();
+    if(data.error){ toast('Erro: '+data.error); return; }
+    const result=data.text||'';
+    const resEl=document.getElementById('adaptResult');
+    const resText=document.getElementById('adaptResultText');
+    const resLabel=document.getElementById('adaptResultLabel');
+    if(resText) resText.value=result;
+    if(resLabel) resLabel.textContent=preview?'Prévia (15% do artigo)':'Resultado completo';
+    if(resEl) resEl.style.display='';
+    if(!preview && ud){
+      // Decrementar adaptações localmente (webhook vai atualizar no Firestore)
+      ud.adaptacoesDisponiveis=Math.max(0,(ud.adaptacoesDisponiveis||1)-1);
+      window.UD=ud; updateHeader();
+    }
+    toast(preview?'Prévia gerada!':'Adaptação concluída!', 4000);
+  }catch(err){ toast('Erro de conexão: '+err.message); }
+  finally{
+    if(btnPrev) btnPrev.disabled=false;
+    if(btnFull) btnFull.disabled=false;
+  }
+}
+
+const _btnAdaptPrev=document.getElementById('btnAdaptPreview');
+if(_btnAdaptPrev) _btnAdaptPrev.onclick=()=>_runAdaptar(true);
+const _btnAdaptFull=document.getElementById('btnAdaptFull');
+if(_btnAdaptFull) _btnAdaptFull.onclick=()=>_runAdaptar(false);
+const _btnCopyAdapt=document.getElementById('btnCopyAdapt');
+if(_btnCopyAdapt) _btnCopyAdapt.onclick=function(){
+  const t=document.getElementById('adaptResultText');
+  if(!t||!t.value){ toast('Nada para copiar.'); return; }
+  navigator.clipboard.writeText(t.value).then(()=>toast('Texto adaptado copiado!'));
+};
+
+
+
+// ── ADMIN: emitir código promo ────────────────────────────────────────────────
+const _btnEmitir=document.getElementById('btnEmitirCodigo');
+if(_btnEmitir) _btnEmitir.onclick=async function(){
+  if(!CU||CU.email.toLowerCase()!==OWNER_EMAIL.toLowerCase()){ toast('Acesso negado.'); return; }
+  const codigo=(document.getElementById('adminPromoCode')?.value||'').trim().toUpperCase();
+  const plano=document.getElementById('adminPromoPlano')?.value;
+  const creditos=parseInt(document.getElementById('adminPromoCreditos')?.value)||0;
+  const expira=document.getElementById('adminPromoExpira')?.value||'';
+  const usosMax=parseInt(document.getElementById('adminPromoUsosMax')?.value)||1;
+  const multiuso=document.getElementById('adminPromoMultiuso')?.checked||false;
+  if(!codigo||!plano){ toast('Código e plano são obrigatórios.'); return; }
+  try{
+    toast('Criando código...');
+    const token=await getIdToken(CU,true);
+    const resp=await fetch('https://proxy-anthropic.onrender.com/promo/criar',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({codigo,plano,creditos,expira,usosMax,multiuso})
+    });
+    const data=await resp.json();
+    const msg=document.getElementById('adminPromoMsg');
+    if(msg) msg.textContent=data.ok?`Código ${codigo} criado!`:(data.error||JSON.stringify(data));
+  }catch(err){ toast('Erro ao criar código.'); console.error(err); }
+};
+
+// ── EXPORTAR IDEIAS ───────────────────────────────────────────────────────────
+const _btnExpId=document.getElementById('btnExportIdeias');
+if(_btnExpId) _btnExpId.onclick=()=>toast('Exportação de ideias em breve!');
+
+
 // Planos pagos que dão acesso ao app (leitor NÃO entra — vai para paywall obrigatório)
 function hasAppAccess(p){return['pesquisador','orientador','pro','mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'].includes(p);}
 
@@ -1064,27 +1279,33 @@ async function callAI(prompt, system, maxTokens=500){
 
 onAuthStateChanged(auth,async u=>{
   try{
-    if(!u){CU=null;UD=null;showLogin();return;}
+    if(!u){CU=null;UD=null;window.CU=null;window.UD=null;showLogin();return;}
 
-    CU=u;
+    CU=u; window.CU=CU;
+    console.log('[AUTH] email=',u.email,'OWNER=',OWNER_EMAIL,'match=',u.email===OWNER_EMAIL);
 
-    // Dono do app: acesso total imediato
-    if(u.email===OWNER_EMAIL){
+    // Dono do app: acesso total imediato (case-insensitive)
+    if(u.email&&u.email.toLowerCase()===OWNER_EMAIL.toLowerCase()){
+      UD={plano:'ilimitado',creditos:9999,exportacoesMes:0,adaptacoesDisponiveis:999};
+      window.CU=CU; window.UD=UD;
       hideLoader();
       showApp();
-      await withTimeout(Promise.all([loadCols(),loadQuotes(),loadIdeias().catch(()=>{})]));
+      await withTimeout(Promise.all([loadCols(),loadQuotes()]));
       renderSidebar();renderGrid();
       return;
     }
 
     // Carregar dados do usuário com timeout de 5s
     await withTimeout(loadUD().catch(()=>{}), 5000);
+    window.CU=CU; window.UD=UD;
+    console.log('[AUTH] plano=',UD?.plano,'UD=',JSON.stringify(UD));
 
     // REGRA DE SEGURANÇA: planos que dão acesso ao app (leitor não entra)
     const PLANOS_PAGOS=['pesquisador','orientador','pro','mestre','mestre_offline','doutor','pesquisador_pro','ilimitado'];
     const plano=UD?.plano||null;
 
     if(!PLANOS_PAGOS.includes(plano)){
+      console.log('[AUTH] plano nao pago, showPaywall. plano=',plano);
       showPaywall();
       return;
     }
@@ -1101,11 +1322,11 @@ onAuthStateChanged(auth,async u=>{
     Promise.all([
       loadCols().catch(()=>{}),
       loadQuotes().catch(()=>{}),
-      loadIdeias().catch(()=>{})
+      
     ]).then(()=>{ renderSidebar(); renderGrid(); }).catch(()=>{});
 
   }catch(err){
-    console.error('Erro no onAuthStateChanged:',err);
+    console.error('[AUTH] Erro:',err);
     hideLoader();
     showLogin();
   }
@@ -1152,6 +1373,7 @@ document.getElementById('btnLogout').onclick=()=>signOut(auth);
 
 // ── RESGATE DE CÓDIGO PROMOCIONAL (via proxy seguro) ───────────────────────
 async function _resgatarCodigo(inputId, msgId){
+  const CU = window.CU;
   const codigo = (document.getElementById(inputId)?.value||'').trim().toUpperCase();
   const msg = document.getElementById(msgId);
   if(!codigo){ if(msg)msg.textContent='Digite um código.'; return; }
@@ -1186,7 +1408,7 @@ function showLogin(){hideLoader();document.getElementById('loginScreen').style.d
 function showApp(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('paywallScreen').style.display='none';document.getElementById('appRoot').style.display='flex';updateHeader();setTimeout(()=>document.dispatchEvent(new Event('appReady')),500);}
 function showPaywall(){hideLoader();document.getElementById('loginScreen').style.display='none';document.getElementById('appRoot').style.display='none';document.getElementById('paywallScreen').style.display='flex';const nm=CU?.displayName||CU?.email?.split('@')[0]||'';document.getElementById('paywallName').textContent=nm?`Olá, ${nm.split(' ')[0]}! Escolha seu plano`:'Olá, pesquisador! Escolha seu plano';}
 
-async function loadUD(){const s=await getDoc(doc(db,'usuarios',CU.uid));UD=s.exists()?s.data():{plano:null,creditos:0};}
+async function loadUD(){const s=await getDoc(doc(db,'usuarios',CU.uid));UD=s.exists()?s.data():{plano:null,creditos:0};window.UD=UD;}
 
 // Verifica se o plano atual ainda é válido
 async function verificarPlanoValido(){
@@ -1281,7 +1503,7 @@ function buildInline(q){if(!q.author&&!q.year)return'';const s=(q.author||'').sp
 window.copyAbnt=function(id){const q=quotes.find(x=>x.id===id);if(!q)return;navigator.clipboard.writeText(buildAbnt(q)).then(()=>toast('ABNT copiado!'));};
 window.openRead=function(id){const q=quotes.find(x=>x.id===id);if(!q)return;readQ=q;document.getElementById('readModalTitle').textContent=q.author||'Citacao';document.getElementById('readText').textContent=q.text||'';document.getElementById('readAbnt').textContent=buildAbnt(q)||'-';document.getElementById('readInline').textContent=buildInline(q)||'-';const cs=document.getElementById('readCommentSection');if(q.comment){document.getElementById('readComment').textContent=q.comment;cs.style.display='';}else cs.style.display='none';const ts=document.getElementById('readTagsSection');if((q.tags||[]).length){document.getElementById('readTags').innerHTML=(q.tags||[]).map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('');ts.style.display='';}else ts.style.display='none';openM('readModal');};
 window.openEdit=function(id){closeM('readModal');const q=quotes.find(x=>x.id===id);if(!q)return;editId=id;document.getElementById('quoteModalTitle').textContent='Editar citacao';document.getElementById('qText').value=q.text||'';document.getElementById('qAuthor').value=q.author||'';document.getElementById('qWork').value=q.work||'';document.getElementById('qYear').value=q.year||'';document.getElementById('qPages').value=q.pages||'';document.getElementById('qCollection').value=q.collectionId||'';document.getElementById('qComment').value=q.comment||'';curTags=[...(q.tags||[])];renderTagsForm();openM('quoteModal');};
-window.delQuote=async function(id){if(!confirm('Excluir esta citacao?'))return;await deleteDoc(doc(db,'usuarios',CU.uid,'citacoes',id));quotes=quotes.filter(q=>q.id!==id);renderTagToolbar();renderGrid();renderSidebar();toast('Citacao excluida.');};
+window.delQuote=async function(id){const CU=window.CU;if(!confirm('Excluir esta citacao?'))return;await deleteDoc(doc(db,'usuarios',CU.uid,'citacoes',id));quotes=quotes.filter(q=>q.id!==id);renderTagToolbar();renderGrid();renderSidebar();toast('Citacao excluida.');};
 // Upsell automático: quando usuário gratuito atinge 80% das citações
 function checkUpsell(){
   if(!UD||!CU) return;
@@ -1301,7 +1523,7 @@ function checkUpsell(){
 }
 
 document.getElementById('btnNovaCitacao').onclick=()=>{editId=null;document.getElementById('quoteModalTitle').textContent='Nova citacao';['qText','qAuthor','qWork','qYear','qPages','qComment'].forEach(i=>document.getElementById(i).value='');document.getElementById('qCollection').value='';curTags=[];renderTagsForm();openM('quoteModal');};
-document.getElementById('btnSaveQuote').onclick=async()=>{const text=document.getElementById('qText').value.trim();if(!text){toast('O texto da citacao e obrigatorio.');return;}const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.citacoes??30;if(!editId&&quotes.length>=lim){toast(`Limite de ${lim} citacoes. Faca upgrade!`);return;}const id=editId||'cit_'+Date.now(),data={text,author:document.getElementById('qAuthor').value.trim(),work:document.getElementById('qWork').value.trim(),year:parseInt(document.getElementById('qYear').value)||null,pages:document.getElementById('qPages').value.trim(),collectionId:document.getElementById('qCollection').value||null,tags:[...curTags],comment:document.getElementById('qComment').value.trim(),createdAt:editId?(quotes.find(q=>q.id===id)?.createdAt||serverTimestamp()):serverTimestamp()};await setDoc(doc(db,'usuarios',CU.uid,'citacoes',id),data);if(editId){const i=quotes.findIndex(q=>q.id===id);if(i>=0)quotes[i]={id,...data};}else quotes.unshift({id,...data});closeM('quoteModal');renderTagToolbar();renderGrid();renderSidebar();toast(editId?'Citacao atualizada!':'Citacao salva!');// fnEmbed removida (Cloud Function indisponível no Spark plan)};
+document.getElementById('btnSaveQuote').onclick=async()=>{const text=document.getElementById('qText').value.trim();if(!text){toast('O texto da citacao e obrigatorio.');return;}const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.citacoes??30;if(!editId&&quotes.length>=lim){toast(`Limite de ${lim} citacoes. Faca upgrade!`);return;}const id=editId||'cit_'+Date.now(),data={text,author:document.getElementById('qAuthor').value.trim(),work:document.getElementById('qWork').value.trim(),year:parseInt(document.getElementById('qYear').value)||null,pages:document.getElementById('qPages').value.trim(),collectionId:document.getElementById('qCollection').value||null,tags:[...curTags],comment:document.getElementById('qComment').value.trim(),createdAt:editId?(quotes.find(q=>q.id===id)?.createdAt||serverTimestamp()):serverTimestamp()};await setDoc(doc(db,'usuarios',CU.uid,'citacoes',id),data);if(editId){const i=quotes.findIndex(q=>q.id===id);if(i>=0)quotes[i]={id,...data};}else quotes.unshift({id,...data});closeM('quoteModal');renderTagToolbar();renderGrid();renderSidebar();toast(editId?'Citacao atualizada!':'Citacao salva!');}// fnEmbed removida (Cloud Function indisponível no Spark plan);
 
 function renderTagsForm(){const w=document.getElementById('tagsWrap');w.querySelectorAll('.tag-pill').forEach(e=>e.remove());curTags.forEach(t=>{const p=document.createElement('span');p.className='tag-pill';p.style.cursor='pointer';p.innerHTML=`${esc(t)} <span class="tag-remove">x</span>`;p.querySelector('.tag-remove').onclick=()=>{curTags=curTags.filter(x=>x!==t);renderTagsForm();};w.insertBefore(p,document.getElementById('tagInput'));});}
 document.getElementById('tagInput').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==',')return;e.preventDefault();const v=e.target.value.trim().replace(/,/g,'');if(v&&!curTags.includes(v)){curTags.push(v);renderTagsForm();}e.target.value='';});
@@ -1368,3 +1590,228 @@ document.getElementById('btnExport').onclick=async()=>{
     console.error(err);
   }
 };
+
+// ── EXPOSIÇÃO GLOBAL (module scope → window) ──
+window.switchTab = switchTab;
+window.openM = openM;
+window.closeM = closeM;
+window.closeAllM = closeAllM;
+window.showPaywall = showPaywall;
+
+// ── FUNÇÕES FALTANTES ──
+window.fecharPixModal = function(){
+  const el = document.getElementById('pixModal');
+  if(el) el.style.display = 'none';
+  closeAllM();
+};
+
+window.fecharCartaoModal = function(){
+  const el = document.getElementById('cartaoModal');
+  if(el) el.style.display = 'none';
+  closeAllM();
+};
+
+window.confirmarAssinatura = async function(){
+  const CU = window.CU;
+  if(!CU){ toast('Faça login primeiro.'); return; }
+  const numero = (document.getElementById('cartaoNumero')||{}).value||'';
+  const validade = (document.getElementById('cartaoValidade')||{}).value||'';
+  const cvv = (document.getElementById('cartaoCvv')||{}).value||'';
+  const nome = (document.getElementById('cartaoNome')||{}).value||'';
+  const erroEl = document.getElementById('cartaoErroMsg');
+  if(!numero||!validade||!cvv||!nome){
+    if(erroEl) erroEl.textContent='Preencha todos os campos do cartão.';
+    return;
+  }
+  if(erroEl) erroEl.textContent='';
+  const btnConf = document.getElementById('btnConfirmarCartao');
+  if(btnConf) btnConf.disabled=true;
+  toast('Processando pagamento...', 10000);
+  try{
+    // 1. Buscar public key do MP
+    const pkResp = await fetch('https://proxy-anthropic.onrender.com/mp/pubkey');
+    const pkData = await pkResp.json();
+    if(!pkData.public_key) throw new Error('Chave pública MP não disponível. Contate o suporte.');
+
+    // 2. Tokenizar cartão via SDK Mercado Pago
+    if(typeof MercadoPago === 'undefined') throw new Error('SDK Mercado Pago não carregado.');
+    const mp = new MercadoPago(pkData.public_key, {locale:'pt-BR'});
+    const [mes, ano] = validade.split('/');
+    const tokenResult = await mp.createCardToken({
+      cardNumber: numero.replace(/\s/g,''),
+      cardholderName: nome,
+      cardExpirationMonth: mes,
+      cardExpirationYear: '20'+ano,
+      securityCode: cvv
+    });
+    if(tokenResult.error || !tokenResult.id) {
+      const msg = tokenResult.error?.message || 'Dados do cartão inválidos.';
+      if(erroEl) erroEl.textContent = msg;
+      toast(msg, 5000);
+      return;
+    }
+
+    // 3. Enviar token para o proxy
+    const r = await fetch('https://proxy-anthropic.onrender.com/mp/assinatura',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        plano: window._planoSelecionado||'pro',
+        email_pagador: CU.email,
+        uid: CU.uid,
+        token_cartao: tokenResult.id
+      })
+    });
+    const data = await r.json();
+    if(data.status==='authorized'||data.status==='active'||data.ok){
+      toast('Assinatura ativada! Bem-vindo(a)! 🎉', 6000);
+      closeAllM();
+      UD={plano:window._planoSelecionado||'pro', creditos:999, exportacoesMes:0};
+      updateHeader();
+    } else {
+      const msg = data.error||data.message||'Erro no pagamento. Tente PIX.';
+      if(erroEl) erroEl.textContent = msg;
+      toast(msg, 5000);
+    }
+  } catch(err){
+    if(erroEl) erroEl.textContent = err.message||'Erro de conexão.';
+    toast(err.message||'Erro de conexão.', 5000);
+  } finally {
+    if(btnConf) btnConf.disabled=false;
+  }
+};
+
+window.ativarLeitor = async function(){
+  const CU = window.CU;
+  if(!CU) return;
+  try{
+    await setDoc(doc(db,'usuarios',CU.uid), {plano:'leitor', creditos:0, exportacoesMes:0}, {merge:true});
+    UD={plano:'leitor',creditos:0,exportacoesMes:0};
+    closeAllM();
+    showApp();
+  } catch(err){ toast('Erro: ' + err.message); }
+};
+
+window.sairPaywall = function(){
+  signOut(auth).then(()=>{ showLogin(); }).catch(()=>{ showLogin(); });
+};
+
+window.copyElem = function(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(()=> toast('Copiado!')).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); toast('Copiado!');
+  });
+};
+
+// ── helpers internos de modal PIX ──────────────────────────────────────────
+function _pixShowLoading(desc){
+  const descEl = document.getElementById('pixModalDesc');
+  const loadEl = document.getElementById('pixLoadingMsg');
+  const qrEl   = document.getElementById('pixQrArea');
+  const errEl  = document.getElementById('pixErroMsg');
+  if(descEl) descEl.textContent = desc||'';
+  if(loadEl){ loadEl.textContent='Gerando PIX...'; loadEl.style.display=''; }
+  if(qrEl)   qrEl.style.display='none';
+  if(errEl)  errEl.style.display='none';
+}
+function _pixShowQr(data){
+  const loadEl  = document.getElementById('pixLoadingMsg');
+  const qrArea  = document.getElementById('pixQrArea');
+  const qrImg   = document.getElementById('pixQrImg');
+  const codeEl  = document.getElementById('pixCodigoCopia');
+  if(loadEl)  loadEl.style.display='none';
+  if(qrImg && data.qr_code_base64) qrImg.src='data:image/png;base64,'+data.qr_code_base64;
+  if(codeEl)  codeEl.textContent = data.qr_code||'';
+  window._pixCodigo = data.qr_code||'';
+  if(qrArea)  qrArea.style.display='';
+}
+function _pixShowErro(msg){
+  const loadEl = document.getElementById('pixLoadingMsg');
+  const errEl  = document.getElementById('pixErroMsg');
+  if(loadEl) loadEl.style.display='none';
+  if(errEl){ errEl.textContent=msg; errEl.style.display=''; }
+}
+
+window.iniciarPagamentoPix = async function(plano, valor, desc){
+  window._planoSelecionado = plano;
+  window._valorSelecionado = valor;
+  const CU = window.CU;
+  if(!CU) return toast('Faça login primeiro.');
+  const descricao = desc || plano;
+  _pixShowLoading(descricao);
+  openM('pixModal');
+  try{
+    const r = await fetch('https://proxy-anthropic.onrender.com/mp/pix', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({plano, valor, descricao, email_pagador: CU.email, uid: CU.uid})
+    });
+    const data = await r.json();
+    if(data.qr_code){
+      _pixShowQr(data);
+      iniciarPollingPix(data.id);
+    } else {
+      const msg = data.message || data.cause?.[0]?.description || data.error || JSON.stringify(data);
+      _pixShowErro('Erro ao gerar PIX: ' + msg);
+    }
+  } catch(err){
+    _pixShowErro('Erro de conexão: ' + err.message);
+  }
+};
+
+// ── polling status PIX ──────────────────────────────────────────────────────
+let _pixPollingTimer = null;
+function iniciarPollingPix(paymentId){
+  if(!paymentId) return;
+  clearInterval(_pixPollingTimer);
+  let tentativas = 0;
+  const MAX = 24; // 2 min a cada 5s
+  _pixPollingTimer = setInterval(async()=>{
+    tentativas++;
+    if(tentativas > MAX){ clearInterval(_pixPollingTimer); return; }
+    try{
+      const r = await fetch('https://proxy-anthropic.onrender.com/mp/status/'+paymentId);
+      const d = await r.json();
+      const msgEl = document.getElementById('pixStatusMsg');
+      if(d.status==='approved'){
+        clearInterval(_pixPollingTimer);
+        if(msgEl){ msgEl.textContent='✅ Pagamento confirmado! Liberando acesso...'; msgEl.style.color='#27ae60'; }
+        setTimeout(()=>{ closeAllM(); location.reload(); }, 2000);
+      } else if(msgEl){
+        msgEl.textContent = d.status==='pending' ? '⏳ Aguardando pagamento...' : ('Status: '+d.status);
+      }
+    }catch(e){}
+  }, 5000);
+}
+
+// ── abrir cartão (planos anuais) ─────────────────────────────────────────────
+window.abrirCartao = function(plano, valor, desc){
+  window._planoSelecionado = plano;
+  window._valorSelecionado = valor;
+  const descEl = document.getElementById('cartaoModalDesc');
+  if(descEl) descEl.textContent = desc||plano;
+  openM('cartaoModal');
+};
+
+// ── escolha PIX ou Cartão (planos mensais) ───────────────────────────────────
+window.abrirEscolhaPagamento = function(plano, valor, desc){
+  // Abre o pixModal com botão extra para trocar para cartão
+  window._planoSelecionado = plano;
+  window._valorSelecionado = valor;
+  // mostra sheet de escolha — por simplicidade abre direto PIX mas com msg
+  if(confirm('Como deseja pagar?\n\nOK = PIX\nCancelar = Cartão de crédito')){
+    window.iniciarPagamentoPix(plano, valor, desc);
+  } else {
+    window.abrirCartao(plano, valor, desc);
+  }
+};
+
+window.showLogin = showLogin;
+window.showApp = showApp;
+</script>
+</body>
+</html>
