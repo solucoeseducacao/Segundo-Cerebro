@@ -400,14 +400,14 @@ main{padding:8px}
           </div>
         </div>
         <div class="pw-plan-features">
-          <span>Tudo do Orientador, mais:</span>
+          <span>Tudo do Pesquisador, mais:</span>
           <span>Transcrição Whisper — 300 min/mês (alta precisão)</span>
           <span>IA para links semânticos entre notas</span>
           <span>Busca por similaridade no arquivo</span>
-          <span>Alunos ilimitados incluídos</span>
           <span>Múltiplos projetos independentes (ilimitados)</span>
-          <span>Exportação Word com links automáticos</span>
-          <span>Resumo semanal por e-mail</span>
+          <span>OCR — extrair texto de foto de livro ou artigo</span>
+          <span>Adaptar artigo às normas via IA (1 uso incluso/mês)</span>
+          <span>Exportação Word com links automáticos entre referências</span>
           <span>Suporte prioritário (até 24h)</span>
         </div>
         <div class="pw-plan-btns">
@@ -418,24 +418,24 @@ main{padding:8px}
 
       <!-- ORIENTADOR -->
       <div class="pw-plan">
-        <span class="pw-badge blue">🧑‍🏫 PARA PROFESSORES-ORIENTADORES</span>
+        <span class="pw-badge blue">🧑‍🏫 PARA PROFESSORES E GRUPOS DE PESQUISA</span>
         <div class="pw-plan-header" style="margin-top:8px">
-          <div class="pw-plan-name">Orientador — Avaliar e Orientar</div>
+          <div class="pw-plan-name">Orientador — Apoiar a Pesquisa</div>
           <div class="pw-plan-price">
             <div class="main">R$ 39,90<span style="font-size:.7rem;font-weight:400">/mês no anual</span> <span class="pw-saving">≈ R$478/ano</span></div>
             <div class="sub">ou R$ 49,90/mês no plano mensal</div>
           </div>
         </div>
         <div class="pw-plan-features">
-          <span>Tudo do Pesquisador, mais:</span>
-          <span>Painel do orientador — receba trabalhos de alunos</span>
-          <span>Feedback com perfil de voz configurável</span>
-          <span>E-mail para alunos em um clique</span>
-          <span>Até 10 alunos com acesso gratuito restrito</span>
-          <span>Histórico de versões por aluno</span>
-          <span>Avaliação qualitativa completa (ABNT + metodológica)</span>
-          <span class="no">Transcrição Whisper (só Pro)</span>
-          <span class="no">Links semânticos automáticos (só Pro)</span>
+          <span>Tudo do Pesquisador</span>
+          <span>Citações ilimitadas</span>
+          <span>IA integrada — resumir, melhorar, parafrasear</span>
+          <span>Transcrição de voz — 120 min/mês (Web Speech)</span>
+          <span>Exportação Word por coleção e tema</span>
+          <span>Múltiplos projetos (até 3)</span>
+          <span>Apoia o desenvolvimento do projeto</span>
+          <span class="no">OCR e busca semântica (só Pro)</span>
+          <span class="no">Adaptar artigo às normas (só Pro)</span>
         </div>
         <div class="pw-plan-btns">
           <button class="pw-btn-pix" onclick="abrirCartao('orientador',478.80,'Orientador — Anual 12x R$39,90')">💳 Anual — 12x de R$39,90<br><small>somente cartão, sem juros</small></button>
@@ -508,7 +508,7 @@ main{padding:8px}
           <div style="width:calc(min(240px, 85vw));min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;flex-shrink:0">
             <div style="font-size:1.4rem;margin-bottom:8px">💡</div>
             <div style="font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-weight:600">Menos que um café por dia. Mais que um assistente de pesquisa.</div>
-            <div style="font-size:.78rem;color:var(--text2);line-height:1.5">Por R$19,90/mês você tem IA, OCR, busca semântica, exportação ABNT e acesso em qualquer dispositivo. Um revisor humano cobraria isso por parágrafo.</div>
+            <div style="font-size:.78rem;color:var(--text2);line-height:1.5">Por R$19,90/mês você tem IA, citações ilimitadas, exportação ABNT e acesso em qualquer dispositivo. Um revisor humano cobraria isso por parágrafo.</div>
           </div>
 
           <!-- Card 5: Urgência implícita + perda -->
@@ -560,7 +560,7 @@ main{padding:8px}
 
     <!-- Plano gratuito — opção de saída, menos destaque -->
     <button class="pw-btn-free" onclick="ativarLeitor()">
-      Continuar grátis com o Plano Leitor (30 citações, sem IA)
+      Continuar grátis com o Plano Leitor (50 citações, sem IA)
     </button>
 
     <div class="pw-promo" style="margin-top:20px">
@@ -595,22 +595,24 @@ main{padding:8px}
         <tr style="background:var(--accent);color:#fff">
           <th style="padding:10px 8px;text-align:left;border-radius:8px 0 0 0">Recurso</th>
           <th style="padding:10px 8px">Leitor<br><span style="font-weight:400;font-size:.75rem">Grátis</span></th>
-          <th style="padding:10px 8px">Mestre<br><span style="font-weight:400;font-size:.75rem">R$29,90/ano</span></th>
-          <th style="padding:10px 8px">Doutor<br><span style="font-weight:400;font-size:.75rem">R$49,90/ano</span></th>
-          <th style="padding:10px 8px;border-radius:0 8px 0 0">Pro<br><span style="font-weight:400;font-size:.75rem">R$89,90/ano</span></th>
+          <th style="padding:10px 8px">Pesquisador<br><span style="font-weight:400;font-size:.75rem">R$19,90/mês</span></th>
+          <th style="padding:10px 8px">Orientador<br><span style="font-weight:400;font-size:.75rem">R$39,90/mês</span></th>
+          <th style="padding:10px 8px;border-radius:0 8px 0 0">Pro<br><span style="font-weight:400;font-size:.75rem">R$79,90/mês</span></th>
         </tr>
       </thead>
       <tbody>
-        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Citações salvas</td><td>30</td><td>500</td><td>∞</td><td>∞</td></tr>
-        <tr><td style="text-align:left;padding:9px 8px">Exportações/mês</td><td>5</td><td>20</td><td>∞</td><td>∞</td></tr>
-        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">IA (resumir, melhorar)</td><td>✗</td><td>✓</td><td>✓</td><td>✓</td></tr>
-        <tr><td style="text-align:left;padding:9px 8px">OCR (extrair texto de imagem)</td><td>✗</td><td>✗</td><td>✓</td><td>✓</td></tr>
-        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Busca semântica por conceito</td><td>✗</td><td>✗</td><td>✓</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Citações salvas</td><td>50</td><td>∞</td><td>∞</td><td>∞</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">Projetos independentes</td><td>1</td><td>até 3</td><td>até 3</td><td>∞</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Exportação Word (.docx)</td><td>✓</td><td>✓</td><td>✓</td><td>✓ (com links)</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">Coleções e tags</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Ideias e conexões com citações</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">IA (resumir, melhorar, parafrasear)</td><td>✗</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Transcrição de voz</td><td>✗</td><td>120 min/mês</td><td>120 min/mês</td><td>300 min/mês (Whisper)</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">OCR (foto → texto)</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Busca semântica por conceito</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
         <tr><td style="text-align:left;padding:9px 8px">Adaptar artigo às normas (IA)</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
-        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Suporte prioritário</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
-        <tr><td style="text-align:left;padding:9px 8px">Exportação ABNT Word (.docx)</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
-        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Coleções e tags</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
-        <tr><td style="text-align:left;padding:9px 8px">Ideias e conexões com citações</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr style="background:var(--surface)"><td style="text-align:left;padding:9px 8px">Links semânticos automáticos</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
+        <tr><td style="text-align:left;padding:9px 8px">Suporte prioritário</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td></tr>
       </tbody>
     </table>
     </div>
@@ -862,10 +864,10 @@ main{padding:8px}
         <div class="form-group">
           <label>Plano concedido</label>
           <select id="adminPromoPlano" style="width:100%;padding:10px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text)">
-            <option value="mestre">Mestre</option>
-            <option value="doutor">Doutor</option>
-            <option value="pesquisador_pro" selected>Pesquisador Pro</option>
-            <option value="ilimitado">Ilimitado</option>
+            <option value="pesquisador">Pesquisador</option>
+            <option value="orientador">Orientador</option>
+            <option value="pro" selected>Pro</option>
+            <option value="ilimitado">Ilimitado (legado)</option>
           </select>
         </div>
         <div class="form-group">
@@ -1466,7 +1468,7 @@ function updateHeader(){
     alertBadge.style.display='none';
   }
 }
-function planLabel(p){return{leitor:'Leitor',mestre:'Mestre',mestre_offline:'Mestre+Offline',doutor:'Doutor',pesquisador_pro:'Pesquisador Pro',ilimitado:'Pesquisador Pro'}[p]||p;}
+function planLabel(p){return{leitor:'Leitor',pesquisador:'Pesquisador',orientador:'Orientador',pro:'Pro',mestre:'Mestre',mestre_offline:'Mestre',doutor:'Doutor',pesquisador_pro:'Pro',ilimitado:'Pro'}[p]||p;}
 
 async function loadCols(){const s=await getDocs(collection(db,'usuarios',CU.uid,'colecoes'));cols=s.docs.map(d=>({id:d.id,...d.data()}));renderSidebar();renderColSel();renderColorPicker();}
 function renderSidebar(){const l=document.getElementById('colecoesList');l.innerHTML=`<button class="collection-item ${activeCol==='all'?'active':''}" data-col="all"><span class="col-dot" style="background:var(--border2)"></span>Todas<span class="col-count">${quotes.length}</span></button>`;cols.forEach(c=>{const b=document.createElement('button');b.className=`collection-item ${activeCol===c.id?'active':''}`;b.dataset.col=c.id;b.innerHTML=`<span class="col-dot" style="background:${c.color}"></span>${esc(c.name)}<span class="col-count">${quotes.filter(q=>q.collectionId===c.id).length}</span>`;l.appendChild(b);});l.querySelectorAll('.collection-item').forEach(b=>{b.onclick=()=>{activeCol=b.dataset.col;activeTag=null;renderSidebar();renderTagToolbar();renderGrid();};});}
@@ -1509,7 +1511,7 @@ function checkUpsell(){
 }
 
 document.getElementById('btnNovaCitacao').onclick=()=>{editId=null;document.getElementById('quoteModalTitle').textContent='Nova citacao';['qText','qAuthor','qWork','qYear','qPages','qComment'].forEach(i=>document.getElementById(i).value='');document.getElementById('qCollection').value='';curTags=[];renderTagsForm();openM('quoteModal');};
-document.getElementById('btnSaveQuote').onclick=async()=>{const text=document.getElementById('qText').value.trim();if(!text){toast('O texto da citacao e obrigatorio.');return;}const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.citacoes??30;if(!editId&&quotes.length>=lim){toast(`Limite de ${lim} citacoes. Faca upgrade!`);return;}const id=editId||'cit_'+Date.now(),data={text,author:document.getElementById('qAuthor').value.trim(),work:document.getElementById('qWork').value.trim(),year:parseInt(document.getElementById('qYear').value)||null,pages:document.getElementById('qPages').value.trim(),collectionId:document.getElementById('qCollection').value||null,tags:[...curTags],comment:document.getElementById('qComment').value.trim(),createdAt:editId?(quotes.find(q=>q.id===id)?.createdAt||serverTimestamp()):serverTimestamp()};await setDoc(doc(db,'usuarios',CU.uid,'citacoes',id),data);if(editId){const i=quotes.findIndex(q=>q.id===id);if(i>=0)quotes[i]={id,...data};}else quotes.unshift({id,...data});closeM('quoteModal');renderTagToolbar();renderGrid();renderSidebar();toast(editId?'Citacao atualizada!':'Citacao salva!');}// fnEmbed removida (Cloud Function indisponível no Spark plan);
+document.getElementById('btnSaveQuote').onclick=async()=>{const text=document.getElementById('qText').value.trim();if(!text){toast('O texto da citacao e obrigatorio.');return;}const pl=UD?.plano||'leitor',lim=LIMITES[pl]?.citacoes??50;if(!editId&&quotes.length>=lim){toast(`Limite de ${lim} citacoes. Faca upgrade!`);return;}const id=editId||'cit_'+Date.now(),data={text,author:document.getElementById('qAuthor').value.trim(),work:document.getElementById('qWork').value.trim(),year:parseInt(document.getElementById('qYear').value)||null,pages:document.getElementById('qPages').value.trim(),collectionId:document.getElementById('qCollection').value||null,tags:[...curTags],comment:document.getElementById('qComment').value.trim(),createdAt:editId?(quotes.find(q=>q.id===id)?.createdAt||serverTimestamp()):serverTimestamp()};await setDoc(doc(db,'usuarios',CU.uid,'citacoes',id),data);if(editId){const i=quotes.findIndex(q=>q.id===id);if(i>=0)quotes[i]={id,...data};}else quotes.unshift({id,...data});closeM('quoteModal');renderTagToolbar();renderGrid();renderSidebar();toast(editId?'Citacao atualizada!':'Citacao salva!');}// fnEmbed removida (Cloud Function indisponível no Spark plan);
 
 function renderTagsForm(){const w=document.getElementById('tagsWrap');w.querySelectorAll('.tag-pill').forEach(e=>e.remove());curTags.forEach(t=>{const p=document.createElement('span');p.className='tag-pill';p.style.cursor='pointer';p.innerHTML=`${esc(t)} <span class="tag-remove">x</span>`;p.querySelector('.tag-remove').onclick=()=>{curTags=curTags.filter(x=>x!==t);renderTagsForm();};w.insertBefore(p,document.getElementById('tagInput'));});}
 document.getElementById('tagInput').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==',')return;e.preventDefault();const v=e.target.value.trim().replace(/,/g,'');if(v&&!curTags.includes(v)){curTags.push(v);renderTagsForm();}e.target.value='';});
