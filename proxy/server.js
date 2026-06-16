@@ -33,7 +33,7 @@ try {
 }
 
 // Health check sem restrição de origem
-app.get('/health',(_,res)=>res.json({ok:true,mp:!!MP_ACCESS_TOKEN,ai:!!ANTHROPIC_API_KEY,firestore:!!db,v:'4.0'}));
+app.get('/health',(_,res)=>res.json({ok:true,mp:!!MP_ACCESS_TOKEN,ai:!!ANTHROPIC_API_KEY,firestore:!!db,v:'4.1'}));
 
 app.use((req,res,next)=>{
   const origin = req.headers.origin;
@@ -214,22 +214,50 @@ app.post('/mp/assinatura', async(req,res)=>{
     if(!plano||!email_pagador||!token_cartao||!uid)
       return res.status(400).json({error:'Dados incompletos'});
 
-    const precos = {mestre:19.90, doutor:39.90, pesquisador_pro:79.90};
-    const valor = precos[plano];
-    if(!valor) return res.status(400).json({error:'Plano invalido'});
+    // Planos atuais — valor mensal cobrado recorrentemente
+    const CONFIG_PLANOS = {
+      // Anuais (cartão em 12x com renovação automática)
+      pesquisador:         { valor: 19.90, label: 'Pesquisador — Anual 12x R$19,90',  parcelas: 12 },
+      orientador:          { valor: 39.90, label: 'Orientador — Anual 12x R$39,90',   parcelas: 12 },
+      pro:                 { valor: 79.90, label: 'Pro — Anual 12x R$79,90',           parcelas: 12 },
+      // Mensais (renovação automática)
+      pesquisador_mensal:  { valor: 29.90, label: 'Pesquisador — Mensal R$29,90',      parcelas: null },
+      orientador_mensal:   { valor: 49.90, label: 'Orientador — Mensal R$49,90',       parcelas: null },
+      pro_mensal:          { valor: 89.90, label: 'Pro — Mensal R$89,90',              parcelas: null },
+      // Legado (compatibilidade)
+      mestre:              { valor: 29.90, label: 'Pesquisador — Mensal R$29,90',      parcelas: null },
+      doutor:              { valor: 49.90, label: 'Orientador — Mensal R$49,90',       parcelas: null },
+      pesquisador_pro:     { valor: 89.90, label: 'Pro — Mensal R$89,90',              parcelas: null },
+    };
+
+    const cfg = CONFIG_PLANOS[plano];
+    if(!cfg) return res.status(400).json({error:`Plano invalido: ${plano}`});
+
+    const { valor, label, parcelas } = cfg;
+
+    const autoRecurring = {
+      frequency: 1,
+      frequency_type: 'months',
+      transaction_amount: valor,
+      currency_id: 'BRL'
+    };
+    if(parcelas) autoRecurring.repetitions = parcelas;
 
     const planResp = await fetch('https://api.mercadopago.com/preapproval_plan',{
       method:'POST',
       headers:{'Authorization': `Bearer ${MP_ACCESS_TOKEN}`, 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        reason: `Segundo Cerebro - ${plano}`,
-        auto_recurring:{ frequency:1, frequency_type:'months', transaction_amount:valor, currency_id:'BRL' },
-        payment_methods_allowed:{payment_types:[{id:'credit_card'}]},
+        reason: label,
+        auto_recurring: autoRecurring,
+        payment_methods_allowed:{ payment_types:[{id:'credit_card'}] },
         back_url: ALLOWED_ORIGIN
       })
     });
     const planData = await planResp.json();
-    if(!planResp.ok) return res.status(planResp.status).json(planData);
+    if(!planResp.ok){
+      console.error('[mp/assinatura] preapproval_plan erro:', JSON.stringify(planData));
+      return res.status(planResp.status).json(planData);
+    }
 
     const subResp = await fetch('https://api.mercadopago.com/preapproval',{
       method:'POST',
@@ -239,30 +267,64 @@ app.post('/mp/assinatura', async(req,res)=>{
         payer_email: email_pagador,
         card_token_id: token_cartao,
         status: 'authorized',
-        metadata: {plano, uid}
+        metadata: { plano, uid }
       })
     });
     const subData = await subResp.json();
-    if(!subResp.ok) return res.status(subResp.status).json(subData);
+    if(!subResp.ok){
+      console.error('[mp/assinatura] preapproval erro:', JSON.stringify(subData));
+      return res.status(subResp.status).json(subData);
+    }
+
+    // Ativar plano imediatamente no Firestore
+    if(db && (subData.status === 'authorized' || subData.status === 'active') && uid){
+      try{
+        const expira = new Date();
+        expira.setFullYear(expira.getFullYear() + (parcelas ? 1 : 0));
+        if(!parcelas) expira.setMonth(expira.getMonth() + 1);
+        const planoNorm = plano.replace('_mensal','').replace('mestre','pesquisador').replace('doutor','orientador').replace('pesquisador_pro','pro');
+        await db.collection('usuarios').doc(uid).set({
+          plano: planoNorm,
+          planoExpira: expira.toISOString(),
+          assinaturaId: subData.id,
+          assinaturaStatus: subData.status
+        }, {merge:true});
+        console.log(`[mp/assinatura] plano ${planoNorm} ativado para uid=${uid}`);
+      } catch(dbErr){
+        console.error('[mp/assinatura] erro ao ativar plano no Firestore:', dbErr.message);
+      }
+    }
 
     res.json({id: subData.id, status: subData.status, plano});
   }catch(e){
+    console.error('[mp/assinatura] erro geral:', e.message);
     res.status(500).json({error: e.message});
   }
 });
+
+// ── Helper: normaliza nome de plano legado ───────────────────────────────────
+function normalizarPlano(p){
+  if(!p) return p;
+  return p
+    .replace('_mensal','')
+    .replace(/^mestre$/,'pesquisador')
+    .replace(/^doutor$/,'orientador')
+    .replace(/^pesquisador_pro$/,'pro');
+}
 
 // ── Webhook MP com idempotência ───────────────────────────────────────────────
 
 app.post('/mp/webhook', async(req,res)=>{
   try{
-    const {type, data} = req.body;
+    const {type, data, action} = req.body;
+    if(!db){
+      console.error('[webhook] Firestore não disponível');
+      return res.sendStatus(200);
+    }
+
+    // ── Pagamento único / PIX ─────────────────────────────────────────────────
     if(type==='payment' && data?.id){
       const paymentId = String(data.id);
-      if(!db){
-        console.error('[webhook] Firestore não disponível');
-        return res.sendStatus(200);
-      }
-      // Idempotência: ignora pagamentos já processados
       const eventRef = db.collection('webhook_events').doc(paymentId);
       const eventSnap = await eventRef.get();
       if(eventSnap.exists){
@@ -284,16 +346,49 @@ app.post('/mp/webhook', async(req,res)=>{
           } else if(plano==='adaptacao_artigo'){
             await userRef.update({ adaptacoesDisponiveis: admin.firestore.FieldValue.increment(1) });
           } else if(plano){
+            const planoNorm = normalizarPlano(plano);
             const expira = new Date();
             expira.setDate(expira.getDate()+365);
-            await userRef.set({ plano, pagamentoId:paymentId, planoExpira:expira.toISOString() }, {merge:true});
+            await userRef.set({ plano:planoNorm, pagamentoId:paymentId, planoExpira:expira.toISOString() }, {merge:true});
           }
           console.log(`[webhook] ${paymentId} aprovado → uid=${uid} plano=${plano}`);
         }
       }
-      // Marca como processado (mesmo se não aprovado, para não reprocessar)
       await eventRef.set({ processedAt: admin.firestore.FieldValue.serverTimestamp(), status: payment.status });
     }
+
+    // ── Assinatura recorrente (preapproval) ───────────────────────────────────
+    if(type==='subscription_preapproval' || (action && action.includes('subscription'))){
+      const subId = data?.id ? String(data.id) : null;
+      if(!subId) return res.sendStatus(200);
+
+      const subResp = await fetch(`https://api.mercadopago.com/preapproval/${subId}`,{
+        headers:{'Authorization': `Bearer ${MP_ACCESS_TOKEN}`}
+      });
+      const sub = await subResp.json();
+      const {plano, uid} = sub.metadata||{};
+      console.log(`[webhook] preapproval ${subId} status=${sub.status} uid=${uid} plano=${plano}`);
+
+      if(uid && plano){
+        const planoNorm = normalizarPlano(plano);
+        const userRef = db.collection('usuarios').doc(uid);
+        if(sub.status === 'authorized' || sub.status === 'active'){
+          const expira = new Date();
+          expira.setMonth(expira.getMonth() + 1);
+          await userRef.set({
+            plano: planoNorm,
+            assinaturaId: subId,
+            assinaturaStatus: sub.status,
+            planoExpira: expira.toISOString()
+          }, {merge:true});
+          console.log(`[webhook] preapproval → plano ${planoNorm} ativo para uid=${uid}`);
+        } else if(sub.status === 'cancelled' || sub.status === 'paused'){
+          await userRef.set({ assinaturaStatus: sub.status }, {merge:true});
+          console.log(`[webhook] preapproval cancelada/pausada uid=${uid}`);
+        }
+      }
+    }
+
     res.sendStatus(200);
   }catch(e){
     console.error('[webhook] erro:', e.message);
@@ -358,7 +453,6 @@ app.post('/promo/resgatar', async(req,res)=>{
           break;
         }
         default:
-          // Compatibilidade com formato antigo (campo plano direto)
           if(d.plano) t.update(userRef, { plano: d.plano });
       }
 
@@ -380,39 +474,38 @@ app.get('/mp/pubkey', async(_,res)=>{
   res.json({public_key: process.env.MP_PUBLIC_KEY||''});
 });
 
-
 // ── Criar código promocional (somente owner via token) ───────────────────────
 app.post('/promo/criar', async(req,res)=>{
-    try{
-          const user = await verificarFirebaseToken(req.headers.authorization);
-          if(!user) return res.status(401).json({error:'Não autenticado.'});
-          const OWNER = process.env.OWNER_EMAIL || 'felipevigneron@gmail.com';
-          if(user.email !== OWNER) return res.status(403).json({error:'Acesso negado.'});
+  try{
+    const user = await verificarFirebaseToken(req.headers.authorization);
+    if(!user) return res.status(401).json({error:'Não autenticado.'});
+    const OWNER = process.env.OWNER_EMAIL || 'felipevigneron@gmail.com';
+    if(user.email !== OWNER) return res.status(403).json({error:'Acesso negado.'});
 
-          const {codigo, plano, creditos, expira, usosMax, multiuso} = req.body;
-          if(!codigo || !plano) return res.status(400).json({error:'Código e plano obrigatórios.'});
-          if(!db) return res.status(503).json({error:'Serviço indisponível.'});
+    const {codigo, plano, creditos, expira, usosMax, multiuso} = req.body;
+    if(!codigo || !plano) return res.status(400).json({error:'Código e plano obrigatórios.'});
+    if(!db) return res.status(503).json({error:'Serviço indisponível.'});
 
-          const codigoNorm = String(codigo).toUpperCase().trim();
-          const promoRef = db.collection('promo_codes').doc(codigoNorm);
+    const codigoNorm = String(codigo).toUpperCase().trim();
+    const promoRef = db.collection('promo_codes').doc(codigoNorm);
 
-          const data = {
-                  type: creditos > 0 ? 'creditos' : 'plano',
-                  value: creditos > 0 ? creditos : plano,
-                  plano: plano,
-                  redeemedBy: [],
-                  usesLeft: multiuso ? (usosMax || 999) : 1,
-                  createdAt: admin.firestore.FieldValue.serverTimestamp(),
-                  cancelled: false
-          };
-          if(expira) data.expiresAt = admin.firestore.Timestamp.fromDate(new Date(expira));
+    const data = {
+      type: creditos > 0 ? 'creditos' : 'plano',
+      value: creditos > 0 ? creditos : plano,
+      plano: plano,
+      redeemedBy: [],
+      usesLeft: multiuso ? (usosMax || 999) : 1,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      cancelled: false
+    };
+    if(expira) data.expiresAt = admin.firestore.Timestamp.fromDate(new Date(expira));
 
-          await promoRef.set(data);
-          res.json({ok:true, codigo:codigoNorm});
-    }catch(e){
-          console.error('[promo/criar]', e.message);
-          res.status(500).json({error:'Erro interno.'});
-    }
+    await promoRef.set(data);
+    res.json({ok:true, codigo:codigoNorm});
+  }catch(e){
+    console.error('[promo/criar]', e.message);
+    res.status(500).json({error:'Erro interno.'});
+  }
 });
 
 // ── Keep-alive ────────────────────────────────────────────────────────────────
@@ -423,6 +516,6 @@ setInterval(async()=>{
 }, 9 * 60 * 1000);
 
 app.listen(process.env.PORT||3000, ()=>{
-  console.log('Proxy Segundo Cerebro v4.0 rodando');
+  console.log('Proxy Segundo Cerebro v4.1 rodando');
   setTimeout(async()=>{ try{ await fetch(`${SELF_URL}/health`); }catch(e){} }, 5000);
 });
